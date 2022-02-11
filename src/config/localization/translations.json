@@ -1527,5 +1527,9 @@
   "Current Market Price": "Current Market Price",
   "Limit Price": "Limit Price",
   "Error Tracking Id": "Error Tracking Id",
-  "Your CAKE held at block": "Your CAKE held at block"
+  "Your CAKE held at block": "Your CAKE held at block",
+  "Important Information": "Important Information",
+  "Currently showing charts from Chainlink.": "Currently showing charts from Chainlink.",
+  "Prices chart is in relatively low fidelity.": "Prices chart is in relatively low fidelity.",
+  "Prices on charts is in relatively slower to respond.": "Prices on charts is in relatively slower to respond."
 }
