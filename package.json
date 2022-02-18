@@ -44,7 +44,7 @@
     "@ethersproject/strings": "^5.5.0",
     "@ethersproject/units": "^5.5.0",
     "@next/bundle-analyzer": "^12.0.7",
-    "@pancakeswap/sdk": "^2.4.0",
+    "@pancakeswap/sdk": "^2.4.3",
     "@pancakeswap/uikit": "^0.63.1",
     "@reduxjs/toolkit": "^1.5.0",
     "@sentry/nextjs": "^6.17.9",
