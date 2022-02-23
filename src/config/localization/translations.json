@@ -1527,5 +1527,6 @@
   "Current Market Price": "Current Market Price",
   "Limit Price": "Limit Price",
   "Error Tracking Id": "Error Tracking Id",
-  "Your CAKE held at block": "Your CAKE held at block"
+  "Your CAKE held at block": "Your CAKE held at block",
+  "Error fetching Voting Power": "Error fetching Voting Power"
 }
