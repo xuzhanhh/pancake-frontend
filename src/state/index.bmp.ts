@@ -14,7 +14,7 @@ import {
 } from 'redux-persist'
 import mpService from '@binance/mp-service'
 import storage from 'redux-persist/lib/storage'
-import blockReducer from './block'
+// import blockReducer from './block'
 import burn from './burn/reducer'
 import farmsReducer from './farms'
 import { updateVersion } from './global/actions'
@@ -55,7 +55,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
-    block: blockReducer,
+    // block: blockReducer,
     // farms: farmsReducer,
     // pools: poolsReducer,
     // predictions: predictionsReducer,
