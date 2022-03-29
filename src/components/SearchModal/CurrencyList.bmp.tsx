@@ -1,4 +1,4 @@
-import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
+import React, { CSSProperties, MutableRefObject, useCallback, useMemo, useRef, useState } from 'react'
 import { Currency, CurrencyAmount, currencyEquals, ETHER, Token } from '@pancakeswap/sdk'
 import { Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
@@ -17,7 +17,8 @@ import { CurrencyLogo } from '../Logo'
 import CircleLoader from '../Loader/CircleLoader'
 import { isTokenOnList } from '../../utils'
 import ImportRow from './ImportRow'
-import VirtualList from '@tarojs/components/virtual-list'
+// import VirtualList from '@tarojs/components/virtual-list'
+import VirtualList from 'views/bmp/BmpPage/components/VirtualList'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 
 const { safeArea } = getSystemInfoSync()
@@ -142,6 +143,9 @@ export default function CurrencyList({
   const inactiveTokens: {
     [address: string]: Token
   } = useAllInactiveTokens()
+  const [activeIndex, setActiveIndex] = useState(undefined)
+  // const listRef = useRef()
+  console.log('??????', fixedListRef)
   const Row = React.memo(
     useCallback(
       ({ data, index, style }) => {
@@ -184,13 +188,23 @@ export default function CurrencyList({
           )
         }
         return (
-          <CurrencyRow
-            style={style}
-            currency={currency}
-            isSelected={isSelected}
-            onSelect={handleSelect}
-            otherSelected={otherSelected}
-          />
+          <>
+            {/* <CurrencyRow */}
+            {/*   style={style} */}
+            {/*   currency={currency} */}
+            {/*   isSelected={isSelected} */}
+            {/*   onSelect={handleSelect} */}
+            {/*   otherSelected={otherSelected} */}
+            {/* /> */}
+            <button
+              onClick={() => {
+                setActiveIndex(index)
+                fixedListRef.current.resetAfterIndex(index)
+              }}
+            >
+              test
+            </button>
+          </>
         )
       },
       [
@@ -215,7 +229,7 @@ export default function CurrencyList({
       width="100%"
       itemData={itemData}
       itemCount={itemData.length}
-      itemSize={56}
+      itemSize={(index) => (index === activeIndex ? 100 : 56)}
       itemKey={itemKey}
     >
       {Row}
