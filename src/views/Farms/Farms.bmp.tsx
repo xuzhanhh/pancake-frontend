@@ -29,6 +29,7 @@ import FarmTabButtons from './components/FarmTabButtons'
 import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema } from './components/types'
+import { useDidHide, useDidShow } from '@binance/mp-service'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -114,26 +115,23 @@ export const getDisplayApr = (cakeRewardsApr?: number, lpRewardsApr?: number) =>
   return null
 }
 
-const Farms: React.FC = ({ children }) => {
+const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsData, cakePrice }) => {
   // const { pathname } = useRouter()
   const { t } = useTranslation()
   const {
     state: { page },
   } = useFarmsWrapper()
-  const { data: farmsLP, userDataLoaded } = useFarms()
-  const cakePrice = usePriceCakeBusd()
+  const { data: farmsLP, userDataLoaded } = farmsData
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useUserFarmsViewMode()
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
   // const { observerRef, isIntersecting } = useIntersectionObserver()
   const chosenFarmsLength = useRef(0)
-  console.log('farms rerender')
+  console.log('farms rerender', new Date().toString())
   const isArchived = false
   const isInactive = page === FarmsPage.History
   const isActive = !isInactive && !isArchived
-
-  usePollFarmsWithUserData(isArchived)
 
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
@@ -327,7 +325,6 @@ const Farms: React.FC = ({ children }) => {
   const handleSortOptionChange = (option: OptionProps): void => {
     setSortOption(option.value)
   }
-
   return (
     <FarmsContext.Provider value={{ chosenFarmsMemoized }}>
       <PageHeader>
@@ -408,4 +405,37 @@ const Farms: React.FC = ({ children }) => {
 
 export const FarmsContext = React.createContext({ chosenFarmsMemoized: [] })
 
-export default Farms
+// let origin = null
+
+const Fetcher = React.memo(({ setFarmsData, setCakePrice }) => {
+  const { data, userDataLoaded } = useFarms()
+  const cakePrice = usePriceCakeBusd()
+  useEffect(() => {
+    setFarmsData({ data, userDataLoaded })
+  }, [data, userDataLoaded, setFarmsData])
+  useEffect(() => {
+    setCakePrice(cakePrice)
+  }, [cakePrice, setCakePrice])
+  usePollFarmsWithUserData(false)
+  return null
+})
+
+const FramsWrapper = ({ children }) => {
+  const [isHide, setIsHide] = useState(false)
+  const [farmsData, setFarmsData] = useState({ data: [] })
+  const [cakePrice, setCakePrice] = useState(null)
+  useDidShow(() => {
+    setIsHide(false)
+  })
+  useDidHide(() => {
+    setIsHide(true)
+  })
+  return (
+    <view>
+      <Farms farmsData={farmsData} cakePrice={cakePrice} children={children} />
+      {!isHide && <Fetcher setFarmsData={setFarmsData} setCakePrice={setCakePrice} />}
+    </view>
+  )
+}
+
+export default FramsWrapper
