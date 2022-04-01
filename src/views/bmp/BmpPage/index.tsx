@@ -79,14 +79,14 @@ const StyledPage = styled.div`
   background: ${({ theme }) => theme.colors.gradients.bubblegum};
   min-height: calc(100vh - 64px);
   overflow-y: scroll;
-  padding: 16px 16px 100px 16px;
+  padding: ${({ activeId }) => (activeId === ActiveId.FARMS ? '0px 0px 100px 0px' : '16px 16px 100px 16px')};
 `
 const { statusBarHeight } = getSystemInfoSync()
 const CUSTOM_NAV_HEIGHT = 44
 const BmpPage = ({ activeId = ActiveId.SWAP, children }) => {
   return (
     <Providers>
-      <StyledPage>
+      <StyledPage activeId={activeId}>
         <CustomNav top={statusBarHeight} height={CUSTOM_NAV_HEIGHT} />
         {children}
         <Footer activeId={activeId} />

@@ -1,6 +1,6 @@
 export default {
   entryPagePath: 'views/Swap/bmp/index',
-  pages: ['views/Swap/bmp/index', 'views/bmp/liquidity/index', 'views/webview'],
+  pages: ['views/Swap/bmp/index', 'views/bmp/liquidity/index', 'views/bmp/farms/index', 'views/webview'],
   darkmode: true,
   window: {
     backgroundTextStyle: 'light',
@@ -27,6 +27,12 @@ export default {
         selectedIconPath: 'images/earn-select.png',
         pagePath: 'views/bmp/liquidity/index',
         text: 'Liquidity',
+      },
+      {
+        iconPath: 'images/farm.png',
+        selectedIconPath: 'images/farm-select.png',
+        pagePath: 'views/bmp/farms/index',
+        text: 'Farm',
       },
     ],
   },

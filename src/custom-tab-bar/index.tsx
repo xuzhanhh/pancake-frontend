@@ -32,6 +32,12 @@ const defaultState = {
       pagePath: 'views/bmp/liquidity/index',
       text: 'Liquidity',
     },
+    {
+      iconPath: 'images/farm.png',
+      selectedIconPath: 'images/farm-select.png',
+      pagePath: 'views/bmp/farms/index',
+      text: 'Farms',
+    },
   ],
 }
 const Title = ({ selected, title }) => {

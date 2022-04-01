@@ -22,7 +22,7 @@ import PageHeader from 'components/PageHeader'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
-import { FarmsPage, useFarms as useFarmsWrapper } from 'views/bmp/BmpPage/context/farmsContext.bmp'
+import { FarmsPage, useFarms as useFarmsWrapper } from 'views/bmp/farms/farmsContext'
 import { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
 import FarmTabButtons from './components/FarmTabButtons'
@@ -128,7 +128,7 @@ const Farms: React.FC = ({ children }) => {
   const [sortOption, setSortOption] = useState('hot')
   // const { observerRef, isIntersecting } = useIntersectionObserver()
   const chosenFarmsLength = useRef(0)
-
+  console.log('farms rerender')
   const isArchived = false
   const isInactive = page === FarmsPage.History
   const isActive = !isInactive && !isArchived
