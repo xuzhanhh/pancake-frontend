@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Flex, Text, Button, Modal, LinkExternal, CalculateIcon, IconButton, Skeleton } from '@pancakeswap/uikit'
 import { ModalActions, ModalInput } from 'components/Modal'
-// import RoiCalculatorModal from 'components/RoiCalculatorModal'
+import RoiCalculatorModal from 'components/RoiCalculatorModal'
 import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance, formatNumber } from 'utils/formatBalance'
 import useToast from 'hooks/useToast'
@@ -75,6 +75,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
   })
 
   const annualRoi = cakePrice.times(interestBreakdown[3])
+  const annualRoiAsNumber = annualRoi.toNumber()
   const formattedAnnualRoi = formatNumber(
     annualRoi.toNumber(),
     annualRoi.gt(10000) ? 0 : 2,
@@ -83,9 +84,9 @@ const DepositModal: React.FC<DepositModalProps> = ({
 
   const handleChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
-      if (e.currentTarget.validity.valid) {
-        setVal(e.currentTarget.value.replace(/,/g, '.'))
-      }
+      // if (e.currentTarget.validity.valid) {
+      setVal(e.currentTarget.value.replace(/,/g, '.'))
+      // }
     },
     [setVal],
   )
@@ -94,24 +95,25 @@ const DepositModal: React.FC<DepositModalProps> = ({
     setVal(fullBalance)
   }, [fullBalance, setVal])
 
-  // if (showRoiCalculator) {
-  //   return (
-  //     <RoiCalculatorModal
-  //       linkLabel={t('Get %symbol%', { symbol: lpLabel })}
-  //       stakingTokenBalance={stakedBalance.plus(max)}
-  //       stakingTokenSymbol={tokenName}
-  //       stakingTokenPrice={lpPrice.toNumber()}
-  //       earningTokenPrice={cakePrice.toNumber()}
-  //       apr={apr}
-  //       multiplier={multiplier}
-  //       displayApr={displayApr}
-  //       linkHref={addLiquidityUrl}
-  //       isFarm
-  //       initialValue={val}
-  //       onBack={() => setShowRoiCalculator(false)}
-  //     />
-  //   )
-  // }
+  if (showRoiCalculator) {
+    return (
+      <RoiCalculatorModal
+        linkLabel={t('Get %symbol%', { symbol: lpLabel })}
+        stakingTokenBalance={stakedBalance.plus(max)}
+        stakingTokenSymbol={tokenName}
+        stakingTokenPrice={lpPrice.toNumber()}
+        earningTokenPrice={cakePrice.toNumber()}
+        apr={apr}
+        multiplier={multiplier}
+        displayApr={displayApr}
+        linkHref={addLiquidityUrl}
+        isFarm
+        initialValue={val}
+        onBack={() => setShowRoiCalculator(false)}
+        jumpToLiquidity={goAddLiquidity}
+      />
+    )
+  }
 
   return (
     <Modal title={t('Stake LP tokens')} onDismiss={onDismiss}>
@@ -121,14 +123,14 @@ const DepositModal: React.FC<DepositModalProps> = ({
         onChange={handleChange}
         max={fullBalance}
         symbol={tokenName}
-        addLiquidityUrl={addLiquidityUrl}
+        jumpToLiquidity={goAddLiquidity}
         inputTitle={t('Stake')}
       />
       <Flex mt="24px" alignItems="center" justifyContent="space-between">
         <Text mr="8px" color="textSubtle">
           {t('Annual ROI at current rates')}:
         </Text>
-        {Number.isFinite(annualRoi) ? (
+        {Number.isFinite(annualRoiAsNumber) ? (
           <AnnualRoiContainer
             alignItems="center"
             onClick={() => {

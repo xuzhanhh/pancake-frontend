@@ -69,6 +69,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   addLiquidityUrl,
   inputTitle,
   decimals = 18,
+  jumpToLiquidity,
 }) => {
   const { t } = useTranslation()
   const isBalanceZero = max === '0' || !max
@@ -108,7 +109,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
       {isBalanceZero && (
         <StyledErrorMessage fontSize="14px" color="failure">
           {t('No tokens to stake')}:{' '}
-          <Link fontSize="14px" bold={false} href={addLiquidityUrl} external color="failure">
+          <Link fontSize="14px" bold={false} onClick={jumpToLiquidity} external color="failure">
             {t('Get %symbol%', { symbol })}
           </Link>
         </StyledErrorMessage>
