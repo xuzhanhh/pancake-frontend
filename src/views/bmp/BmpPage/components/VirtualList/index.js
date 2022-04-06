@@ -1,5 +1,6 @@
 import React from 'react'
-import ViriableSizeList from './VariableSizeList.js'
+import _VariableSizeList from './VariableSizeList'
+import _FixedSizeList from './FixedSizeList'
 import { ScrollView, View } from '@tarojs/components'
 
 function convertPxToInt(style) {
@@ -39,7 +40,7 @@ const OuterScrollView = React.forwardRef((props, ref) => {
   })
 })
 
-const VirtualList = React.forwardRef((props, ref) => {
+export const VariableSizeList = React.forwardRef((props, ref) => {
   const {
     direction = 'ltr',
     innerElementType = View,
@@ -49,7 +50,7 @@ const VirtualList = React.forwardRef((props, ref) => {
     ...rest
   } = props
 
-  return React.createElement(ViriableSizeList, {
+  return React.createElement(_VariableSizeList, {
     ref,
     ...rest,
     itemElementType,
@@ -61,4 +62,24 @@ const VirtualList = React.forwardRef((props, ref) => {
   })
 })
 
-export default VirtualList
+export const FixedSizeList = React.forwardRef((props, ref) => {
+  const {
+    direction = 'ltr',
+    innerElementType = View,
+    itemElementType = View,
+    initialScrollOffset = 0,
+    overscanCount = 1,
+    ...rest
+  } = props
+
+  return React.createElement(_FixedSizeList, {
+    ref,
+    ...rest,
+    itemElementType,
+    innerElementType,
+    outerElementType: OuterScrollView,
+    direction,
+    initialScrollOffset,
+    overscanCount,
+  })
+})
