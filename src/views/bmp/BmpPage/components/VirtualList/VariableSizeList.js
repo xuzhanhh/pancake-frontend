@@ -1,4 +1,4 @@
-import createListComponent, { isHorizontalFunc } from '@tarojs/components/virtual-list/react/createListComponent'
+import createListComponent, { isHorizontalFunc } from './createListComponent'
 
 const DEFAULT_ESTIMATED_ITEM_SIZE = 50
 
@@ -123,13 +123,13 @@ const getEstimatedTotalSize = ({ itemCount }, { itemMetadataMap, estimatedItemSi
 }
 
 const VariableSizeList = createListComponent({
-  getItemOffset: (props, index, instanceProps) => getItemMetadata(props, index, instanceProps).offset,
+  getItemOffset: (props, index, _, instanceProps) => getItemMetadata(props, index, instanceProps).offset,
 
-  getItemSize: (props, index, instanceProps) => instanceProps.itemMetadataMap[index].size,
+  getItemSize: (props, index, _, instanceProps) => instanceProps.itemMetadataMap[index].size,
 
   getEstimatedTotalSize,
 
-  getOffsetForIndexAndAlignment: (props, index, align, scrollOffset, instanceProps) => {
+  getOffsetForIndexAndAlignment: (props, id, index, align, scrollOffset, _, instanceProps) => {
     const { direction, height, layout, width } = props
 
     // TODO Deprecate direction "horizontal"
@@ -171,9 +171,9 @@ const VariableSizeList = createListComponent({
     }
   },
 
-  getStartIndexForOffset: (props, offset, instanceProps) => findNearestItem(props, instanceProps, offset),
+  getStartIndexForOffset: (props, offset, _, instanceProps) => findNearestItem(props, instanceProps, offset),
 
-  getStopIndexForStartIndex: (props, startIndex, scrollOffset, instanceProps) => {
+  getStopIndexForStartIndex: (props, startIndex, scrollOffset, _, instanceProps) => {
     const { direction, height, itemCount, layout, width } = props
 
     // TODO Deprecate direction "horizontal"
