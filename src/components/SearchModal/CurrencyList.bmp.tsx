@@ -1,8 +1,8 @@
-import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
+import React, { CSSProperties, MutableRefObject, useCallback, useMemo, useRef, useState } from 'react'
 import { Currency, CurrencyAmount, currencyEquals, ETHER, Token } from '@pancakeswap/sdk'
 import { Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
-import { FixedSizeList } from 'react-window'
+// import { FixedSizeList } from 'react-window'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { LightGreyCard } from 'components/Card'
 import QuestionHelper from 'components/QuestionHelper'
@@ -17,7 +17,8 @@ import { CurrencyLogo } from '../Logo'
 import CircleLoader from '../Loader/CircleLoader'
 import { isTokenOnList } from '../../utils'
 import ImportRow from './ImportRow'
-import VirtualList from '@tarojs/components/virtual-list'
+// import VirtualList from '@tarojs/components/virtual-list'
+import { VariableSizeList, FixedSizeList } from 'views/bmp/BmpPage/components/VirtualList'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 
 const { safeArea } = getSystemInfoSync()
@@ -142,6 +143,7 @@ export default function CurrencyList({
   const inactiveTokens: {
     [address: string]: Token
   } = useAllInactiveTokens()
+  // const listRef = useRef()
   const Row = React.memo(
     useCallback(
       ({ data, index, style }) => {
@@ -184,13 +186,15 @@ export default function CurrencyList({
           )
         }
         return (
-          <CurrencyRow
-            style={style}
-            currency={currency}
-            isSelected={isSelected}
-            onSelect={handleSelect}
-            otherSelected={otherSelected}
-          />
+          <>
+            <CurrencyRow
+              style={style}
+              currency={currency}
+              isSelected={isSelected}
+              onSelect={handleSelect}
+              otherSelected={otherSelected}
+            />
+          </>
         )
       },
       [
@@ -209,16 +213,17 @@ export default function CurrencyList({
 
   const itemKey = useCallback((index: number, data: any) => currencyKey(data[index]), [])
   return (
-    <VirtualList
+    <FixedSizeList
       height={Number(safeArea.height / 2) - (showCommonBases ? 76 : 0)}
       ref={fixedListRef as any}
       width="100%"
       itemData={itemData}
       itemCount={itemData.length}
+      // itemSize={(index) => (index === activeIndex ? 100 : 56)}
       itemSize={56}
       itemKey={itemKey}
     >
       {Row}
-    </VirtualList>
+    </FixedSizeList>
   )
 }
