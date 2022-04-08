@@ -29,7 +29,8 @@ import FarmTabButtons from './components/FarmTabButtons'
 import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema } from './components/types'
-import { useDidHide, useDidShow } from '@binance/mp-service'
+import { getSystemInfo, useDidHide, useDidShow } from '@binance/mp-service'
+import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -39,7 +40,7 @@ const ControlContainer = styled.div`
 
   justify-content: space-between;
   flex-direction: column;
-  margin-bottom: 32px;
+  margin-bottom: 8px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
@@ -243,12 +244,16 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
 
   // useEffect(() => {
   //   if (isIntersecting) {
-  //     setNumberOfFarmsVisible((farmsCurrentlyVisible) => {
-  //       if (farmsCurrentlyVisible <= chosenFarmsLength.current) {
-  //         return farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE
-  //       }
-  //       return farmsCurrentlyVisible
-  //     })
+  const setVisible = useCallback(
+    () =>
+      setNumberOfFarmsVisible((farmsCurrentlyVisible) => {
+        if (farmsCurrentlyVisible <= chosenFarmsLength.current) {
+          return farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE
+        }
+        return farmsCurrentlyVisible
+      }),
+    [],
+  )
   //   }
   // }, [isIntersecting])
 
@@ -325,80 +330,90 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
   const handleSortOptionChange = (option: OptionProps): void => {
     setSortOption(option.value)
   }
+  const [remainHeight, setRemainHeight] = useState(null)
+  if (!remainHeight) {
+    bn.createSelectorQuery()
+      .selectAll('.farms-control')
+      .boundingClientRect(function (rect) {
+        const { safeArea } = getSystemInfoSync()
+        setRemainHeight(safeArea.height - rect[0].height - 44 - 49)
+      })
+      .exec()
+  }
   return (
-    <FarmsContext.Provider value={{ chosenFarmsMemoized }}>
-      <PageHeader>
-        <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-          {t('Farms')}
-        </Heading>
-        <Heading scale="lg" color="text">
-          {t('Stake LP tokens to earn.')}
-        </Heading>
-      </PageHeader>
-      <Page>
-        <ControlContainer>
-          <ViewControls>
-            <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
-            <ToggleWrapper>
-              <Toggle
-                id="staked-only-farms"
-                checked={stakedOnly}
-                onChange={() => setStakedOnly(!stakedOnly)}
-                scale="sm"
-              />
-              <ToggleWrapperText> {t('Staked only')}</ToggleWrapperText>
-            </ToggleWrapper>
-            <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
-          </ViewControls>
-          <FilterContainer>
-            <LabelWrapper>
-              <LabelWrapperText textTransform="uppercase">{t('Sort by')}</LabelWrapperText>
-              <Select
-                options={[
-                  {
-                    label: t('Hot'),
-                    value: 'hot',
-                  },
-                  {
-                    label: t('APR'),
-                    value: 'apr',
-                  },
-                  {
-                    label: t('Multiplier'),
-                    value: 'multiplier',
-                  },
-                  {
-                    label: t('Earned'),
-                    value: 'earned',
-                  },
-                  {
-                    label: t('Liquidity'),
-                    value: 'liquidity',
-                  },
-                ]}
-                onOptionChange={handleSortOptionChange}
-              />
-            </LabelWrapper>
-            <LabelWrapper style={{ marginLeft: 16 }}>
-              <LabelWrapperText textTransform="uppercase">{t('Search')}</LabelWrapperText>
-              <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
-            </LabelWrapper>
-          </FilterContainer>
-        </ControlContainer>
-        {renderContent()}
-        {account && !userDataLoaded && stakedOnly && (
-          <Flex justifyContent="center">
-            <Loading />
-          </Flex>
-        )}
-        {/* <view ref={observerRef} /> */}
-        <StyledImage
-          src="https://pancakeswap.finance/images/decorations/3dpan.png"
-          alt="Pancake illustration"
-          width={120}
-          height={103}
-        />
-      </Page>
+    <FarmsContext.Provider value={{ chosenFarmsMemoized, setVisible, height: remainHeight }}>
+      {/* <PageHeader> */}
+      {/*   <Heading as="h1" scale="xxl" color="secondary" mb="24px"> */}
+      {/*     {t('Farms')} */}
+      {/*   </Heading> */}
+      {/*   <Heading scale="lg" color="text"> */}
+      {/*     {t('Stake LP tokens to earn.')} */}
+      {/*   </Heading> */}
+      {/* </PageHeader> */}
+      {/* <Page> */}
+      <ControlContainer className="farms-control">
+        <ViewControls>
+          <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
+          <ToggleWrapper>
+            <Toggle
+              id="staked-only-farms"
+              checked={stakedOnly}
+              onChange={() => setStakedOnly(!stakedOnly)}
+              scale="sm"
+            />
+            <ToggleWrapperText> {t('Staked only')}</ToggleWrapperText>
+          </ToggleWrapper>
+          <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
+        </ViewControls>
+        <FilterContainer>
+          <LabelWrapper>
+            <LabelWrapperText textTransform="uppercase">{t('Sort by')}</LabelWrapperText>
+            <Select
+              options={[
+                {
+                  label: t('Hot'),
+                  value: 'hot',
+                },
+                {
+                  label: t('APR'),
+                  value: 'apr',
+                },
+                {
+                  label: t('Multiplier'),
+                  value: 'multiplier',
+                },
+                {
+                  label: t('Earned'),
+                  value: 'earned',
+                },
+                {
+                  label: t('Liquidity'),
+                  value: 'liquidity',
+                },
+              ]}
+              onOptionChange={handleSortOptionChange}
+            />
+          </LabelWrapper>
+          <LabelWrapper style={{ marginLeft: 16 }}>
+            <LabelWrapperText textTransform="uppercase">{t('Search')}</LabelWrapperText>
+            <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
+          </LabelWrapper>
+        </FilterContainer>
+      </ControlContainer>
+      {renderContent()}
+      {/* {account && !userDataLoaded && stakedOnly && ( */}
+      {/*   <Flex justifyContent="center"> */}
+      {/*     <Loading /> */}
+      {/*   </Flex> */}
+      {/* )} */}
+      {/* <view ref={observerRef} /> */}
+      {/* <StyledImage */}
+      {/*   src="https://pancakeswap.finance/images/decorations/3dpan.png" */}
+      {/*   alt="Pancake illustration" */}
+      {/*   width={120} */}
+      {/*   height={103} */}
+      {/* /> */}
+      {/* </Page> */}
     </FarmsContext.Provider>
   )
 }

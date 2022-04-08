@@ -22,7 +22,6 @@ const DEFAULT_ESTIMATED_ITEM_SIZE = 50
 const getItemMetadata = (props, index, instanceProps) => {
   const { itemSize } = props
   const { itemMetadataMap, lastMeasuredIndex } = instanceProps
-  console.log('???', itemMetadataMap, instanceProps)
   if (index > lastMeasuredIndex) {
     let offset = 0
     if (lastMeasuredIndex >= 0) {
@@ -215,7 +214,6 @@ const VariableSizeList = createListComponent({
         instance.forceUpdate()
       }
     }
-    console.log('init', instanceProps)
     return instanceProps
   },
 
