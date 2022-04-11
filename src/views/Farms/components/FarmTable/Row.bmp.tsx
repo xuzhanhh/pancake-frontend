@@ -15,7 +15,7 @@ import Liquidity, { LiquidityProps } from './Liquidity'
 import ActionPanel from './Actions/ActionPanel'
 import CellLayout from './CellLayout'
 import { DesktopColumnSchema, MobileColumnSchema } from '../types'
-
+import { expandIndex } from './FarmTable.bmp'
 export interface RowProps {
   apr: AprProps
   farm: FarmProps
@@ -67,21 +67,31 @@ const AprMobileCell = styled.div`
 const FarmMobileCell = styled.div`
   padding-top: 24px;
 `
+let isFirstRender = true
 
 const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
-  const { details, userDataReady } = props
+  const { details, userDataReady, expand, toggleExpand, index } = props
   const hasStakedAmount = !!useFarmUser(details.pid).stakedBalance.toNumber()
-  const [actionPanelExpanded, setActionPanelExpanded] = useState(hasStakedAmount)
-  const shouldRenderChild = useDelayedUnmount(actionPanelExpanded, 300)
+  const [actionPanelExpanded, setActionPanelExpanded] = useState(expand)
+
+  useEffect(() => {
+    if (isFirstRender && hasStakedAmount) {
+      toggleExpand()
+      setActionPanelExpanded(true)
+      isFirstRender = false
+    }
+  }, [hasStakedAmount])
+  // const shouldRenderChild = useDelayedUnmount(actionPanelExpanded, 300)
   const { t } = useTranslation()
 
   const toggleActionPanel = () => {
     setActionPanelExpanded(!actionPanelExpanded)
+    toggleExpand()
   }
 
-  useEffect(() => {
-    setActionPanelExpanded(hasStakedAmount)
-  }, [hasStakedAmount])
+  // useEffect(() => {
+  //   setActionPanelExpanded(hasStakedAmount)
+  // }, [hasStakedAmount])
 
   const { isDesktop, isMobile } = useMatchBreakpoints()
 
@@ -177,7 +187,7 @@ const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
             </CellInner>
           </view>
         </StyledTr>
-        {shouldRenderChild && <ActionPanel {...props} expanded={actionPanelExpanded} />}
+        {actionPanelExpanded && <ActionPanel {...props} expanded={actionPanelExpanded} />}
       </view>
     )
   }

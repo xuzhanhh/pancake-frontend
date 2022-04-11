@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
+import React, { useEffect, useCallback, useState, useMemo, useRef, useLayoutEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { Image, Heading, RowType, Toggle, Text, Button, ArrowForwardIcon, Flex } from '@pancakeswap/uikit'
@@ -31,7 +31,7 @@ import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema } from './components/types'
 import { getSystemInfo, useDidHide, useDidShow } from '@binance/mp-service'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
-
+import { throttle } from 'lodash'
 const ControlContainer = styled.div`
   display: flex;
   width: 100%;
@@ -104,7 +104,7 @@ const StyledImage = styled(Image)`
   margin-right: auto;
   margin-top: 58px;
 `
-const NUMBER_OF_FARMS_VISIBLE = 12
+const NUMBER_OF_FARMS_VISIBLE = 5
 
 export const getDisplayApr = (cakeRewardsApr?: number, lpRewardsApr?: number) => {
   if (cakeRewardsApr && lpRewardsApr) {
@@ -245,13 +245,17 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
   // useEffect(() => {
   //   if (isIntersecting) {
   const setVisible = useCallback(
-    () =>
-      setNumberOfFarmsVisible((farmsCurrentlyVisible) => {
-        if (farmsCurrentlyVisible <= chosenFarmsLength.current) {
-          return farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE
-        }
-        return farmsCurrentlyVisible
-      }),
+    throttle(
+      () =>
+        setNumberOfFarmsVisible((farmsCurrentlyVisible) => {
+          console.log('??? setNumberOfFarmsVisible')
+          if (farmsCurrentlyVisible <= chosenFarmsLength.current) {
+            return farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE
+          }
+          return farmsCurrentlyVisible
+        }),
+      10000,
+    ),
     [],
   )
   //   }
@@ -331,15 +335,21 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
     setSortOption(option.value)
   }
   const [remainHeight, setRemainHeight] = useState(null)
-  if (!remainHeight) {
-    bn.createSelectorQuery()
-      .selectAll('.farms-control')
-      .boundingClientRect(function (rect) {
-        const { safeArea } = getSystemInfoSync()
-        setRemainHeight(safeArea.height - rect[0].height - 44 - 49)
-      })
-      .exec()
-  }
+  useEffect(() => {
+    setTimeout(() => {
+      bn.createSelectorQuery()
+        .selectAll('.farms-control')
+        .boundingClientRect(function (rect) {
+          const { safeArea } = getSystemInfoSync()
+          console.log('??? in query Selector', rect[0])
+          setRemainHeight(safeArea.height - rect[0].height - 44 - 49)
+        })
+        .exec()
+    }, 0)
+  }, [remainHeight])
+  // if (execQuerySelector) {
+  //   execQuerySelector = false
+  // }
   return (
     <FarmsContext.Provider value={{ chosenFarmsMemoized, setVisible, height: remainHeight }}>
       {/* <PageHeader> */}
