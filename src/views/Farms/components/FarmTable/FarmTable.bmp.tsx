@@ -1,9 +1,12 @@
-import React, { useRef } from 'react'
+import React, { useCallback, useContext, useMemo, useRef } from 'react'
 import styled from 'styled-components'
 import { useTable, Button, ChevronUpIcon, ColumnType } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 
+import { remove } from 'lodash'
 import Row, { RowProps } from './Row'
+import { VariableSizeList } from 'views/bmp/BmpPage/components/VirtualList'
+import { FarmsContext } from 'views/Farms'
 
 export interface ITableProps {
   data: RowProps[]
@@ -56,36 +59,97 @@ const ScrollButtonContainer = styled.div`
   padding-bottom: 5px;
 `
 
+export let expandIndex = []
+const setExpandIndex = (func) => {
+  const result = func(expandIndex)
+  expandIndex = result
+}
+
 const FarmTable: React.FC<ITableProps> = (props) => {
   // const tableWrapperEl = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
+
+  const { setVisible, height } = useContext(FarmsContext)
+  console.log('???', height)
   const { data, columns, userDataReady } = props
 
   const { rows } = useTable(columns, data, { sortable: true, sortColumn: 'farm' })
 
-  // const scrollToTop = (): void => {
-  //   tableWrapperEl.current.scrollIntoView({
-  //     behavior: 'smooth',
-  //   })
-  // }
+  const virtualListRef = useRef()
+
+  const toggleExpand = (index) => () => {
+    setExpandIndex((expandIndex) => {
+      if (expandIndex.includes(index)) {
+        const newArray = [...expandIndex]
+        remove(newArray, (n) => n === index)
+        return newArray
+      } else {
+        return [...expandIndex, index]
+        // setExpandIndex(array => [...array, index])
+      }
+    })
+    virtualListRef.current?.resetAfterIndex(index)
+  }
+
+  const VirtualListRow = React.memo(
+    useCallback(
+      ({ data, index, style }) => {
+        const row = data[index]
+        console.log('??? render row', row)
+        return (
+          <Row
+            {...row.original}
+            userDataReady={userDataReady}
+            index={index}
+            toggleExpand={toggleExpand(index)}
+            expand={expandIndex.includes(index)}
+          />
+        )
+        // return <view>{index}</view>
+      },
+      [userDataReady],
+    ),
+  )
+
+  const VariableList = useMemo(() => {
+    return (
+      <VariableSizeList
+        height={height || 500}
+        // height={500}
+        ref={virtualListRef}
+        width="100%"
+        itemData={rows}
+        itemCount={rows.length}
+        itemSize={(index) => (expandIndex.includes(index) ? 619 : 127)}
+        onScrollToLower={() => {
+          console.log('??? onScrollToLower')
+          setVisible()
+        }}
+      >
+        {VirtualListRow}
+      </VariableSizeList>
+    )
+  }, [rows])
+
   return (
     <Container id="farms-table">
       <TableContainer id="table-container">
         <TableWrapper id="table-wrapper">
           <StyledTable id="styled-table">
             <TableBody id="table-body">
-              {rows.map((row) => {
-                return <Row {...row.original} userDataReady={userDataReady} key={`table-row-${row.id}`} />
-              })}
+              {VariableList}
+              {/* {rows.map((row) => { */}
+              {/*   return <Row {...row.original} userDataReady={userDataReady} key={`table-row-${row.id}`} /> */}
+              {/* })} */}
             </TableBody>
           </StyledTable>
         </TableWrapper>
-        <ScrollButtonContainer>
-          <Button variant="text" onClick={() => {}}>
-            {t('To Top')}
-            <ChevronUpIcon color="primary" />
-          </Button>
-        </ScrollButtonContainer>
+        {/* <ScrollButtonContainer> */}
+        {/*   <Button variant="text" onClick={() => { }}> */}
+        {/*     {t('To Top')} */}
+        {/*     <ChevronUpIcon color="primary" /> */}
+        {/*   </Button> */}
+        {/* </ScrollButtonContainer> */}
       </TableContainer>
     </Container>
   )
