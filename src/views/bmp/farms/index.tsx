@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Farms from 'pages/farms/index.bmp'
-import History from 'pages/farms/history.bmp'
 import BmpPage from '../BmpPage'
 import { ActiveId } from '../BmpPage/constants'
 import { FarmsPage, FarmsProvider, useFarms } from './farmsContext'
@@ -14,12 +13,14 @@ export const FarmsWrapper = () => {
     case FarmsPage.Farms:
       return <Farms />
     case FarmsPage.History:
-      return <History />
+      // use same component here
+      return <Farms />
     default:
       return null
   }
 }
 
+ 
 const FarmsHome = () => {
   //   const [isHide, setIsHide] = useState(false)
   //   useDidShow(() => {

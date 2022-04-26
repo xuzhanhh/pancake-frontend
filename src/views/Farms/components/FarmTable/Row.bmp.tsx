@@ -98,7 +98,7 @@ const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
   const isSmallerScreen = !isDesktop
   const tableSchema = isSmallerScreen ? MobileColumnSchema : DesktopColumnSchema
   const columnNames = tableSchema.map((column) => column.name)
-
+  console.log('??? aaa', props.apr)
   const handleRenderRow = () => {
     if (!isMobile) {
       return (

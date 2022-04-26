@@ -16,7 +16,7 @@ const setExpandIndex = (func) => {
 
 const FarmsPage = ({ cakePrice }) => {
   const { account } = useWeb3React()
-  const { chosenFarmsMemoized, setVisible, height } = useContext(FarmsContext)
+  const { chosenFarmsMemoized, height } = useContext(FarmsContext)
   // const [expandIndex, setExpandIndex] = useState([])
   const virtualListRef = useRef()
   const toggleExpand = (index) => () => {
@@ -64,7 +64,7 @@ const FarmsPage = ({ cakePrice }) => {
         itemCount={chosenFarmsMemoized.length}
         itemSize={(index) => (expandIndex.includes(index) ? 566 : 422)}
         itemKey={itemKey}
-        onScrollToLower={setVisible}
+        // onScrollToLower={setVisible}
       >
         {Row}
       </VariableSizeList>

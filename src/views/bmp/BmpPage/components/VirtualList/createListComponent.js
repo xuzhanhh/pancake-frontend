@@ -20,7 +20,7 @@ export function isHorizontalFunc({ direction, layout }) {
 export function isRtlFunc({ direction }) {
   return direction === 'rtl'
 }
-export function getRectSize(id, success = () => {}, fail = () => {}) {
+export function getRectSize(id, success = () => { }, fail = () => { }) {
   const query = Taro.createSelectorQuery()
   query
     .select(id)
@@ -154,9 +154,10 @@ export default function createListComponent({
             }
             const { sizeList } = this.state
             const sizes = sizeList.slice(0, count)
-            return sizes.reduce((p, a) => {
+            const data = sizes.reduce((p, a) => {
               return p + this._getSize(a)
             }, 0)
+            return data
           }
 
           this._getSizeCount = void 0
@@ -242,7 +243,7 @@ export default function createListComponent({
           this._onScrollHorizontal = (event) => {
             const { clientWidth, scrollTop, scrollLeft, scrollHeight, scrollWidth } = event.currentTarget
             this.field.scrollHeight = scrollHeight
-            this.field.scrollWidth = getEstimatedTotalSize(this.props, this)
+            this.field.scrollWidth = getEstimatedTotalSize(this.props, this, this._instanceProps)
             this.field.scrollTop = scrollTop
             this.field.scrollLeft = scrollLeft
             this.field.clientHeight = scrollHeight
@@ -295,7 +296,7 @@ export default function createListComponent({
                 return null
               } // Prevent Safari's elastic scrolling from causing visual shaking when scrolling past bounds.
               const scrollOffset = Math.max(0, Math.min(scrollTop, scrollHeight - clientHeight))
-              this.field.scrollHeight = getEstimatedTotalSize(this.props, this)
+              this.field.scrollHeight = getEstimatedTotalSize(this.props, this, this._instanceProps)
               this.field.scrollWidth = scrollWidth
               this.field.scrollTop = scrollOffset
               this.field.scrollLeft = scrollLeft
@@ -515,7 +516,7 @@ export default function createListComponent({
           // Read this value AFTER items have been created,
           // So their actual sizes (if variable) are taken into consideration.
 
-          const estimatedTotalSize = getEstimatedTotalSize(this.props, this)
+          const estimatedTotalSize = getEstimatedTotalSize(this.props, this, this._instanceProps)
           const outerElementProps = {
             ...rest,
             id,

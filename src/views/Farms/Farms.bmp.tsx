@@ -14,7 +14,7 @@ import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { getFarmApr } from 'utils/apr'
 import orderBy from 'lodash/orderBy'
-import isArchivedPid from 'utils/farmHelpers'
+import { isArchivedPid } from 'utils/farmHelpers'
 import { latinise } from 'utils/latinise'
 import { useUserFarmStakedOnly, useUserFarmsViewMode } from 'state/user/hooks'
 import { ViewMode } from 'state/user/actions'
@@ -104,7 +104,7 @@ const StyledImage = styled(Image)`
   margin-right: auto;
   margin-top: 58px;
 `
-const NUMBER_OF_FARMS_VISIBLE = 5
+const NUMBER_OF_FARMS_VISIBLE = 2000
 
 export const getDisplayApr = (cakeRewardsApr?: number, lpRewardsApr?: number) => {
   if (cakeRewardsApr && lpRewardsApr) {
@@ -129,7 +129,6 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
   const [sortOption, setSortOption] = useState('hot')
   // const { observerRef, isIntersecting } = useIntersectionObserver()
   const chosenFarmsLength = useRef(0)
-  console.log('farms rerender', new Date().toString())
   const isArchived = false
   const isInactive = page === FarmsPage.History
   const isActive = !isInactive && !isArchived
@@ -163,6 +162,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
           return farm
         }
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteTokenPriceBusd)
+        console.log('??? ccc', new BigNumber(farm.poolWeight), cakePrice, totalLiquidity, farm.lpAddresses[ChainId.MAINNE])
         const { cakeRewardsApr, lpRewardsApr } = isActive
           ? getFarmApr(new BigNumber(farm.poolWeight), cakePrice, totalLiquidity, farm.lpAddresses[ChainId.MAINNET])
           : { cakeRewardsApr: 0, lpRewardsApr: 0 }
@@ -244,20 +244,19 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
 
   // useEffect(() => {
   //   if (isIntersecting) {
-  const setVisible = useCallback(
-    throttle(
-      () =>
-        setNumberOfFarmsVisible((farmsCurrentlyVisible) => {
-          console.log('??? setNumberOfFarmsVisible')
-          if (farmsCurrentlyVisible <= chosenFarmsLength.current) {
-            return farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE
-          }
-          return farmsCurrentlyVisible
-        }),
-      10000,
-    ),
-    [],
-  )
+  // const setVisible = useCallback(
+  //   throttle(
+  //     () =>
+  //       setNumberOfFarmsVisible((farmsCurrentlyVisible) => {
+  //         if (farmsCurrentlyVisible <= chosenFarmsLength.current) {
+  //           return farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE
+  //         }
+  //         return farmsCurrentlyVisible
+  //       }),
+  //     10000,
+  //   ),
+  //   [],
+  // )
   //   }
   // }, [isIntersecting])
 
@@ -266,7 +265,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
     const tokenAddress = token.address
     const quoteTokenAddress = quoteToken.address
     const lpLabel = farm.lpSymbol && farm.lpSymbol.split(' ')[0].toUpperCase().replace('PANCAKE', '')
-
+    console.log('??? ccc', farm.apr, farm.lpRewardsApr)
     const row: RowProps = {
       apr: {
         value: getDisplayApr(farm.apr, farm.lpRewardsApr),
@@ -339,10 +338,9 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
     setTimeout(() => {
       bn.createSelectorQuery()
         .selectAll('.farms-control')
-        .boundingClientRect(function (rect) {
+        .boundingClientRect(function(rect) {
           const { safeArea } = getSystemInfoSync()
-          console.log('??? in query Selector', rect[0])
-          setRemainHeight(safeArea.height - rect[0].height - 44 - 49)
+          setRemainHeight(safeArea.height - rect[0].height - 35 - 44 - 49)
         })
         .exec()
     }, 0)
@@ -351,7 +349,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
   //   execQuerySelector = false
   // }
   return (
-    <FarmsContext.Provider value={{ chosenFarmsMemoized, setVisible, height: remainHeight }}>
+    <FarmsContext.Provider value={{ chosenFarmsMemoized, height: remainHeight }}>
       {/* <PageHeader> */}
       {/*   <Heading as="h1" scale="xxl" color="secondary" mb="24px"> */}
       {/*     {t('Farms')} */}

@@ -112,7 +112,9 @@ const FixedSizeList =
       return ref._getSizeUpload(index, isHorizontalFunc(props))
     },
     getEstimatedTotalSize(props, ref) {
-      return ref._getCountSize(props, props.itemCount)
+      const data = ref._getCountSize(props, props.itemCount)
+      console.log('??? getEstimatedTotalSize', data)
+      return data
     },
     getOffsetForIndexAndAlignment: (props, id, index, align, scrollOffset, ref) => {
       const { height, width } = props
