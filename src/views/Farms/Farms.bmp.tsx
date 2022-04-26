@@ -32,6 +32,7 @@ import { DesktopColumnSchema } from './components/types'
 import { getSystemInfo, useDidHide, useDidShow } from '@binance/mp-service'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import { throttle } from 'lodash'
+
 const ControlContainer = styled.div`
   display: flex;
   width: 100%;
@@ -122,7 +123,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
   const {
     state: { page },
   } = useFarmsWrapper()
-  const { data: farmsLP, userDataLoaded } = farmsData
+  const { data: farmsLP, userDataLoaded, regularCakePerBlock } = farmsData
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useUserFarmsViewMode()
   const { account } = useWeb3React()
@@ -162,11 +163,15 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
           return farm
         }
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteTokenPriceBusd)
-        console.log('??? ccc', new BigNumber(farm.poolWeight), cakePrice, totalLiquidity, farm.lpAddresses[ChainId.MAINNE])
         const { cakeRewardsApr, lpRewardsApr } = isActive
-          ? getFarmApr(new BigNumber(farm.poolWeight), cakePrice, totalLiquidity, farm.lpAddresses[ChainId.MAINNET])
+          ? getFarmApr(
+              new BigNumber(farm.poolWeight),
+              cakePrice,
+              totalLiquidity,
+              farm.lpAddresses[ChainId.MAINNET],
+              regularCakePerBlock,
+            )
           : { cakeRewardsApr: 0, lpRewardsApr: 0 }
-
         return { ...farm, apr: cakeRewardsApr, lpRewardsApr, liquidity: totalLiquidity }
       })
 
@@ -178,7 +183,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
       }
       return farmsToDisplayWithAPR
     },
-    [cakePrice, query, isActive],
+    [cakePrice, query, isActive, regularCakePerBlock],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -265,7 +270,6 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
     const tokenAddress = token.address
     const quoteTokenAddress = quoteToken.address
     const lpLabel = farm.lpSymbol && farm.lpSymbol.split(' ')[0].toUpperCase().replace('PANCAKE', '')
-    console.log('??? ccc', farm.apr, farm.lpRewardsApr)
     const row: RowProps = {
       apr: {
         value: getDisplayApr(farm.apr, farm.lpRewardsApr),
@@ -338,7 +342,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
     setTimeout(() => {
       bn.createSelectorQuery()
         .selectAll('.farms-control')
-        .boundingClientRect(function(rect) {
+        .boundingClientRect(function (rect) {
           const { safeArea } = getSystemInfoSync()
           setRemainHeight(safeArea.height - rect[0].height - 35 - 44 - 49)
         })
@@ -431,11 +435,11 @@ export const FarmsContext = React.createContext({ chosenFarmsMemoized: [] })
 // let origin = null
 
 const Fetcher = React.memo(({ setFarmsData, setCakePrice }) => {
-  const { data, userDataLoaded } = useFarms()
+  const { data, userDataLoaded, regularCakePerBlock } = useFarms()
   const cakePrice = usePriceCakeBusd()
   useEffect(() => {
-    setFarmsData({ data, userDataLoaded })
-  }, [data, userDataLoaded, setFarmsData])
+    setFarmsData({ data, userDataLoaded, regularCakePerBlock })
+  }, [data, userDataLoaded, setFarmsData, regularCakePerBlock])
   useEffect(() => {
     setCakePrice(cakePrice)
   }, [cakePrice, setCakePrice])
