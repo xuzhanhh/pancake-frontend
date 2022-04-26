@@ -7,9 +7,13 @@ import type {
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit'
 import stringify from 'fast-json-stable-stringify'
 import farmsConfig from 'config/constants/farms'
-import isArchivedPid from 'utils/farmHelpers'
+import { isArchivedPid } from 'utils/farmHelpers'
+import multicall from 'utils/multicall'
+import masterchefABI from 'config/abi/masterchef.json'
+import { getMasterChefAddress } from 'utils/addressHelpers'
+import { getBalanceAmount } from 'utils/formatBalance'
+import { ethersToBigNumber } from 'utils/bigNumber'
 import type { AppState } from 'state'
-import priceHelperLpsConfig from 'config/constants/priceHelperLps'
 import fetchFarms from './fetchFarms'
 import getFarmsPrices from './getFarmsPrices'
 import {
@@ -19,6 +23,8 @@ import {
   fetchFarmUserStakedBalances,
 } from './fetchFarmUser'
 import { SerializedFarmsState, SerializedFarm } from '../types'
+import { fetchMasterChefFarmPoolLength } from './fetchMasterChefData'
+import { resetUserState } from '../global/actions'
 
 const noAccountFarmConfig = farmsConfig.map((farm) => ({
   ...farm,
@@ -41,7 +47,7 @@ export const nonArchivedFarms = farmsConfig.filter(({ pid }) => !isArchivedPid(p
 
 // Async thunks
 export const fetchFarmsPublicDataAsync = createAsyncThunk<
-  SerializedFarm[],
+  [SerializedFarm[], number, number],
   number[],
   {
     state: AppState
@@ -49,20 +55,27 @@ export const fetchFarmsPublicDataAsync = createAsyncThunk<
 >(
   'farms/fetchFarmsPublicDataAsync',
   async (pids) => {
+    const masterChefAddress = getMasterChefAddress()
+    const calls = [
+      {
+        address: masterChefAddress,
+        name: 'poolLength',
+      },
+      {
+        address: masterChefAddress,
+        name: 'cakePerBlock',
+        params: [true],
+      },
+    ]
+    const [[poolLength], [cakePerBlockRaw]] = await multicall(masterchefABI, calls)
+    const regularCakePerBlock = getBalanceAmount(ethersToBigNumber(cakePerBlockRaw))
     const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.pid))
+    const farmsCanFetch = farmsToFetch.filter((f) => poolLength.gt(f.pid))
 
-    // Add price helper farms
-    const farmsWithPriceHelpers = farmsToFetch.concat(priceHelperLpsConfig)
-
-    const farms = await fetchFarms(farmsWithPriceHelpers)
+    const farms = await fetchFarms(farmsCanFetch)
     const farmsWithPrices = getFarmsPrices(farms)
 
-    // Filter out price helper LP config farms
-    const farmsWithoutHelperLps = farmsWithPrices.filter((farm: SerializedFarm) => {
-      return farm.pid || farm.pid === 0
-    })
-
-    return farmsWithoutHelperLps
+    return [farmsWithPrices, poolLength.toNumber(), regularCakePerBlock.toNumber()]
   },
   {
     condition: (arg, { getState }) => {
@@ -93,15 +106,17 @@ export const fetchFarmUserDataAsync = createAsyncThunk<
 >(
   'farms/fetchFarmUserDataAsync',
   async ({ account, pids }) => {
+    const poolLength = await fetchMasterChefFarmPoolLength()
     const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.pid))
-    const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
-    const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
-    const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)
-    const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
+    const farmsCanFetch = farmsToFetch.filter((f) => poolLength.gt(f.pid))
+    const userFarmAllowances = await fetchFarmUserAllowances(account, farmsCanFetch)
+    const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsCanFetch)
+    const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsCanFetch)
+    const userFarmEarnings = await fetchFarmUserEarnings(account, farmsCanFetch)
 
     return userFarmAllowances.map((farmAllowance, index) => {
       return {
-        pid: farmsToFetch[index].pid,
+        pid: farmsCanFetch[index].pid,
         allowance: userFarmAllowances[index],
         tokenBalance: userFarmTokenBalances[index],
         stakedBalance: userStakedBalances[index],
@@ -142,12 +157,30 @@ export const farmsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(resetUserState, (state) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      state.data = state.data.map((farm) => {
+        return {
+          ...farm,
+          userData: {
+            allowance: '0',
+            tokenBalance: '0',
+            stakedBalance: '0',
+            earnings: '0',
+          },
+        }
+      })
+      state.userDataLoaded = false
+    })
     // Update farms with live data
     builder.addCase(fetchFarmsPublicDataAsync.fulfilled, (state, action) => {
+      const [farmPayload, poolLength, regularCakePerBlock] = action.payload
       state.data = state.data.map((farm) => {
-        const liveFarmData = action.payload.find((farmData) => farmData.pid === farm.pid)
+        const liveFarmData = farmPayload.find((farmData) => farmData.pid === farm.pid)
         return { ...farm, ...liveFarmData }
       })
+      state.poolLength = poolLength
+      state.regularCakePerBlock = regularCakePerBlock
     })
 
     // Update farms with user data

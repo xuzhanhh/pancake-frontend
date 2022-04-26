@@ -37,6 +37,7 @@ const FarmTabButtons: React.FC<FarmTabButtonsProps> = ({ hasStakeInFinishedFarms
     <Wrapper>
       <ButtonMenu
         onItemClick={(index) => {
+          console.log('???', index)
           if (index === 0) {
             dispatch({ type: 'setPage', page: FarmsPage.Farms })
           } else if (index === 1) {
@@ -49,7 +50,7 @@ const FarmTabButtons: React.FC<FarmTabButtonsProps> = ({ hasStakeInFinishedFarms
       >
         <ButtonMenuItem>{t('Live')}</ButtonMenuItem>
         <NotificationDot show={hasStakeInFinishedFarms}>
-          <ButtonMenuItem id="finished-farms-button">{t('Finished')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('Finished')}</ButtonMenuItem>
         </NotificationDot>
       </ButtonMenu>
     </Wrapper>

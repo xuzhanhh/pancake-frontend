@@ -5,7 +5,7 @@ import { useTranslation } from 'contexts/Localization'
 
 import { remove } from 'lodash'
 import Row, { RowProps } from './Row'
-import { VariableSizeList } from 'views/bmp/BmpPage/components/VirtualList'
+import { VariableSizeList, FixedSizeList } from 'views/bmp/BmpPage/components/VirtualList'
 import { FarmsContext } from 'views/Farms'
 
 export interface ITableProps {
@@ -70,7 +70,6 @@ const FarmTable: React.FC<ITableProps> = (props) => {
   const { t } = useTranslation()
 
   const { setVisible, height } = useContext(FarmsContext)
-  console.log('???', height)
   const { data, columns, userDataReady } = props
 
   const { rows } = useTable(columns, data, { sortable: true, sortColumn: 'farm' })
@@ -95,7 +94,6 @@ const FarmTable: React.FC<ITableProps> = (props) => {
     useCallback(
       ({ data, index, style }) => {
         const row = data[index]
-        console.log('??? render row', row)
         return (
           <Row
             {...row.original}
@@ -121,10 +119,11 @@ const FarmTable: React.FC<ITableProps> = (props) => {
         itemData={rows}
         itemCount={rows.length}
         itemSize={(index) => (expandIndex.includes(index) ? 619 : 127)}
-        onScrollToLower={() => {
-          console.log('??? onScrollToLower')
-          setVisible()
-        }}
+      // itemSize={127}
+      // onScrollToLower={() => {
+      //   console.log('??? onScrollToLower')
+      //   setVisible()
+      // }}
       >
         {VirtualListRow}
       </VariableSizeList>

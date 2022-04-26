@@ -101,7 +101,7 @@ const findNearestItemExponentialSearch = (props, instanceProps, index, offset) =
   )
 }
 
-const getEstimatedTotalSize = ({ itemCount }, { itemMetadataMap, estimatedItemSize, lastMeasuredIndex }) => {
+const getEstimatedTotalSize = ({ itemCount }, _, { itemMetadataMap, estimatedItemSize, lastMeasuredIndex }) => {
   let totalSizeOfMeasuredItems = 0
 
   // Edge case check for when the number of items decreases while a scroll is in progress.
@@ -109,7 +109,6 @@ const getEstimatedTotalSize = ({ itemCount }, { itemMetadataMap, estimatedItemSi
   if (lastMeasuredIndex >= itemCount) {
     lastMeasuredIndex = itemCount - 1
   }
-
   if (lastMeasuredIndex >= 0) {
     const itemMetadata = itemMetadataMap[lastMeasuredIndex]
     totalSizeOfMeasuredItems = itemMetadata.offset + itemMetadata.size
@@ -117,7 +116,6 @@ const getEstimatedTotalSize = ({ itemCount }, { itemMetadataMap, estimatedItemSi
 
   const numUnmeasuredItems = itemCount - lastMeasuredIndex - 1
   const totalSizeOfUnmeasuredItems = numUnmeasuredItems * estimatedItemSize
-
   return totalSizeOfMeasuredItems + totalSizeOfUnmeasuredItems
 }
 
@@ -172,7 +170,7 @@ const VariableSizeList = createListComponent({
 
   getStartIndexForOffset: (props, offset, _, instanceProps) => findNearestItem(props, instanceProps, offset),
 
-  getStopIndexForStartIndex: (props, startIndex, scrollOffset, _, instanceProps) => {
+  getStopIndexForStartIndex: (props, scrollOffset, startIndex, _, instanceProps) => {
     const { direction, height, itemCount, layout, width } = props
 
     // TODO Deprecate direction "horizontal"
@@ -217,15 +215,15 @@ const VariableSizeList = createListComponent({
     return instanceProps
   },
 
-  shouldResetStyleCacheOnItemSizeChange: false,
+  shouldResetStyleCacheOnItemSizeChange: true,
 
   validateProps: ({ itemSize }) => {
     if (process.env.NODE_ENV !== 'production') {
       if (typeof itemSize !== 'function') {
         throw Error(
           'An invalid "itemSize" prop has been specified. ' +
-            'Value should be a function. ' +
-            `"${itemSize === null ? 'null' : typeof itemSize}" was specified.`,
+          'Value should be a function. ' +
+          `"${itemSize === null ? 'null' : typeof itemSize}" was specified.`,
         )
       }
     }
