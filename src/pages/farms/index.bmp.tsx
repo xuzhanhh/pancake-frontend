@@ -17,7 +17,12 @@ const setExpandIndex = (func) => {
 const FarmsPage = ({ cakePrice }) => {
   const { account } = useWeb3React()
   const { chosenFarmsMemoized, height } = useContext(FarmsContext)
-  // const [expandIndex, setExpandIndex] = useState([])
+  const [reRender, triggerRerender] = useState(0)
+
+  useDidShow(() => {
+    triggerRerender((n) => n + 1)
+  })
+
   const virtualListRef = useRef()
   const toggleExpand = (index) => () => {
     setExpandIndex((expandIndex) => {
