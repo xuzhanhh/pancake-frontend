@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef } from 'react'
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useTable, Button, ChevronUpIcon, ColumnType } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
@@ -7,6 +7,7 @@ import { remove } from 'lodash'
 import Row, { RowProps } from './Row'
 import { VariableSizeList, FixedSizeList } from 'views/bmp/BmpPage/components/VirtualList'
 import { FarmsContext } from 'views/Farms'
+import { useDidShow } from '@binance/mp-service'
 
 export interface ITableProps {
   data: RowProps[]
@@ -73,9 +74,11 @@ const FarmTable: React.FC<ITableProps> = (props) => {
   const { data, columns, userDataReady } = props
 
   const { rows } = useTable(columns, data, { sortable: true, sortColumn: 'farm' })
-
+  const [reRender, triggerReRender] = useState(0)
   const virtualListRef = useRef()
-
+  useDidShow(() => {
+    triggerReRender((n) => n + 1)
+  })
   const toggleExpand = (index) => () => {
     setExpandIndex((expandIndex) => {
       if (expandIndex.includes(index)) {
@@ -119,17 +122,16 @@ const FarmTable: React.FC<ITableProps> = (props) => {
         itemData={rows}
         itemCount={rows.length}
         itemSize={(index) => (expandIndex.includes(index) ? 619 : 127)}
-      // itemSize={127}
-      // onScrollToLower={() => {
-      //   console.log('??? onScrollToLower')
-      //   setVisible()
-      // }}
+        // itemSize={127}
+        // onScrollToLower={() => {
+        //   console.log('??? onScrollToLower')
+        //   setVisible()
+        // }}
       >
         {VirtualListRow}
       </VariableSizeList>
     )
   }, [rows])
-
   return (
     <Container id="farms-table">
       <TableContainer id="table-container">
