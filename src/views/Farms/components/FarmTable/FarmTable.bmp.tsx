@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useTable, Button, ChevronUpIcon, ColumnType } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
@@ -21,7 +21,7 @@ const Container = styled.div`
   width: 100%;
   background: ${({ theme }) => theme.card.background};
   border-radius: 16px;
-  margin: 16px 0px;
+  margin: 8px 0px;
 `
 
 const TableWrapper = styled.div`
@@ -79,6 +79,9 @@ const FarmTable: React.FC<ITableProps> = (props) => {
   useDidShow(() => {
     triggerReRender((n) => n + 1)
   })
+  useEffect(() => {
+    triggerReRender((n) => n + 1)
+  }, [data])
   const toggleExpand = (index) => () => {
     setExpandIndex((expandIndex) => {
       if (expandIndex.includes(index)) {
@@ -122,6 +125,7 @@ const FarmTable: React.FC<ITableProps> = (props) => {
         itemData={rows}
         itemCount={rows.length}
         itemSize={(index) => (expandIndex.includes(index) ? 619 : 127)}
+        overscanCount={4}
         // itemSize={127}
         // onScrollToLower={() => {
         //   console.log('??? onScrollToLower')

@@ -6,6 +6,7 @@ import { useTranslation } from 'contexts/Localization'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import useToast from 'hooks/useToast'
 import { logError } from 'utils/sentry'
+import { FloatLayout } from 'components/FloatLayout/index.bmp'
 
 interface WithdrawModalProps {
   max: BigNumber
@@ -40,42 +41,45 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, max
   }, [fullBalance, setVal])
 
   return (
-    <Modal title={t('Unstake LP tokens')} onDismiss={onDismiss}>
-      <ModalInput
-        onSelectMax={handleSelectMax}
-        onChange={handleChange}
-        value={val}
-        max={fullBalance}
-        symbol={tokenName}
-        inputTitle={t('Unstake')}
-      />
-      <ModalActions>
-        <Button variant="secondary" onClick={onDismiss} width="100%" disabled={pendingTx}>
-          {t('Cancel')}
-        </Button>
-        <Button
-          disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
-          onClick={async () => {
-            setPendingTx(true)
-            try {
-              await onConfirm(val)
-              onDismiss()
-            } catch (e) {
-              logError(e)
-              toastError(
-                t('Error'),
-                t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
-              )
-            } finally {
-              setPendingTx(false)
-            }
-          }}
-          width="100%"
-        >
-          {pendingTx ? t('Confirming') : t('Confirm')}
-        </Button>
-      </ModalActions>
-    </Modal>
+    <FloatLayout title={t('Unstake LP tokens')} onDismiss={onDismiss}>
+      <view style={{ padding: '20px' }}>
+        <ModalInput
+          onSelectMax={handleSelectMax}
+          onChange={handleChange}
+          value={val}
+          max={fullBalance}
+          symbol={tokenName}
+          inputTitle={t('Unstake')}
+        />
+        <view style={{ marginTop: '24px' }} />
+        <ModalActions>
+          <Button variant="secondary" onClick={onDismiss} width="100%" disabled={pendingTx}>
+            {t('Cancel')}
+          </Button>
+          <Button
+            disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
+            onClick={async () => {
+              setPendingTx(true)
+              try {
+                await onConfirm(val)
+                onDismiss()
+              } catch (e) {
+                logError(e)
+                toastError(
+                  t('Error'),
+                  t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+                )
+              } finally {
+                setPendingTx(false)
+              }
+            }}
+            width="100%"
+          >
+            {pendingTx ? t('Confirming') : t('Confirm')}
+          </Button>
+        </ModalActions>
+      </view>
+    </FloatLayout>
   )
 }
 

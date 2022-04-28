@@ -42,12 +42,14 @@ const defaultState = {
 }
 const Title = ({ selected, title }) => {
   const theme = useTheme()
-  const { t } = useTranslation()
+  const { t, currentLanguage } = useTranslation()
   return (
     <View
       className="bottom-tab-item-text"
       style={{
         color: selected ? theme.colors.secondary : theme.colors.textSubtle,
+        fontWeight: selected ? 600 : 400,
+        fontSize: currentLanguage.locale === 'zh-CN' || currentLanguage.locale === 'zh-TW' ? 12 : 14,
       }}
     >
       {t(title)}
