@@ -1,14 +1,14 @@
-import react from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { chevrondownicon, chevronupicon, text } from '@pancakeswap/uikit'
-import { usetranslation } from 'contexts/localization'
+import { ChevronDownIcon, ChevronUpIcon, Text } from '@pancakeswap/uikit'
+import { useTranslation } from 'contexts/Localization'
 
-export interface expandablesectionbuttonprops {
-  onclick?: () => void
+export interface ExpandableSectionButtonProps {
+  onClick?: () => void
   expanded?: boolean
 }
 
-const wrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,17 +19,17 @@ const wrapper = styled.div`
   }
 `
 
-const expandablesectionbutton: react.fc<expandablesectionbuttonprops> = ({ onclick, expanded = false }) => {
-  const { t } = usetranslation()
+const ExpandableSectionButton: React.FC<ExpandableSectionButtonProps> = ({ onClick, expanded = false }) => {
+  const { t } = useTranslation()
 
   return (
-    <wrapper aria-label={t('hide or show expandable content')} role="button" onclick={() => onclick()}>
-      <text color="primary" bold>
-        {expanded ? t('hide') : t('details')}
-      </text>
-      {expanded ? <chevronupicon color="primary" /> : <chevrondownicon color="primary" />}
-    </wrapper>
+    <Wrapper aria-label={t('Hide or show expandable content')} role="button" onClick={() => onClick()}>
+      <Text color="primary" bold>
+        {expanded ? t('Hide') : t('Details')}
+      </Text>
+      {expanded ? <ChevronUpIcon color="primary" /> : <ChevronDownIcon color="primary" />}
+    </Wrapper>
   )
 }
 
-export default expandablesectionbutton
+export default ExpandableSectionButton
