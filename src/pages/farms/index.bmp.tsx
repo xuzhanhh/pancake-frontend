@@ -22,6 +22,9 @@ const FarmsPage = ({ cakePrice }) => {
   useDidShow(() => {
     triggerRerender((n) => n + 1)
   })
+  useEffect(() => {
+    triggerRerender((n) => n + 1)
+  }, [chosenFarmsMemoized])
 
   const virtualListRef = useRef()
   const toggleExpand = (index) => () => {
@@ -69,13 +72,14 @@ const FarmsPage = ({ cakePrice }) => {
         itemCount={chosenFarmsMemoized.length}
         itemSize={(index) => (expandIndex.includes(index) ? 566 : 422)}
         itemKey={itemKey}
+        overscanCount={4}
         // onScrollToLower={setVisible}
       >
         {Row}
       </VariableSizeList>
     )
   }, [chosenFarmsMemoized, itemKey, expandIndex])
-  return <view>{VariableList}</view>
+  return <view style={{ maxWidth: 'unset', margin: 'unset' }}>{VariableList}</view>
 }
 
 const Fetcher = ({ setCakePrice }) => {

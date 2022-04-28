@@ -116,74 +116,78 @@ const DepositModal: React.FC<DepositModalProps> = ({
   }
 
   return (
-    <Modal title={t('Stake LP tokens')} onDismiss={onDismiss}>
-      <ModalInput
-        value={val}
-        onSelectMax={handleSelectMax}
-        onChange={handleChange}
-        max={fullBalance}
-        symbol={tokenName}
-        jumpToLiquidity={goAddLiquidity}
-        inputTitle={t('Stake')}
-      />
-      <Flex mt="24px" alignItems="center" justifyContent="space-between">
-        <Text mr="8px" color="textSubtle">
-          {t('Annual ROI at current rates')}:
-        </Text>
-        {Number.isFinite(annualRoiAsNumber) ? (
-          <AnnualRoiContainer
-            alignItems="center"
-            onClick={() => {
-              setShowRoiCalculator(true)
+    <FloatLayout title={t('Stake LP tokens')} onDismiss={onDismiss}>
+      <view style={{ padding: '20px' }}>
+        <ModalInput
+          value={val}
+          onSelectMax={handleSelectMax}
+          onChange={handleChange}
+          max={fullBalance}
+          symbol={tokenName}
+          jumpToLiquidity={goAddLiquidity}
+          inputTitle={t('Stake')}
+        />
+        <Flex mt="24px" alignItems="center" justifyContent="space-between">
+          <Text mr="8px" color="textSubtle">
+            {t('Annual ROI at current rates')}:
+          </Text>
+          {Number.isFinite(annualRoiAsNumber) ? (
+            <AnnualRoiContainer
+              alignItems="center"
+              onClick={() => {
+                setShowRoiCalculator(true)
+              }}
+            >
+              <AnnualRoiDisplay>${formattedAnnualRoi}</AnnualRoiDisplay>
+              <IconButton variant="text" scale="sm">
+                <CalculateIcon color="textSubtle" width="18px" />
+              </IconButton>
+            </AnnualRoiContainer>
+          ) : (
+            <Skeleton width={60} />
+          )}
+        </Flex>
+        <ModalActions>
+          <Button variant="secondary" onClick={onDismiss} width="100%" disabled={pendingTx}>
+            {t('Cancel')}
+          </Button>
+          <Button
+            width="100%"
+            disabled={
+              pendingTx || !lpTokensToStake.isFinite() || lpTokensToStake.eq(0) || lpTokensToStake.gt(fullBalanceNumber)
+            }
+            onClick={async () => {
+              setPendingTx(true)
+              try {
+                await onConfirm(val)
+                onDismiss()
+              } catch (e) {
+                logError(e)
+                toastError(
+                  t('Error'),
+                  t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+                )
+              } finally {
+                setPendingTx(false)
+              }
             }}
           >
-            <AnnualRoiDisplay>${formattedAnnualRoi}</AnnualRoiDisplay>
-            <IconButton variant="text" scale="sm">
-              <CalculateIcon color="textSubtle" width="18px" />
-            </IconButton>
-          </AnnualRoiContainer>
-        ) : (
-          <Skeleton width={60} />
-        )}
-      </Flex>
-      <ModalActions>
-        <Button variant="secondary" onClick={onDismiss} width="100%" disabled={pendingTx}>
-          {t('Cancel')}
-        </Button>
-        <Button
-          width="100%"
-          disabled={
-            pendingTx || !lpTokensToStake.isFinite() || lpTokensToStake.eq(0) || lpTokensToStake.gt(fullBalanceNumber)
-          }
-          onClick={async () => {
-            setPendingTx(true)
-            try {
-              await onConfirm(val)
+            {pendingTx ? t('Confirming') : t('Confirm')}
+          </Button>
+        </ModalActions>
+        <view style={{ display: 'flex', justifyContent: 'center' }}>
+          <LinkExternal
+            onClick={() => {
+              goAddLiquidity()
               onDismiss()
-            } catch (e) {
-              logError(e)
-              toastError(
-                t('Error'),
-                t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
-              )
-            } finally {
-              setPendingTx(false)
-            }
-          }}
-        >
-          {pendingTx ? t('Confirming') : t('Confirm')}
-        </Button>
-      </ModalActions>
-      <LinkExternal
-        onClick={() => {
-          goAddLiquidity()
-          onDismiss()
-        }}
-        style={{ alignSelf: 'center' }}
-      >
-        {t('Get %symbol%', { symbol: tokenName })}
-      </LinkExternal>
-    </Modal>
+            }}
+            style={{ alignSelf: 'center' }}
+          >
+            {t('Get %symbol%', { symbol: tokenName })}
+          </LinkExternal>
+        </view>
+      </view>
+    </FloatLayout>
   )
 }
 

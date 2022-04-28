@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState, useMemo, useRef, useLayoutEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text, Button, ArrowForwardIcon, Flex } from '@pancakeswap/uikit'
+import { Image, Heading, RowType, Toggle, Text, Button, ArrowForwardIcon, Flex, Input } from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
 // import { NextLinkFromReactRouter } from 'components/NextLink'
 import styled from 'styled-components'
@@ -344,7 +344,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
         .selectAll('.farms-control')
         .boundingClientRect(function (rect) {
           const { safeArea } = getSystemInfoSync()
-          setRemainHeight(safeArea.height - rect[0].height - 35 - 44 - 49)
+          setRemainHeight(safeArea.height - rect[0].height - 16 - 44 - 49)
         })
         .exec()
     }, 0)
@@ -377,9 +377,16 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
           </ToggleWrapper>
           <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
         </ViewControls>
-        <FilterContainer>
+        <FilterContainer style={{ paddingBottom: 0 }}>
+          <LabelWrapperText style={{ width: '100%' }} textTransform="uppercase">
+            {t('Sort by')}
+          </LabelWrapperText>
+          <LabelWrapperText style={{ width: '100%', marginLeft: '-16px' }} textTransform="uppercase">
+            {t('Search')}
+          </LabelWrapperText>
+        </FilterContainer>
+        <FilterContainer style={{ paddingTop: 0 }}>
           <LabelWrapper>
-            <LabelWrapperText textTransform="uppercase">{t('Sort by')}</LabelWrapperText>
             <Select
               options={[
                 {
@@ -406,10 +413,9 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
               onOptionChange={handleSortOptionChange}
             />
           </LabelWrapper>
-          <LabelWrapper style={{ marginLeft: 16 }}>
-            <LabelWrapperText textTransform="uppercase">{t('Search')}</LabelWrapperText>
-            <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
-          </LabelWrapper>
+          {/* <LabelWrapper style={{ marginLeft: 16 }}> */}
+          <SearchInput style={{ marginLeft: 16 }} onChange={handleChangeQuery} placeholder="Search Farms" />
+          {/* </LabelWrapper> */}
         </FilterContainer>
       </ControlContainer>
       {renderContent()}
