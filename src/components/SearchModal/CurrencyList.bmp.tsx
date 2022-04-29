@@ -221,6 +221,7 @@ export default function CurrencyList({
       itemCount={itemData.length}
       // itemSize={(index) => (index === activeIndex ? 100 : 56)}
       itemSize={56}
+      overscanCount={10}
       itemKey={itemKey}
     >
       {Row}

@@ -21,6 +21,7 @@ import RoiCalculatorFooter from './RoiCalculatorFooter.bmp'
 import RoiCard from './RoiCard'
 import useRoiCalculatorReducer, { CalculatorMode, EditingCurrency } from './useRoiCalculatorReducer'
 import AnimatedArrow from './AnimatedArrow'
+import { FloatLayout } from 'components/FloatLayout/index.bmp'
 
 interface RoiCalculatorModalProps {
   onDismiss?: () => void
@@ -124,7 +125,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
   const onUserInput = editingCurrency === EditingCurrency.TOKEN ? setPrincipalFromTokenValue : setPrincipalFromUSDValue
 
   return (
-    <StyledModal
+    <FloatLayout
       title={t('ROI Calculator')}
       onDismiss={onBack || onDismiss}
       onBack={onBack ?? null}
@@ -239,7 +240,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
           performanceFee={performanceFee}
         />
       </ScrollView>
-    </StyledModal>
+    </FloatLayout>
   )
 }
 

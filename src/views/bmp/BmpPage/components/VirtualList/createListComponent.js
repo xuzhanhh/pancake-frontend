@@ -20,7 +20,7 @@ export function isHorizontalFunc({ direction, layout }) {
 export function isRtlFunc({ direction }) {
   return direction === 'rtl'
 }
-export function getRectSize(id, success = () => { }, fail = () => { }) {
+export function getRectSize(id, success = () => {}, fail = () => {}) {
   const query = Taro.createSelectorQuery()
   query
     .select(id)
@@ -434,13 +434,13 @@ export default function createListComponent({
 
           this._callPropsCallbacks(prevProps, prevState)
 
-          setTimeout(() => {
-            const [startIndex, stopIndex] = this._getRangeToRender()
-            const isHorizontal = isHorizontalFunc(this.props)
-            for (let index = startIndex; index <= stopIndex; index++) {
-              this._getSizeUploadSync(index, isHorizontal)
-            }
-          }, 0)
+          // setTimeout(() => {
+          //   const [startIndex, stopIndex] = this._getRangeToRender()
+          //   const isHorizontal = isHorizontalFunc(this.props)
+          //   for (let index = startIndex; index <= stopIndex; index++) {
+          //     this._getSizeUploadSync(index, isHorizontal)
+          //   }
+          // }, 0)
         }
 
         componentWillUnmount() {

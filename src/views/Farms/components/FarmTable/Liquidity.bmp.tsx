@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { HelpIcon, Text, Skeleton } from '@pancakeswap/uikit'
+import { useTooltip } from 'contexts/bmp/TooltipContext'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
 
@@ -38,9 +39,16 @@ const Liquidity: React.FunctionComponent<LiquidityProps> = ({ liquidity }) => {
     )
   const { t } = useTranslation()
   // const { targetRef, tooltip, tooltipVisible } = useTooltip(
-  //   t('Total value of the funds in this farm’s liquidity pool'),
   //   { placement: 'top-end', tooltipOffset: [20, 10] },
   // )
+  //
+  const tooltipContent = (
+    <>
+      <Text>{t('Total value of the funds in this farm’s liquidity pool')}</Text>
+    </>
+  )
+
+  const { onPresent } = useTooltip(tooltipContent)
 
   return (
     <Container>
@@ -48,7 +56,7 @@ const Liquidity: React.FunctionComponent<LiquidityProps> = ({ liquidity }) => {
         <Text>{displayLiquidity}</Text>
       </LiquidityWrapper>
       {/* <ReferenceElement ref={targetRef}> */}
-      <ReferenceElement>
+      <ReferenceElement onClick={onPresent}>
         <HelpIcon color="textSubtle" />
       </ReferenceElement>
       {/* {tooltipVisible && tooltip} */}
