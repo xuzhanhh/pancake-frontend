@@ -434,13 +434,13 @@ export default function createListComponent({
 
           this._callPropsCallbacks(prevProps, prevState)
 
-          setTimeout(() => {
-            const [startIndex, stopIndex] = this._getRangeToRender()
-            const isHorizontal = isHorizontalFunc(this.props)
-            for (let index = startIndex; index <= stopIndex; index++) {
-              this._getSizeUploadSync(index, isHorizontal)
-            }
-          }, 0)
+          // setTimeout(() => {
+          //   const [startIndex, stopIndex] = this._getRangeToRender()
+          //   const isHorizontal = isHorizontalFunc(this.props)
+          //   for (let index = startIndex; index <= stopIndex; index++) {
+          //     this._getSizeUploadSync(index, isHorizontal)
+          //   }
+          // }, 0)
         }
 
         componentWillUnmount() {
