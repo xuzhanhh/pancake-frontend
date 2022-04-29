@@ -279,7 +279,7 @@ if (platform === 'android') {
       sNum = this.toFixed(options.minimumFractionDigits)
     }
     if (options && options.maximumFractionDigits !== undefined) {
-      let digits = this.toString().split('.')[1].length
+      let digits = sNum.toString().split('.')[1]?.length || 0
       if (digits > options.maximumFractionDigits) {
         sNum = new Number(sNum.toFixed(options.maximumFractionDigits))
       }
