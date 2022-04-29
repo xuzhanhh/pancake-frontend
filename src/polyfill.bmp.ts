@@ -2,8 +2,7 @@ import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 
 const { platform } = getSystemInfoSync()
 
-// if (platform === 'android') {
-if (true) {
+if (platform === 'android') {
   function toLocaleStringSupportsLocales() {
     var number = 0
     try {
@@ -13,10 +12,10 @@ if (true) {
     }
     return false
   }
-  var roundOff = function (number, precision) {
+  var roundOff = function(number, precision) {
     return +(+number).toFixed(precision)
   }
-  var replaceSeparators = function (sNum, separators, options) {
+  var replaceSeparators = function(sNum, separators, options) {
     // sNum = '' + roundOff(sNum, 3)
     var sNumParts = sNum.split('.')
     if (separators && separators.thousands) {
@@ -30,7 +29,7 @@ if (true) {
     sNum = sNumParts.join(separators.decimal)
     return sNum
   }
-  var getLast3Digits = function (sNum) {
+  var getLast3Digits = function(sNum) {
     // sNum = '' + roundOff(sNum, 3)
     var sNumParts = sNum.split('.')
     switch (sNumParts[0].length) {
@@ -47,13 +46,13 @@ if (true) {
     sNum = sNumParts.join('.')
     return sNum
   }
-  var renderFormat = function (template, props) {
+  var renderFormat = function(template, props) {
     for (var prop in props) {
       template = template.replace('{{' + prop + '}}', props[prop])
     }
     return template
   }
-  var mapMatch = function (map, locale) {
+  var mapMatch = function(map, locale) {
     var match = locale
     var language = locale && locale.toLowerCase().match(/^\w+/)
     if (!map.hasOwnProperty(locale)) {
@@ -65,32 +64,32 @@ if (true) {
     }
     return map[match]
   }
-  var dotThousCommaDec = function (sNum, options) {
+  var dotThousCommaDec = function(sNum, options) {
     var separators = {
       decimal: ',',
       thousands: '.',
     }
     return replaceSeparators(sNum, separators, options)
   }
-  var commaThousDotDec = function (sNum, options) {
+  var commaThousDotDec = function(sNum, options) {
     var separators = {
       decimal: '.',
       thousands: ',',
     }
     return replaceSeparators(sNum, separators, options)
   }
-  var spaceThousCommaDec = function (sNum, options) {
+  var spaceThousCommaDec = function(sNum, options) {
     var seperators = {
       decimal: ',',
       thousands: '\u00A0',
     }
     return replaceSeparators(sNum, seperators, options)
   }
-  var spaceHundredsCommaThousCommaDec = function (sNum) {
+  var spaceHundredsCommaThousCommaDec = function(sNum) {
     var hundredSeperators = {
-        decimal: '.',
-        hundreds: ',',
-      },
+      decimal: '.',
+      hundreds: ',',
+    },
       thoudandSeperators = {
         decimal: '.',
         thousands: ',',
@@ -104,7 +103,7 @@ if (true) {
       return replaceSeparators(sNum + '', thoudandSeperators)
     }
   }
-  var apostrophThousDotDec = function (sNum, options) {
+  var apostrophThousDotDec = function(sNum, options) {
     var seperators = {
       decimal: '.',
       thousands: '\u0027',
@@ -273,7 +272,7 @@ if (true) {
     post: '{{num}} {{code}}',
     prespace: '{{code}} {{num}}',
   }
-  Number.prototype.toLocaleString = function (locale, options) {
+  Number.prototype.toLocaleString = function(locale, options) {
     if (locale && locale.length < 2) throw new RangeError('Invalid language tag: ' + locale)
     var sNum = this
     if (options && options.minimumFractionDigits !== undefined) {
