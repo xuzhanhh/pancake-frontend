@@ -26,11 +26,8 @@ const Container = styled.div`
 
 const TokenWrapper = styled.div`
   padding-right: 8px;
-  width: 24px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    width: 40px;
-  }
+  width: 32px;
+  box-sizing: content-box;
 `
 
 const Farm: React.FunctionComponent<FarmProps> = ({ token, quoteToken, label, pid }) => {
@@ -53,7 +50,7 @@ const Farm: React.FunctionComponent<FarmProps> = ({ token, quoteToken, label, pi
   return (
     <Container>
       <TokenWrapper>
-        <TokenPairImage variant="inverted" primaryToken={token} secondaryToken={quoteToken} width={16} height={16} />
+        <TokenPairImage variant="inverted" primaryToken={token} secondaryToken={quoteToken} width={32} height={32} />
       </TokenWrapper>
       <view>
         {handleRenderFarming()}
