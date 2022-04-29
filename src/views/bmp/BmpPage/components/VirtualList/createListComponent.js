@@ -20,7 +20,7 @@ export function isHorizontalFunc({ direction, layout }) {
 export function isRtlFunc({ direction }) {
   return direction === 'rtl'
 }
-export function getRectSize(id, success = () => { }, fail = () => { }) {
+export function getRectSize(id, success = () => {}, fail = () => {}) {
   const query = Taro.createSelectorQuery()
   query
     .select(id)

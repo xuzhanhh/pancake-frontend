@@ -2,7 +2,8 @@ import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 
 const { platform } = getSystemInfoSync()
 
-if (platform === 'android') {
+// if (platform === 'android') {
+if (true) {
   function toLocaleStringSupportsLocales() {
     var number = 0
     try {
@@ -16,7 +17,7 @@ if (platform === 'android') {
     return +(+number).toFixed(precision)
   }
   var replaceSeparators = function (sNum, separators, options) {
-    sNum = '' + roundOff(sNum, 3)
+    // sNum = '' + roundOff(sNum, 3)
     var sNumParts = sNum.split('.')
     if (separators && separators.thousands) {
       sNumParts[0] = sNumParts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + separators.thousands)
@@ -30,7 +31,7 @@ if (platform === 'android') {
     return sNum
   }
   var getLast3Digits = function (sNum) {
-    sNum = '' + roundOff(sNum, 3)
+    // sNum = '' + roundOff(sNum, 3)
     var sNumParts = sNum.split('.')
     switch (sNumParts[0].length) {
       case 0:
@@ -274,12 +275,17 @@ if (platform === 'android') {
   }
   Number.prototype.toLocaleString = function (locale, options) {
     if (locale && locale.length < 2) throw new RangeError('Invalid language tag: ' + locale)
-    var sNum
+    var sNum = this
     if (options && options.minimumFractionDigits !== undefined) {
       sNum = this.toFixed(options.minimumFractionDigits)
-    } else {
-      sNum = this.toString()
     }
+    if (options && options.maximumFractionDigits !== undefined) {
+      let digits = this.toString().split('.')[1].length
+      if (digits > options.maximumFractionDigits) {
+        sNum = new Number(sNum.toFixed(options.maximumFractionDigits))
+      }
+    }
+    sNum = sNum.toString()
     sNum = mapMatch(transformForLocale, locale)(sNum, options)
     if (options && options.currency && options.style === 'currency') {
       var format = currencyFormats[mapMatch(currencyFormatMap, locale)]
@@ -295,6 +301,7 @@ if (platform === 'android') {
         })
       }
     }
+
     return '' + sNum
   }
 }

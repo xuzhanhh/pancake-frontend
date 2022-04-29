@@ -20,7 +20,6 @@ export const FarmsWrapper = () => {
   }
 }
 
- 
 const FarmsHome = () => {
   //   const [isHide, setIsHide] = useState(false)
   //   useDidShow(() => {
