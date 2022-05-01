@@ -14,9 +14,9 @@ const setExpandIndex = (func) => {
   expandIndex = result
 }
 
-const FarmsPage = ({ cakePrice }) => {
+const FarmsPage = () => {
   const { account } = useWeb3React()
-  const { chosenFarmsMemoized, height } = useContext(FarmsContext)
+  const { chosenFarmsMemoized, height, cakePrice } = useContext(FarmsContext)
   const [reRender, triggerRerender] = useState(0)
 
   useDidShow(() => {
@@ -91,18 +91,19 @@ const Fetcher = ({ setCakePrice }) => {
 }
 
 const FarmsPageWrapper = () => {
-  const [isDisplay, setIsDisplay] = useState(true)
-  const [cakePrice, setCakePrice] = useState(undefined)
-  useDidShow(() => {
-    setIsDisplay(true)
-  })
-  useDidHide(() => {
-    setIsDisplay(false)
-  })
+  // const [isDisplay, setIsDisplay] = useState(true)
+  // const [cakePrice, setCakePrice] = useState(undefined)
+  // useDidShow(() => {
+  //   setIsDisplay(true)
+  // })
+  // useDidHide(() => {
+  //   setIsDisplay(false)
+  // })
   return (
     <FarmsPageLayout>
-      <FarmsPage cakePrice={cakePrice} />
-      {isDisplay && <Fetcher setCakePrice={setCakePrice} />}
+      <FarmsPage />
+      {/* <FarmsPage cakePrice={cakePrice} /> */}
+      {/* {isDisplay && <Fetcher setCakePrice={setCakePrice} />} */}
     </FarmsPageLayout>
   )
 }
