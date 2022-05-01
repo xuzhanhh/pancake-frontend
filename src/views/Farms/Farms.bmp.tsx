@@ -353,7 +353,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
   //   execQuerySelector = false
   // }
   return (
-    <FarmsContext.Provider value={{ chosenFarmsMemoized, height: remainHeight }}>
+    <FarmsContext.Provider value={{ chosenFarmsMemoized, height: remainHeight, cakePrice }}>
       {/* <PageHeader> */}
       {/*   <Heading as="h1" scale="xxl" color="secondary" mb="24px"> */}
       {/*     {t('Farms')} */}
@@ -449,7 +449,6 @@ const Fetcher = React.memo(({ setFarmsData, setCakePrice }) => {
   useEffect(() => {
     setCakePrice(cakePrice)
   }, [cakePrice, setCakePrice])
-  usePollFarmsWithUserData(false)
   return null
 })
 
@@ -463,10 +462,12 @@ const FramsWrapper = ({ children }) => {
   useDidHide(() => {
     setIsHide(true)
   })
+  usePollFarmsWithUserData(false)
   return (
     <view>
       <Farms farmsData={farmsData} cakePrice={cakePrice} children={children} />
       {!isHide && <Fetcher setFarmsData={setFarmsData} setCakePrice={setCakePrice} />}
+      {/* <Fetcher setFarmsData={setFarmsData} setCakePrice={setCakePrice} /> */}
     </view>
   )
 }

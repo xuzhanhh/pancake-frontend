@@ -16,7 +16,6 @@ import { Blocklist, Updaters } from './index'
 import { useDidHide, useDidShow } from '@binance/mp-service'
 
 const Hooks = () => {
-  usePollBlockNumber()
   useEagerConnect()
   useBmpInit()
   // useFetchProfile()
@@ -24,6 +23,11 @@ const Hooks = () => {
   // useUserAgent()
   // useInactiveListener()
   return <></>
+}
+
+const Hooks2 = () => {
+  usePollBlockNumber()
+  return null
 }
 
 const Providers: React.FC = ({ children }) => {
@@ -46,6 +50,7 @@ const Providers: React.FC = ({ children }) => {
                   <view>
                     {visible && <Updaters />}
                     {visible && <Hooks />}
+                    <Hooks2 />
                   </view>
                   {children}
                   <ToastListener />
