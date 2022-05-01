@@ -48,7 +48,7 @@ const Title = ({ selected, title }) => {
       className="bottom-tab-item-text"
       style={{
         color: selected ? theme.colors.secondary : theme.colors.textSubtle,
-        fontWeight: selected ? 600 : 400,
+        fontWeight: selected ? 'bold' : 400,
         fontSize: currentLanguage.locale === 'zh-CN' || currentLanguage.locale === 'zh-TW' ? 12 : 14,
       }}
     >
