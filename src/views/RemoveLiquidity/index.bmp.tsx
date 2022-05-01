@@ -692,7 +692,12 @@ export default function RemoveLiquidity() {
                       onPresentRemoveLiquidity()
                     }}
                     width="100%"
-                    disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
+                    disabled={
+                      !isValid ||
+                      formattedAmounts[Field.CURRENCY_A] === '0' ||
+                      formattedAmounts[Field.CURRENCY_B] === '0' ||
+                      (signatureData === null && approval !== ApprovalState.APPROVED)
+                    }
                   >
                     {error || t('Remove')}
                   </Button>
