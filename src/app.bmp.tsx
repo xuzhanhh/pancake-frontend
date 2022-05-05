@@ -4,6 +4,7 @@ import './style.scss'
 import { init, bindRequest } from '@binance/sentry-miniapp'
 import { getEnv } from 'utils/bmp/getEnv'
 import './polyfill.bmp'
+import 'utils/apr.bmp'
 
 declare const COMMIT_ID: string
 declare const env: any
