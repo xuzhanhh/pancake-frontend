@@ -355,10 +355,10 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
   return (
     <FarmsContext.Provider value={{ chosenFarmsMemoized, height: remainHeight, cakePrice }}>
       {/* <PageHeader> */}
-      <Heading as="h1" scale="lg" color="secondary" mb="8px">
+      <Heading as="h1" scale="lg" color="secondary" style={{ fontSize: '24px', fontWeight: 'bold' }} mb="8px">
         {t('Farms')}
       </Heading>
-      <Heading scale="lg" color="text" style={{ fontSize: '16px' }} mb="4px">
+      <Heading scale="lg" color="text" style={{ fontSize: '16px', fontWeight: 'bold' }} mb="4px">
         {t('Stake LP tokens to earn.')}
       </Heading>
       {/* </PageHeader> */}
