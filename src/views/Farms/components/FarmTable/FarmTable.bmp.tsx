@@ -124,7 +124,14 @@ const FarmTable: React.FC<ITableProps> = (props) => {
         width="100%"
         itemData={rows}
         itemCount={rows.length}
-        itemSize={(index) => (expandIndex.includes(index) ? 619 : 127)}
+        itemSize={(index) => {
+          let origin = expandIndex.includes(index) ? 636 : 135
+          if (rows[index]?.original?.earned?.earnings) {
+            origin += 10
+          }
+
+          return origin
+        }}
         overscanCount={4}
         // itemSize={127}
         // onScrollToLower={() => {

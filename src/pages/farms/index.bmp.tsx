@@ -70,7 +70,7 @@ const FarmsPage = () => {
         width="100%"
         itemData={chosenFarmsMemoized}
         itemCount={chosenFarmsMemoized.length}
-        itemSize={(index) => (expandIndex.includes(index) ? 566 : 422)}
+        itemSize={(index) => (expandIndex.includes(index) ? 568 : 448)}
         itemKey={itemKey}
         overscanCount={4}
         // onScrollToLower={setVisible}
