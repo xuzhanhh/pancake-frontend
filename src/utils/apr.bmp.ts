@@ -15,7 +15,9 @@ let remoteAprs = null
 if (!remoteAprs) {
   // console.log('??? bbb')
   bn.request({
-    url: 'https://raw.staticdn.net/pancakeswap/pancake-frontend/develop/src/config/constants/lpAprs.json',
+    // url: 'https://raw.staticdn.net/pancakeswap/pancake-frontend/develop/src/config/constants/lpAprs.json',
+    url: 'https://cdn.jsdelivr.net/gh/pancakeswap/pancake-frontend@develop/src/config/constants/lpAprs.json',
+    header: { 'Cache-Control': 'no-cache' },
     success(res) {
       console.log('??? success', res)
       remoteAprs = res.data
@@ -27,14 +29,6 @@ if (!remoteAprs) {
       console.log('??? complete')
     },
   })
-
-  // fetch('https://raw.githubusercontent.com/pancakeswap/pancake-frontend/develop/src/config/constants/lpAprs.json')
-  //   .then((res) => {
-  //     console.log('🚀 ~ file: index.tsx ~ line 27 ~ fetch ~ res', res)
-  //   })
-  //   .catch((err) => {
-  //     console.log('🚀 ~ file: index.tsx ~ line 31 ~ ).then ~ err', err)
-  //   })
 }
 
 export const getPoolApr = (
