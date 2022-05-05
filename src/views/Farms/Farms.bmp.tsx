@@ -344,7 +344,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
         .selectAll('.farms-control')
         .boundingClientRect(function (rect) {
           const { safeArea } = getSystemInfoSync()
-          setRemainHeight(safeArea.height - rect[0].height - 16 - 44 - 49)
+          setRemainHeight(safeArea.height - rect[0].height - 16 - 8 - 39 - 44 - 49)
         })
         .exec()
     }, 0)
@@ -355,12 +355,12 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
   return (
     <FarmsContext.Provider value={{ chosenFarmsMemoized, height: remainHeight, cakePrice }}>
       {/* <PageHeader> */}
-      {/*   <Heading as="h1" scale="xxl" color="secondary" mb="24px"> */}
-      {/*     {t('Farms')} */}
-      {/*   </Heading> */}
-      {/*   <Heading scale="lg" color="text"> */}
-      {/*     {t('Stake LP tokens to earn.')} */}
-      {/*   </Heading> */}
+      <Heading as="h1" scale="lg" color="secondary" mb="8px">
+        {t('Farms')}
+      </Heading>
+      <Heading scale="lg" color="text" style={{ fontSize: '16px' }} mb="4px">
+        {t('Stake LP tokens to earn.')}
+      </Heading>
       {/* </PageHeader> */}
       {/* <Page> */}
       <ControlContainer className="farms-control">
@@ -378,10 +378,10 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
           <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
         </ViewControls>
         <FilterContainer style={{ paddingBottom: 0 }}>
-          <LabelWrapperText style={{ width: '100%' }} textTransform="uppercase">
+          <LabelWrapperText style={{ minWidth: '136px' }} textTransform="uppercase">
             {t('Sort by')}
           </LabelWrapperText>
-          <LabelWrapperText style={{ width: '100%', marginLeft: '-16px' }} textTransform="uppercase">
+          <LabelWrapperText style={{ width: '100%', marginLeft: '16px' }} textTransform="uppercase">
             {t('Search')}
           </LabelWrapperText>
         </FilterContainer>
