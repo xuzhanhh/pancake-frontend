@@ -79,9 +79,9 @@ const FarmTable: React.FC<ITableProps> = (props) => {
   useDidShow(() => {
     triggerReRender((n) => n + 1)
   })
-  useEffect(() => {
-    triggerReRender((n) => n + 1)
-  }, [data])
+  // useEffect(() => {
+  //   triggerReRender((n) => n + 1)
+  // }, [data])
   const toggleExpand = (index) => () => {
     setExpandIndex((expandIndex) => {
       if (expandIndex.includes(index)) {
