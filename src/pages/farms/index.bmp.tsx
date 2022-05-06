@@ -22,9 +22,9 @@ const FarmsPage = () => {
   useDidShow(() => {
     triggerRerender((n) => n + 1)
   })
-  useEffect(() => {
-    triggerRerender((n) => n + 1)
-  }, [chosenFarmsMemoized])
+  // useEffect(() => {
+  //   triggerRerender((n) => n + 1)
+  // }, [chosenFarmsMemoized])
 
   const virtualListRef = useRef()
   const toggleExpand = (index) => () => {
