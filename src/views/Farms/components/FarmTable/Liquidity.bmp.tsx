@@ -6,7 +6,8 @@ import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
 
 const ReferenceElement = styled.div`
-  display: inline-block;
+  /* display: inline-block; */
+  display: flex;
 `
 
 export interface LiquidityProps {
@@ -17,6 +18,7 @@ const LiquidityWrapper = styled.div`
   min-width: 110px;
   font-weight: bold;
   text-align: right;
+  line-height: 1.5;
   margin-right: 14px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
