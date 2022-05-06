@@ -61,6 +61,14 @@ const FullWidthButtonMenu = styled(ButtonMenu)<{ disabled?: boolean }>`
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `
 
+const PricesWrap = styled(Flex)`
+  justify-content: space-between;
+  align-items: center;
+  mt: 8px;
+  > bn-button {
+    mr: 4px;
+  }
+`
 const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
   onDismiss,
   onBack,
@@ -146,8 +154,9 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
               switchEditingUnits={toggleEditingCurrency}
               onFocus={onBalanceFocus}
             />
-            <Flex justifyContent="space-between" mt="8px">
+            <PricesWrap>
               <Button
+                style={{ flex: 1 }}
                 scale="xs"
                 p="4px 16px"
                 width="68px"
@@ -157,6 +166,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
                 $100
               </Button>
               <Button
+                style={{ flex: 1 }}
                 scale="xs"
                 p="4px 16px"
                 width="68px"
@@ -166,6 +176,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
                 $1000
               </Button>
               <Button
+                style={{ flex: 2 }}
                 disabled={!stakingTokenBalance.isFinite() || stakingTokenBalance.lte(0) || !account}
                 scale="xs"
                 p="4px 16px"
@@ -177,10 +188,10 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
               >
                 {t('My Balance').toLocaleUpperCase()}
               </Button>
-              <view onClick={onPresent}>
+              <Flex onClick={onPresent}>
                 <HelpIcon width="16px" height="16px" color="textSubtle" />
-              </view>
-            </Flex>
+              </Flex>
+            </PricesWrap>
             <Text mt="24px" color="secondary" bold fontSize="12px" textTransform="uppercase">
               {t('Staked for')}
             </Text>
