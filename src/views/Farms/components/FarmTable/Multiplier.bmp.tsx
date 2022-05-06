@@ -5,7 +5,8 @@ import { useTranslation } from 'contexts/Localization'
 import { useTooltip } from 'contexts/bmp/TooltipContext'
 
 const ReferenceElement = styled.div`
-  display: inline-block;
+  /* display: inline-block; */
+  display: flex;
 `
 export interface MultiplierProps {
   multiplier: string
@@ -16,6 +17,9 @@ const MultiplierWrapper = styled.div`
   width: 36px;
   text-align: right;
   margin-right: 14px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
 
   ${({ theme }) => theme.mediaQueries.lg} {
     text-align: left;

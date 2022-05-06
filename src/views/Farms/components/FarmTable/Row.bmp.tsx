@@ -70,13 +70,13 @@ const FarmMobileCell = styled.div`
 let isFirstRender = true
 
 const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
-  const { details, userDataReady, expand, toggleExpand, index } = props
+  const { details, userDataReady, expand, toggleExpand, index, makeExpand } = props
   const hasStakedAmount = !!useFarmUser(details.pid).stakedBalance.toNumber()
   const [actionPanelExpanded, setActionPanelExpanded] = useState(expand)
 
   useEffect(() => {
     if (isFirstRender && hasStakedAmount) {
-      toggleExpand()
+      makeExpand()
       setActionPanelExpanded(true)
       isFirstRender = false
     }

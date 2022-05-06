@@ -96,6 +96,20 @@ const FarmTable: React.FC<ITableProps> = (props) => {
     virtualListRef.current?.resetAfterIndex(index)
   }
 
+  const makeExpand = (index) => () => {
+    setExpandIndex((expandIndex) => {
+      if (expandIndex.includes(index)) {
+        // const newArray = [...expandIndex]
+        // remove(newArray, (n) => n === index)
+        // return newArray
+      } else {
+        return [...expandIndex, index]
+        // setExpandIndex(array => [...array, index])
+      }
+    })
+    virtualListRef.current?.resetAfterIndex(index)
+  }
+
   const VirtualListRow = React.memo(
     useCallback(
       ({ data, index, style }) => {
@@ -106,6 +120,7 @@ const FarmTable: React.FC<ITableProps> = (props) => {
             userDataReady={userDataReady}
             index={index}
             toggleExpand={toggleExpand(index)}
+            makeExpand={makeExpand(index)}
             expand={expandIndex.includes(index)}
           />
         )

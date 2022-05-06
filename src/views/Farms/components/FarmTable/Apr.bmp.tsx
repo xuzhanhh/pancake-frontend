@@ -70,6 +70,7 @@ const Apr: React.FC<AprProps> = ({
           apr={originalValue}
           displayApr={value}
           addLiquidityUrl={addLiquidityUrl}
+          style={{ width: '20px', height: '20px' }}
         />
       ) : (
         <AprWrapper>
