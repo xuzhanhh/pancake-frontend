@@ -6,8 +6,11 @@ import { getApy } from 'utils/compoundApyHelpers'
 import { useTooltip } from 'contexts/bmp/TooltipContext'
 
 const Footer = styled(Flex)`
-  width: 100%;
   background: ${({ theme }) => theme.colors.dropdown};
+  p: 0 16px;
+  mx: 24px;
+  flex-direction: column;
+  border-radius: 16px;
 `
 
 const BulletList = styled.div`
@@ -16,12 +19,17 @@ const BulletList = styled.div`
   > bn-view {
     margin: 0;
     padding: 0;
+    position: relative;
   }
   > bn-view::before {
     content: '•';
     margin-right: 4px;
     color: ${({ theme }) => theme.colors.textSubtle};
   }
+`
+const ListText = styled(Text)`
+  font-size: 12px;
+  color: textSubtle;
 `
 
 interface RoiCalculatorFooterProps {
@@ -72,7 +80,7 @@ const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
     onDismiss()
   }
   return (
-    <Footer p="16px" flexDirection="column">
+    <Footer>
       <ExpandableLabel expanded={isExpanded} onClick={() => setIsExpanded((prev) => !prev)}>
         {isExpanded ? t('Hide') : t('Details')}
       </ExpandableLabel>
@@ -81,6 +89,7 @@ const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
           <Grid
             style={{
               gridTemplateColumns: '2.5fr 1fr',
+              alignItems: 'center',
               gridRowGap: '8px',
               gridTemplateRows: `repeat(${gridRowCount}, auto)`,
             }}
@@ -114,48 +123,38 @@ const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
                 <Text color="textSubtle" small>
                   {t('Farm Multiplier')}
                 </Text>
-                <Flex justifyContent="flex-end" alignItems="flex-end">
+                <Flex justifyContent="flex-end" alignItems="center">
                   <Text small textAlign="right" mr="4px">
                     {multiplier}
                   </Text>
-                  <view onClick={onPresent}>
+                  <Flex onClick={onPresent}>
                     <HelpIcon color="textSubtle" width="16px" height="16px" />
-                  </view>
+                  </Flex>
                 </Flex>
               </>
             )}
           </Grid>
           <BulletList>
-            <view>
-              <Text fontSize="12px" textAlign="center" color="textSubtle" display="inline">
-                {t('Calculated based on current rates.')}
-              </Text>
-            </view>
+            <ListText>{t('Calculated based on current rates.')}</ListText>
             {isFarm && (
-              <view>
-                <Text fontSize="12px" textAlign="center" color="textSubtle" display="inline">
-                  {t('LP rewards: 0.17% trading fees, distributed proportionally among LP token holders.')}
-                </Text>
-              </view>
+              <ListText>
+                {t('LP rewards: 0.17% trading fees, distributed proportionally among LP token holders.')}
+              </ListText>
             )}
-            <view>
-              <Text fontSize="12px" textAlign="center" color="textSubtle" display="inline">
-                {t(
-                  'All figures are estimates provided for your convenience only, and by no means represent guaranteed returns.',
-                )}
-              </Text>
-            </view>
+            <ListText>
+              {t(
+                'All figures are estimates provided for your convenience only, and by no means represent guaranteed returns.',
+              )}
+            </ListText>
             {performanceFee > 0 && (
-              <view>
-                <Text mt="14px" fontSize="12px" textAlign="center" color="textSubtle" display="inline">
-                  {t('All estimated rates take into account this pool’s %fee%% performance fee', {
-                    fee: performanceFee,
-                  })}
-                </Text>
-              </view>
+              <ListText mt="14px">
+                {t('All estimated rates take into account this pool’s %fee%% performance fee', {
+                  fee: performanceFee,
+                })}
+              </ListText>
             )}
           </BulletList>
-          <Flex justifyContent="center" mt="24px" onClick={onGetLPClick}>
+          <Flex justifyContent="center" mt="24px" mb="16px" onClick={onGetLPClick}>
             <LinkExternal>{linkLabel}</LinkExternal>
           </Flex>
         </Box>

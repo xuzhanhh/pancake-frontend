@@ -59,7 +59,7 @@ function CustomNav({ top = 0, height = 44 }: Tprops) {
           right: '0px',
           justifyContent: 'center',
           width: '100vw',
-          zIndex: '10',
+          zIndex: '100',
           background: theme.colors.backgroundAlt,
           paddingTop: `${top}px`,
           boxSizing: 'content-box',
