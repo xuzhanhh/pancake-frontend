@@ -79,24 +79,24 @@ export default function createListComponent({
             clientWidth: 0,
           }
           this._callOnItemsRendered = void 0
-          this._callOnItemsRendered = memoizeOne(
+          this._callOnItemsRendered = 
             (overscanStartIndex, overscanStopIndex, visibleStartIndex, visibleStopIndex) =>
               this.props.onItemsRendered({
                 overscanStartIndex,
                 overscanStopIndex,
                 visibleStartIndex,
                 visibleStopIndex,
-              }),
-          )
+              })
+          
           this._callOnScroll = void 0
-          this._callOnScroll = memoizeOne((scrollDirection, scrollOffset, scrollUpdateWasRequested, detail) =>
+          this._callOnScroll = (scrollDirection, scrollOffset, scrollUpdateWasRequested, detail) =>
             this.props.onScroll({
               scrollDirection,
               scrollOffset,
               scrollUpdateWasRequested,
               detail,
-            }),
-          )
+            })
+          
 
           this._getSize = void 0
 
@@ -238,7 +238,7 @@ export default function createListComponent({
           }
 
           this._getItemStyleCache = void 0
-          this._getItemStyleCache = memoizeOne(() => ({}))
+          this._getItemStyleCache = () => ({})
 
           this._onScrollHorizontal = (event) => {
             const { clientWidth, scrollTop, scrollLeft, scrollHeight, scrollWidth } = event.currentTarget
