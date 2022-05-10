@@ -21,7 +21,7 @@ const useHarvestFarm = (farmPid: number) => {
         new HitBuilders.EventBuilder()
           .setCategory('farm')
           .setAction('harvest')
-          .setLabel(JSON.stringify({ tx })) //  optional
+          .setLabel(JSON.stringify({ tx: tx.hash })) //  optional
           .setValue(1)
           .build(),
       )
