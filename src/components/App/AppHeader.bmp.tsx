@@ -28,16 +28,26 @@ const AppHeader: React.FC<Props> = ({ title, subtitle, helper, backTo, noConfig 
 
   return (
     <AppHeaderContainer>
-      <Flex alignItems="center" mr={noConfig ? 0 : '16px'}>
+      <Flex width="100%" alignItems="center">
         {backTo && (
           <Box onClick={backTo} style={{ width: '48px' }}>
             <ArrowBackIcon width="32px" />
           </Box>
         )}
-        <Flex flexDirection="column">
-          <Heading as="h2" mb="8px">
-            {title}
-          </Heading>
+        <Flex width="100%" flexDirection="column">
+          <Flex justifyContent="space-between" alignItems="center">
+            <Heading as="h2" mb="8px">
+              {title}
+            </Heading>
+            {!noConfig && (
+              <Flex alignItems="center">
+                <NotificationDot show={expertMode}>
+                  <GlobalSettings color="textSubtle" mr="0" />
+                </NotificationDot>
+                <Transactions />
+              </Flex>
+            )}
+          </Flex>
           <Flex alignItems="center">
             {helper && <QuestionHelper text={helper} mr="4px" placement="top-start" />}
             <Text color="textSubtle" fontSize="14px">
@@ -46,14 +56,6 @@ const AppHeader: React.FC<Props> = ({ title, subtitle, helper, backTo, noConfig 
           </Flex>
         </Flex>
       </Flex>
-      {!noConfig && (
-        <Flex alignItems="center">
-          <NotificationDot show={expertMode}>
-            <GlobalSettings />
-          </NotificationDot>
-          <Transactions />
-        </Flex>
-      )}
     </AppHeaderContainer>
   )
 }

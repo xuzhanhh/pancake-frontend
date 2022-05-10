@@ -1,5 +1,6 @@
 import { ChainId, Token } from '@pancakeswap/sdk'
 import { serializeToken } from 'state/user/hooks/helpers'
+import { CHAIN_ID } from './networks'
 import { SerializedToken } from './types'
 
 const { MAINNET, TESTNET } = ChainId
@@ -29,6 +30,7 @@ export const mainnetTokens = defineTokens({
     'PancakeSwap Token',
     'https://pancakeswap.finance/',
   ),
+  gmi: new Token(MAINNET, '0x93D8d25E3C9A847a5Da79F79ecaC89461FEcA846', 18, 'GMI', 'Gamifi', 'https://gamifi.gg/'),
   tlos: new Token(MAINNET, '0xb6C53431608E626AC81a9776ac3e999c5556717c', 18, 'TLOS', 'Telos', 'https://www.telos.net/'),
   beta: new Token(
     MAINNET,
@@ -842,7 +844,7 @@ export const mainnetTokens = defineTokens({
     '0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47',
     18,
     'ADA',
-    ' Binance-Peg Cardano Token',
+    'Binance-Peg Cardano Token',
     'https://www.cardano.org/',
   ),
   band: new Token(
@@ -1247,12 +1249,12 @@ export const mainnetTokens = defineTokens({
     'Lympo Market Token',
     'https://lympo.io/lmt/',
   ),
-  btt: new Token(
+  bttold: new Token(
     MAINNET,
     '0x8595F9dA7b868b1822194fAEd312235E43007b49',
     18,
-    'BTT',
-    'Binance-Peg BitTorrent Token',
+    'BTTOLD',
+    'Binance-Peg BitTorrent Token (Old)',
     'https://www.bittorrent.com/',
   ),
   trx: new Token(
@@ -1959,12 +1961,130 @@ export const mainnetTokens = defineTokens({
     'https://theparallel.io',
   ),
   fuse: new Token(MAINNET, '0x5857c96DaE9cF8511B08Cb07f85753C472D36Ea3', 18, 'FUSE', 'Fuse Token', 'https://fuse.io/'),
+  ertha: new Token(
+    MAINNET,
+    '0x62823659d09F9F9D2222058878f89437425eB261',
+    18,
+    'ERTHA',
+    'Ertha Token',
+    'https://ertha.io/',
+  ),
+  raca: new Token(
+    MAINNET,
+    '0x12BB890508c125661E03b09EC06E404bc9289040',
+    18,
+    'RACA',
+    'Radio Caca V2',
+    'https://www.radiocaca.com/#/home',
+  ),
+  gear: new Token(
+    MAINNET,
+    '0xb4404DaB7C0eC48b428Cf37DeC7fb628bcC41B36',
+    18,
+    'GEAR',
+    'MetaGear Token',
+    'https://metagear.game/',
+  ),
+  ach: new Token(
+    MAINNET,
+    '0xBc7d6B50616989655AfD682fb42743507003056D',
+    8,
+    'ACH',
+    'Alchemy Token',
+    'https://alchemytech.io/',
+  ),
+  btt: new Token(
+    MAINNET,
+    '0x352Cb5E19b12FC216548a2677bD0fce83BaE434B',
+    18,
+    'BTT',
+    'BitTorrent',
+    'https://bittorrent.com/',
+  ),
+  era: new Token(MAINNET, '0x6f9F0c4ad9Af7EbD61Ac5A1D4e0F2227F7B0E5f9', 18, 'ERA', 'Era Token', 'https://www.era7.io/'),
+  fight: new Token(
+    MAINNET,
+    '0x4f39c3319188A723003670c3F9B9e7EF991E52F3',
+    18,
+    'FIGHT',
+    'Fight Token',
+    'https://www.cryptofightclub.io/',
+  ),
+  loa: new Token(
+    MAINNET,
+    '0x94b69263FCA20119Ae817b6f783Fc0F13B02ad50',
+    18,
+    'LOA',
+    'League Of Ancients',
+    'https://www.leagueofancients.com/',
+  ),
+  duet: new Token(
+    MAINNET,
+    '0x95EE03e1e2C5c4877f9A298F1C0D6c98698FAB7B',
+    18,
+    'DUET',
+    'Duet Governance Token',
+    'https://duet.finance',
+  ),
+  gmt: new Token(
+    MAINNET,
+    '0x3019BF2a2eF8040C242C9a4c5c4BD4C81678b2A1',
+    8,
+    'GMT',
+    'Green Metaverse Token',
+    'https://www.stepn.com/',
+  ),
+  bsw: new Token(MAINNET, '0x965F527D9159dCe6288a2219DB51fc6Eef120dD1', 18, 'BSW', 'Biswap', 'https://biswap.org/'),
+  tem: new Token(
+    MAINNET,
+    '0x19e6BfC1A6e4B042Fb20531244D47E252445df01',
+    9,
+    'TEM',
+    'TemplarDAO',
+    'https://templar.finance/',
+  ),
+  pex: new Token(MAINNET, '0x6a0b66710567b6beb81A71F7e9466450a91a384b', 18, 'PEX', 'PearDAO', 'https://peardao.io/'),
+  yel: new Token(MAINNET, '0xD3b71117E6C1558c1553305b44988cd944e97300', 18, 'YEL', 'YEL', 'https://yel.finance/'),
+  tinc: new Token(
+    MAINNET,
+    '0x05aD6E30A855BE07AfA57e08a4f30d00810a402e',
+    18,
+    'TINC',
+    'Tiny Coin',
+    'https://tinyworlds.io/',
+  ),
+  happy: new Token(
+    MAINNET,
+    '0xF5d8A096CcCb31b9D7bcE5afE812BE23e3D4690d',
+    18,
+    'Happy',
+    'HappyFans',
+    'https://happyfans.club/',
+  ),
+  wzrd: new Token(
+    MAINNET,
+    '0xFa40d8FC324bcdD6Bbae0e086De886c571C225d4',
+    18,
+    'WZRD',
+    'Wizardia Token',
+    'https://wizardia.io/',
+  ),
+  ceek: new Token(MAINNET, '0xe0F94Ac5462997D2BC57287Ac3a3aE4C31345D66', 18, 'CEEK', 'CEEK', 'https://www.ceek.com/'),
+  abnbc: new Token(
+    MAINNET,
+    '0xE85aFCcDaFBE7F2B096f268e31ccE3da8dA2990A',
+    18,
+    'aBNBc',
+    'Ankr BNB Reward Bearing Certificate',
+    'https://www.ankr.com/',
+  ),
+  ankr: new Token(MAINNET, '0xf307910A4c7bbc79691fD374889b36d8531B08e3', 18, 'ANKR', 'Ankr', 'https://www.ankr.com/'),
 } as const)
 
 export const testnetTokens = defineTokens({
   wbnb: new Token(
     TESTNET,
-    '0x094616F0BdFB0b526bD735Bf66Eca0Ad254ca81F',
+    '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
     18,
     'WBNB',
     'Wrapped BNB',
@@ -2005,7 +2125,7 @@ export const testnetTokens = defineTokens({
 } as const)
 
 const tokens = () => {
-  const chainId = process.env.NEXT_PUBLIC_CHAIN_ID
+  const chainId = CHAIN_ID
 
   // If testnet - return list comprised of testnetTokens wherever they exist, and mainnetTokens where they don't
   if (parseInt(chainId, 10) === ChainId.TESTNET) {

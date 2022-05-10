@@ -1,7 +1,7 @@
-import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
+import React, { useEffect, useCallback, useState, useMemo, useRef, useLayoutEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text, Button, ArrowForwardIcon, Flex } from '@pancakeswap/uikit'
+import { Image, Heading, RowType, Toggle, Text, Button, ArrowForwardIcon, Flex, Input } from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
 // import { NextLinkFromReactRouter } from 'components/NextLink'
 import styled from 'styled-components'
@@ -14,7 +14,7 @@ import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { getFarmApr } from 'utils/apr'
 import orderBy from 'lodash/orderBy'
-import isArchivedPid from 'utils/farmHelpers'
+import { isArchivedPid } from 'utils/farmHelpers'
 import { latinise } from 'utils/latinise'
 import { useUserFarmStakedOnly, useUserFarmsViewMode } from 'state/user/hooks'
 import { ViewMode } from 'state/user/actions'
@@ -22,13 +22,16 @@ import PageHeader from 'components/PageHeader'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import Loading from 'components/Loading'
-import { FarmsPage, useFarms as useFarmsWrapper } from 'views/bmp/BmpPage/context/farmsContext.bmp'
+import { FarmsPage, useFarms as useFarmsWrapper } from 'views/bmp/farms/farmsContext'
 import { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
 import FarmTabButtons from './components/FarmTabButtons'
 import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema } from './components/types'
+import { getSystemInfo, useDidHide, useDidShow } from '@binance/mp-service'
+import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
+import { throttle } from 'lodash'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -38,7 +41,7 @@ const ControlContainer = styled.div`
 
   justify-content: space-between;
   flex-direction: column;
-  margin-bottom: 32px;
+  margin-bottom: 8px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
@@ -102,7 +105,7 @@ const StyledImage = styled(Image)`
   margin-right: auto;
   margin-top: 58px;
 `
-const NUMBER_OF_FARMS_VISIBLE = 12
+const NUMBER_OF_FARMS_VISIBLE = 2000
 
 export const getDisplayApr = (cakeRewardsApr?: number, lpRewardsApr?: number) => {
   if (cakeRewardsApr && lpRewardsApr) {
@@ -114,26 +117,22 @@ export const getDisplayApr = (cakeRewardsApr?: number, lpRewardsApr?: number) =>
   return null
 }
 
-const Farms: React.FC = ({ children }) => {
+const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsData, cakePrice }) => {
   // const { pathname } = useRouter()
   const { t } = useTranslation()
   const {
     state: { page },
   } = useFarmsWrapper()
-  const { data: farmsLP, userDataLoaded } = useFarms()
-  const cakePrice = usePriceCakeBusd()
+  const { data: farmsLP, userDataLoaded, regularCakePerBlock } = farmsData
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useUserFarmsViewMode()
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
   // const { observerRef, isIntersecting } = useIntersectionObserver()
   const chosenFarmsLength = useRef(0)
-
   const isArchived = false
   const isInactive = page === FarmsPage.History
   const isActive = !isInactive && !isArchived
-
-  usePollFarmsWithUserData(isArchived)
 
   // Users with no wallet connected should see 0 as Earned amount
   // Connected users should see loading indicator until first userData has loaded
@@ -165,9 +164,14 @@ const Farms: React.FC = ({ children }) => {
         }
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteTokenPriceBusd)
         const { cakeRewardsApr, lpRewardsApr } = isActive
-          ? getFarmApr(new BigNumber(farm.poolWeight), cakePrice, totalLiquidity, farm.lpAddresses[ChainId.MAINNET])
+          ? getFarmApr(
+              new BigNumber(farm.poolWeight),
+              cakePrice,
+              totalLiquidity,
+              farm.lpAddresses[ChainId.MAINNET],
+              regularCakePerBlock,
+            )
           : { cakeRewardsApr: 0, lpRewardsApr: 0 }
-
         return { ...farm, apr: cakeRewardsApr, lpRewardsApr, liquidity: totalLiquidity }
       })
 
@@ -179,7 +183,7 @@ const Farms: React.FC = ({ children }) => {
       }
       return farmsToDisplayWithAPR
     },
-    [cakePrice, query, isActive],
+    [cakePrice, query, isActive, regularCakePerBlock],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -245,12 +249,19 @@ const Farms: React.FC = ({ children }) => {
 
   // useEffect(() => {
   //   if (isIntersecting) {
-  //     setNumberOfFarmsVisible((farmsCurrentlyVisible) => {
-  //       if (farmsCurrentlyVisible <= chosenFarmsLength.current) {
-  //         return farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE
-  //       }
-  //       return farmsCurrentlyVisible
-  //     })
+  // const setVisible = useCallback(
+  //   throttle(
+  //     () =>
+  //       setNumberOfFarmsVisible((farmsCurrentlyVisible) => {
+  //         if (farmsCurrentlyVisible <= chosenFarmsLength.current) {
+  //           return farmsCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE
+  //         }
+  //         return farmsCurrentlyVisible
+  //       }),
+  //     10000,
+  //   ),
+  //   [],
+  // )
   //   }
   // }, [isIntersecting])
 
@@ -259,7 +270,6 @@ const Farms: React.FC = ({ children }) => {
     const tokenAddress = token.address
     const quoteTokenAddress = quoteToken.address
     const lpLabel = farm.lpSymbol && farm.lpSymbol.split(' ')[0].toUpperCase().replace('PANCAKE', '')
-
     const row: RowProps = {
       apr: {
         value: getDisplayApr(farm.apr, farm.lpRewardsApr),
@@ -327,85 +337,139 @@ const Farms: React.FC = ({ children }) => {
   const handleSortOptionChange = (option: OptionProps): void => {
     setSortOption(option.value)
   }
-
+  const [remainHeight, setRemainHeight] = useState(null)
+  useEffect(() => {
+    setTimeout(() => {
+      bn.createSelectorQuery()
+        .selectAll('.farms-control')
+        .boundingClientRect(function (rect) {
+          const { safeArea } = getSystemInfoSync()
+          setRemainHeight(safeArea.height - rect[0].height - 16 - 8 - 39 - 44 - 49)
+        })
+        .exec()
+    }, 0)
+  }, [remainHeight])
+  // if (execQuerySelector) {
+  //   execQuerySelector = false
+  // }
   return (
-    <FarmsContext.Provider value={{ chosenFarmsMemoized }}>
-      <PageHeader>
-        <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-          {t('Farms')}
-        </Heading>
-        <Heading scale="lg" color="text">
-          {t('Stake LP tokens to earn.')}
-        </Heading>
-      </PageHeader>
-      <Page>
-        <ControlContainer>
-          <ViewControls>
-            <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
-            <ToggleWrapper>
-              <Toggle
-                id="staked-only-farms"
-                checked={stakedOnly}
-                onChange={() => setStakedOnly(!stakedOnly)}
-                scale="sm"
-              />
-              <ToggleWrapperText> {t('Staked only')}</ToggleWrapperText>
-            </ToggleWrapper>
-            <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
-          </ViewControls>
-          <FilterContainer>
-            <LabelWrapper>
-              <LabelWrapperText textTransform="uppercase">{t('Sort by')}</LabelWrapperText>
-              <Select
-                options={[
-                  {
-                    label: t('Hot'),
-                    value: 'hot',
-                  },
-                  {
-                    label: t('APR'),
-                    value: 'apr',
-                  },
-                  {
-                    label: t('Multiplier'),
-                    value: 'multiplier',
-                  },
-                  {
-                    label: t('Earned'),
-                    value: 'earned',
-                  },
-                  {
-                    label: t('Liquidity'),
-                    value: 'liquidity',
-                  },
-                ]}
-                onOptionChange={handleSortOptionChange}
-              />
-            </LabelWrapper>
-            <LabelWrapper style={{ marginLeft: 16 }}>
-              <LabelWrapperText textTransform="uppercase">{t('Search')}</LabelWrapperText>
-              <SearchInput onChange={handleChangeQuery} placeholder="Search Farms" />
-            </LabelWrapper>
-          </FilterContainer>
-        </ControlContainer>
-        {renderContent()}
-        {account && !userDataLoaded && stakedOnly && (
-          <Flex justifyContent="center">
-            <Loading />
-          </Flex>
-        )}
-        {/* <view ref={observerRef} /> */}
-        <StyledImage
-          src="https://pancakeswap.finance/images/decorations/3dpan.png"
-          alt="Pancake illustration"
-          width={120}
-          height={103}
-        />
-      </Page>
+    <FarmsContext.Provider value={{ chosenFarmsMemoized, height: remainHeight, cakePrice }}>
+      {/* <PageHeader> */}
+      <Heading as="h1" scale="lg" color="secondary" style={{ fontSize: '24px', fontWeight: 'bold' }} mb="8px">
+        {t('Farms')}
+      </Heading>
+      <Heading scale="lg" color="text" style={{ fontSize: '16px', fontWeight: 'bold' }} mb="4px">
+        {t('Stake LP tokens to earn.')}
+      </Heading>
+      {/* </PageHeader> */}
+      {/* <Page> */}
+      <ControlContainer className="farms-control">
+        <ViewControls>
+          <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
+          <ToggleWrapper>
+            <Toggle
+              id="staked-only-farms"
+              checked={stakedOnly}
+              onChange={() => setStakedOnly(!stakedOnly)}
+              scale="sm"
+            />
+            <ToggleWrapperText> {t('Staked only')}</ToggleWrapperText>
+          </ToggleWrapper>
+          <FarmTabButtons hasStakeInFinishedFarms={stakedInactiveFarms.length > 0} />
+        </ViewControls>
+        <FilterContainer style={{ paddingBottom: 0 }}>
+          <LabelWrapperText style={{ minWidth: '136px' }} textTransform="uppercase">
+            {t('Sort by')}
+          </LabelWrapperText>
+          <LabelWrapperText style={{ width: '100%', marginLeft: '16px' }} textTransform="uppercase">
+            {t('Search')}
+          </LabelWrapperText>
+        </FilterContainer>
+        <FilterContainer style={{ paddingTop: 0 }}>
+          <LabelWrapper>
+            <Select
+              options={[
+                {
+                  label: t('Hot'),
+                  value: 'hot',
+                },
+                {
+                  label: t('APR'),
+                  value: 'apr',
+                },
+                {
+                  label: t('Multiplier'),
+                  value: 'multiplier',
+                },
+                {
+                  label: t('Earned'),
+                  value: 'earned',
+                },
+                {
+                  label: t('Liquidity'),
+                  value: 'liquidity',
+                },
+              ]}
+              onOptionChange={handleSortOptionChange}
+            />
+          </LabelWrapper>
+          {/* <LabelWrapper style={{ marginLeft: 16 }}> */}
+          <SearchInput style={{ marginLeft: 16 }} onChange={handleChangeQuery} placeholder="Search Farms" />
+          {/* </LabelWrapper> */}
+        </FilterContainer>
+      </ControlContainer>
+      {renderContent()}
+      {/* {account && !userDataLoaded && stakedOnly && ( */}
+      {/*   <Flex justifyContent="center"> */}
+      {/*     <Loading /> */}
+      {/*   </Flex> */}
+      {/* )} */}
+      {/* <view ref={observerRef} /> */}
+      {/* <StyledImage */}
+      {/*   src="https://pancakeswap.finance/images/decorations/3dpan.png" */}
+      {/*   alt="Pancake illustration" */}
+      {/*   width={120} */}
+      {/*   height={103} */}
+      {/* /> */}
+      {/* </Page> */}
     </FarmsContext.Provider>
   )
 }
 
 export const FarmsContext = React.createContext({ chosenFarmsMemoized: [] })
 
-export default Farms
+// let origin = null
+
+const Fetcher = React.memo(({ setFarmsData, setCakePrice }) => {
+  const { data, userDataLoaded, regularCakePerBlock } = useFarms()
+  const cakePrice = usePriceCakeBusd()
+  useEffect(() => {
+    setFarmsData({ data, userDataLoaded, regularCakePerBlock })
+  }, [data, userDataLoaded, setFarmsData, regularCakePerBlock])
+  useEffect(() => {
+    setCakePrice(cakePrice)
+  }, [cakePrice, setCakePrice])
+  return null
+})
+
+const FramsWrapper = ({ children }) => {
+  const [isHide, setIsHide] = useState(false)
+  const [farmsData, setFarmsData] = useState({ data: [] })
+  const [cakePrice, setCakePrice] = useState(null)
+  useDidShow(() => {
+    setIsHide(false)
+  })
+  useDidHide(() => {
+    setIsHide(true)
+  })
+  usePollFarmsWithUserData(false)
+  return (
+    <view>
+      <Farms farmsData={farmsData} cakePrice={cakePrice} children={children} />
+      {!isHide && <Fetcher setFarmsData={setFarmsData} setCakePrice={setCakePrice} />}
+      {/* <Fetcher setFarmsData={setFarmsData} setCakePrice={setCakePrice} /> */}
+    </view>
+  )
+}
+
+export default FramsWrapper

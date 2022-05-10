@@ -22,7 +22,7 @@ export interface FarmWithStakedValue extends DeserializedFarm {
 
 const StyledCard = styled(Card)`
   align-self: baseline;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 `
 
 const FarmCardInnerContainer = styled(Flex)`
@@ -43,13 +43,14 @@ interface FarmCardProps {
   removed: boolean
   cakePrice?: BigNumber
   account?: string
+  toggleExpand: () => void
+  expand: boolean
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePrice, account }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ expand, farm, displayApr, removed, cakePrice, account, toggleExpand }) => {
   const { t } = useTranslation()
 
-  const [showExpandableSection, setShowExpandableSection] = useState(false)
-
+  const [showExpandableSection, setShowExpandableSection] = useState(expand)
   const totalValueFormatted =
     farm.liquidity && farm.liquidity.gt(0)
       ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
@@ -114,7 +115,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, cakePric
 
       <ExpandingWrapper>
         <ExpandableSectionButton
-          onClick={() => setShowExpandableSection(!showExpandableSection)}
+          // onClick={() => { setShowExpandableSection(!showExpandableSection); }}
+          onClick={() => {
+            setShowExpandableSection(!showExpandableSection)
+            toggleExpand()
+          }}
           expanded={showExpandableSection}
         />
         {showExpandableSection && (

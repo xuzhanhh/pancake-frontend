@@ -41,6 +41,7 @@ import { useGasPrice, useUserSlippageTolerance } from '../../state/user/hooks'
 import ErrorBoundary from 'components/ErrorBoundary'
 import { HitBuilders } from 'utils/ga'
 import { useTracker } from 'contexts/AnalyticsContext'
+import { CHAIN_ID } from 'config/constants/networks'
 
 const BorderCard = styled.div`
   border: solid 1px ${({ theme }) => theme.colors.cardBorder};
@@ -103,7 +104,7 @@ export default function RemoveLiquidity() {
 
   // allowance handling
   const [signatureData, setSignatureData] = useState<{ v: number; r: string; s: string; deadline: number } | null>(null)
-  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS)
+  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], ROUTER_ADDRESS[CHAIN_ID])
 
   async function onAttemptToApprove() {
     if (!pairContract || !pair || !library || !deadline) throw new Error('missing dependencies')
@@ -134,7 +135,7 @@ export default function RemoveLiquidity() {
     ]
     const message = {
       owner: account,
-      spender: ROUTER_ADDRESS,
+      spender: ROUTER_ADDRESS[CHAIN_ID],
       value: liquidityAmount.raw.toString(),
       nonce: nonce.toHexString(),
       deadline: deadline.toNumber(),
@@ -691,7 +692,12 @@ export default function RemoveLiquidity() {
                       onPresentRemoveLiquidity()
                     }}
                     width="100%"
-                    disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
+                    disabled={
+                      !isValid ||
+                      formattedAmounts[Field.CURRENCY_A] === '0' ||
+                      formattedAmounts[Field.CURRENCY_B] === '0' ||
+                      (signatureData === null && approval !== ApprovalState.APPROVED)
+                    }
                   >
                     {error || t('Remove')}
                   </Button>

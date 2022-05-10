@@ -32,16 +32,24 @@ const defaultState = {
       pagePath: 'views/bmp/liquidity/index',
       text: 'Liquidity',
     },
+    {
+      iconPath: 'images/farm.png',
+      selectedIconPath: 'images/farm-select.png',
+      pagePath: 'views/bmp/farms/index',
+      text: 'Farms',
+    },
   ],
 }
 const Title = ({ selected, title }) => {
   const theme = useTheme()
-  const { t } = useTranslation()
+  const { t, currentLanguage } = useTranslation()
   return (
     <View
       className="bottom-tab-item-text"
       style={{
         color: selected ? theme.colors.secondary : theme.colors.textSubtle,
+        fontWeight: selected ? 'bold' : 400,
+        fontSize: currentLanguage.locale === 'zh-CN' || currentLanguage.locale === 'zh-TW' ? 12 : 14,
       }}
     >
       {t(title)}

@@ -5,11 +5,12 @@ import { Flex, IconButton, useModal, CalculateIcon } from '@pancakeswap/uikit'
 import RoiCalculatorModal from 'components/RoiCalculatorModal/index.bmp'
 import { useTranslation } from 'contexts/Localization'
 import { useFarmUser, useLpTokenPrice } from 'state/farms/hooks'
-import { useFarms } from 'views/bmp/BmpPage/context/farmsContext.bmp'
+import { useFarms } from 'views/bmp/farms/farmsContext'
 
 const ApyLabelContainer = styled(Flex)`
   cursor: pointer;
-
+  font-size: 16px;
+  font-weight: 400;
   &:hover {
     opacity: 0.5;
   }
@@ -26,6 +27,7 @@ export interface ApyButtonProps {
   displayApr?: string
   addLiquidityUrl?: string
   liquidityUrlPathParts: string
+  style: React.CSSProperties
 }
 
 const ApyButton: React.FC<ApyButtonProps> = ({
@@ -39,6 +41,7 @@ const ApyButton: React.FC<ApyButtonProps> = ({
   displayApr,
   addLiquidityUrl,
   liquidityUrlPathParts,
+  style = {},
 }) => {
   const { t } = useTranslation()
   const lpPrice = useLpTokenPrice(lpSymbol)
@@ -73,7 +76,7 @@ const ApyButton: React.FC<ApyButtonProps> = ({
     <ApyLabelContainer alignItems="center" onClick={handleClickButton}>
       {displayApr}%
       {variant === 'text-and-button' && (
-        <IconButton variant="text" scale="sm" ml="4px">
+        <IconButton variant="text" scale="sm" ml="4px" style={style}>
           <CalculateIcon width="18px" />
         </IconButton>
       )}

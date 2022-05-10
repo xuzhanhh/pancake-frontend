@@ -3,7 +3,7 @@ import { CloseIcon, Overlay, Box, IconButton } from '@pancakeswap/uikit'
 import styled from '@binance/mp-styled'
 
 const OverlayInner = styled.div`
-  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  background-color: ${({ theme }) => theme.modal.background};
   position: absolute;
   top: 50%;
   width: 80%;
@@ -17,7 +17,7 @@ const OverlayInner = styled.div`
 const Tooltip = ({ visible, onClose, children }) => {
   if (visible) {
     return (
-      <Overlay onClick={onClose} style={{ backgroundColor: 'transparent', height: '100vh', zIndex: 1111 }}>
+      <Overlay onClick={onClose} style={{ height: '100vh', zIndex: 1111 }}>
         <OverlayInner>
           <Box style={{ marginRight: 20 }}>{children}</Box>
           <IconButton

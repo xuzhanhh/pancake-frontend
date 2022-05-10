@@ -10,9 +10,9 @@ interface ModalInputProps {
   symbol: string
   onSelectMax?: () => void
   onChange: (e: React.FormEvent<HTMLInputElement>) => void
+  jumpToLiquidity: () => void
   placeholder?: string
   value: string
-  addLiquidityUrl?: string
   inputTitle?: string
   decimals?: number
 }
@@ -54,7 +54,7 @@ const StyledInput = styled(Input)`
 
 const StyledErrorMessage = styled(Text)`
   position: absolute;
-  bottom: -22px;
+  bottom: -26px;
   a {
     display: inline;
   }
@@ -66,9 +66,9 @@ const ModalInput: React.FC<ModalInputProps> = ({
   onChange,
   onSelectMax,
   value,
-  addLiquidityUrl,
   inputTitle,
   decimals = 18,
+  jumpToLiquidity,
 }) => {
   const { t } = useTranslation()
   const isBalanceZero = max === '0' || !max
@@ -107,8 +107,15 @@ const ModalInput: React.FC<ModalInputProps> = ({
       </StyledTokenInput>
       {isBalanceZero && (
         <StyledErrorMessage fontSize="14px" color="failure">
-          {t('No tokens to stake')}:{' '}
-          <Link fontSize="14px" bold={false} href={addLiquidityUrl} external color="failure">
+          {t('No tokens to stake')}: {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <Link
+            style={{ display: 'inline' }}
+            fontSize="14px"
+            bold={false}
+            onClick={jumpToLiquidity}
+            external
+            color="failure"
+          >
             {t('Get %symbol%', { symbol })}
           </Link>
         </StyledErrorMessage>

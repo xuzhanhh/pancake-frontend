@@ -13,7 +13,7 @@ import StakedAction from './StakedAction'
 import Apr, { AprProps } from '../Apr'
 import Multiplier, { MultiplierProps } from '../Multiplier'
 import Liquidity, { LiquidityProps } from '../Liquidity'
-import { useFarms } from 'views/bmp/BmpPage/context/farmsContext.bmp'
+import { useFarms } from 'views/bmp/farms/farmsContext'
 
 export interface ActionPanelProps {
   apr: AprProps

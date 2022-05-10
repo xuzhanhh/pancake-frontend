@@ -1,11 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import { HelpIcon, Text, Skeleton } from '@pancakeswap/uikit'
+import { useTooltip } from 'contexts/bmp/TooltipContext'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
 
 const ReferenceElement = styled.div`
-  display: inline-block;
+  /* display: inline-block; */
+  display: flex;
 `
 
 export interface LiquidityProps {
@@ -14,8 +16,9 @@ export interface LiquidityProps {
 
 const LiquidityWrapper = styled.div`
   min-width: 110px;
-  font-weight: 600;
+  font-weight: bold;
   text-align: right;
+  line-height: 1.5;
   margin-right: 14px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
@@ -38,9 +41,16 @@ const Liquidity: React.FunctionComponent<LiquidityProps> = ({ liquidity }) => {
     )
   const { t } = useTranslation()
   // const { targetRef, tooltip, tooltipVisible } = useTooltip(
-  //   t('Total value of the funds in this farm’s liquidity pool'),
   //   { placement: 'top-end', tooltipOffset: [20, 10] },
   // )
+  //
+  const tooltipContent = (
+    <>
+      <Text>{t('Total value of the funds in this farm’s liquidity pool')}</Text>
+    </>
+  )
+
+  const { onPresent } = useTooltip(tooltipContent)
 
   return (
     <Container>
@@ -48,7 +58,7 @@ const Liquidity: React.FunctionComponent<LiquidityProps> = ({ liquidity }) => {
         <Text>{displayLiquidity}</Text>
       </LiquidityWrapper>
       {/* <ReferenceElement ref={targetRef}> */}
-      <ReferenceElement>
+      <ReferenceElement onClick={onPresent}>
         <HelpIcon color="textSubtle" />
       </ReferenceElement>
       {/* {tooltipVisible && tooltip} */}

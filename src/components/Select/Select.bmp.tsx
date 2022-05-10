@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react'
-import styled, { css } from 'styled-components'
+import React, { useState, useRef, useEffect } from 'react'
+import styled, { css, useTheme } from 'styled-components'
 import { ArrowDropDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
 import { AtActionSheet, AtActionSheetItem } from 'taro-ui'
 import 'taro-ui/dist/style/components/action-sheet.scss'
+import { showActionSheet } from '@binance/mp-service'
 
 const DropDownHeader = styled.div`
   width: 100%;
@@ -112,6 +113,7 @@ const Select: React.FunctionComponent<SelectProps> = ({
   ...props
 }) => {
   const dropdownRef = useRef(null)
+  const theme = useTheme()
   const [isOpen, setIsOpen] = useState(false)
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(defaultOptionIndex)
   const toggling = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -141,6 +143,11 @@ const Select: React.FunctionComponent<SelectProps> = ({
         color="text"
         onClick={toggling}
         style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)' }}
+      />
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `.at-action-sheet__item{background: ${theme.modal.background}`,
+        }}
       />
       <AtActionSheet isOpened={isOpen} onCancel={handleClose} onClose={handleClose}>
         {options.map((option, index) =>

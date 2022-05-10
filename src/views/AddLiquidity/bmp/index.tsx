@@ -45,6 +45,7 @@ import ConfirmAddModalBottom from '../ConfirmAddModalBottom'
 import { currencyId } from '../../../utils/currencyId'
 import PoolPriceBar from '../PoolPriceBar'
 import { AddLiquidityTip } from 'views/Pool/index.bmp'
+import { CHAIN_ID } from 'config/constants/networks'
 function AddLiquidity() {
   // const router = useRouter()
   // const [currencyIdA, currencyIdB] = router.query.currency || []
@@ -133,8 +134,8 @@ function AddLiquidity() {
   )
 
   // check whether the user has approved the router on the tokens
-  const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS)
-  const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS)
+  const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], ROUTER_ADDRESS[CHAIN_ID])
+  const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], ROUTER_ADDRESS[CHAIN_ID])
 
   const addTransaction = useTransactionAdder()
 

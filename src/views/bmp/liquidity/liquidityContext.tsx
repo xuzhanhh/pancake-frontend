@@ -1,3 +1,4 @@
+import { useDidShow } from '@binance/mp-service'
 import React, { createContext } from 'react'
 
 export enum LiquidityPage {
@@ -35,6 +36,16 @@ function LiquidityProvider({ children }: LiquidityProviderProps) {
     page: LiquidityPage.Pool,
     currency1: null,
     currency2: null,
+  })
+  useDidShow(() => {
+    const { liquidityPage, currency1, currency2 } = globalThis
+    if (liquidityReducer && currency1 && currency2) {
+      dispatch({ type: 'setPage', page: liquidityPage })
+      dispatch({ type: 'setCurrency', currency1, currency2 })
+      globalThis.liquidityPage = undefined
+      globalThis.currency1 = undefined
+      globalThis.currenct2 = undefined
+    }
   })
   const value = { state, dispatch }
   return <LiquidityContext.Provider value={value}>{children}</LiquidityContext.Provider>

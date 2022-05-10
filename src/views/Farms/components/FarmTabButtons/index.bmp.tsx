@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ButtonMenu, ButtonMenuItem, NotificationDot } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
-import { useFarms, FarmsPage } from 'views/bmp/BmpPage/context/farmsContext.bmp'
+import { useFarms, FarmsPage } from 'views/bmp/farms/farmsContext'
 // import { useRouter } from 'next/router'
 // import { NextLinkFromReactRouter } from 'components/NextLink'
 
@@ -37,6 +37,7 @@ const FarmTabButtons: React.FC<FarmTabButtonsProps> = ({ hasStakeInFinishedFarms
     <Wrapper>
       <ButtonMenu
         onItemClick={(index) => {
+          console.log('???', index)
           if (index === 0) {
             dispatch({ type: 'setPage', page: FarmsPage.Farms })
           } else if (index === 1) {
@@ -49,7 +50,7 @@ const FarmTabButtons: React.FC<FarmTabButtonsProps> = ({ hasStakeInFinishedFarms
       >
         <ButtonMenuItem>{t('Live')}</ButtonMenuItem>
         <NotificationDot show={hasStakeInFinishedFarms}>
-          <ButtonMenuItem id="finished-farms-button">{t('Finished')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('Finished')}</ButtonMenuItem>
         </NotificationDot>
       </ButtonMenu>
     </Wrapper>

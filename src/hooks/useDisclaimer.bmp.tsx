@@ -2,18 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { ScrollView } from '@binance/mp-components'
 import mpService from '@binance/mp-service'
-import {
-  useModal,
-  Button,
-  Modal,
-  Box,
-  Flex,
-  ModalContainer,
-  ModalHeader,
-  ModalTitle,
-  Heading,
-  Text,
-} from '@pancakeswap/uikit'
+import { useModal, Button, Modal, Flex, Text, Checkbox } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 
 const TextWrap = styled.div`
@@ -23,11 +12,16 @@ const TextWrap = styled.div`
   }
 `
 function DisclaimerModal(props) {
-  console.log('🚀 ~ file: useDisclaimer.bmp.tsx ~ line 19 ~ DisclaimerModal ~ props', props)
   const { t } = useTranslation()
   const [confirmDisabled, setConfirmDisabled] = useState(true)
+  const [checked, setChecked] = useState(false)
   return (
-    <Modal style={{ width: '80vw' }} hideCloseButton title="PancakeSwap Mini-Program User Service Agreement">
+    <Modal
+      style={{ width: '80vw' }}
+      hideCloseButton
+      title="PancakeSwap Mini-Program User Service Agreement"
+      headerBackground="gradients.cardHeader"
+    >
       <ScrollView
         scrollY
         style={{ maxHeight: '50vh' }}
@@ -41,15 +35,20 @@ function DisclaimerModal(props) {
           ))}
         </TextWrap>
       </ScrollView>
-      <Flex paddingTop="16px" justifyContent={'center'}>
+      <Flex paddingTop="16px" justifyContent="space-between" alignItems="center">
+        <Flex>
+          <Checkbox scale="sm" disabled={confirmDisabled} checked={checked} onChange={() => setChecked(!checked)} />
+          <Text style={{ marginLeft: '8px' }}>I understand</Text>
+        </Flex>
         <Button
+          width="132px"
           onClick={() => {
             if (props.onClick) props.onClick()
             props.onDismiss()
           }}
-          disabled={confirmDisabled}
+          disabled={!checked}
         >
-          I understand
+          Start
         </Button>
       </Flex>
     </Modal>
