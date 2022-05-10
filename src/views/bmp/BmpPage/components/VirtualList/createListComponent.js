@@ -79,15 +79,14 @@ export default function createListComponent({
             clientWidth: 0,
           }
           this._callOnItemsRendered = void 0
-          this._callOnItemsRendered = 
-            (overscanStartIndex, overscanStopIndex, visibleStartIndex, visibleStopIndex) =>
-              this.props.onItemsRendered({
-                overscanStartIndex,
-                overscanStopIndex,
-                visibleStartIndex,
-                visibleStopIndex,
-              })
-          
+          this._callOnItemsRendered = (overscanStartIndex, overscanStopIndex, visibleStartIndex, visibleStopIndex) =>
+            this.props.onItemsRendered({
+              overscanStartIndex,
+              overscanStopIndex,
+              visibleStartIndex,
+              visibleStopIndex,
+            })
+
           this._callOnScroll = void 0
           this._callOnScroll = (scrollDirection, scrollOffset, scrollUpdateWasRequested, detail) =>
             this.props.onScroll({
@@ -96,7 +95,6 @@ export default function createListComponent({
               scrollUpdateWasRequested,
               detail,
             })
-          
 
           this._getSize = void 0
 

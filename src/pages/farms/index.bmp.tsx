@@ -13,6 +13,21 @@ const setExpandIndex = (func) => {
   const result = func(expandIndex)
   expandIndex = result
 }
+const Row = React.memo(({ data, index, style }) => {
+  const { farm, toggleExpand, cakePrice, account } = data[index]
+  return (
+    <FarmCard
+      key={farm.pid}
+      farm={farm}
+      displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
+      cakePrice={cakePrice}
+      account={account}
+      removed={false}
+      toggleExpand={toggleExpand(index)}
+      expand={expandIndex.includes(index)}
+    />
+  )
+})
 
 const FarmsPage = () => {
   const { account } = useWeb3React()
@@ -27,40 +42,22 @@ const FarmsPage = () => {
   // }, [chosenFarmsMemoized])
 
   const virtualListRef = useRef()
-  const toggleExpand = (index) => () => {
-    setExpandIndex((expandIndex) => {
-      if (expandIndex.includes(index)) {
-        const newArray = [...expandIndex]
-        remove(newArray, (n) => n === index)
-        return newArray
-      } else {
-        return [...expandIndex, index]
-        // setExpandIndex(array => [...array, index])
-      }
-    })
-    virtualListRef.current?.resetAfterIndex(index)
-  }
-  const Row = React.memo(
-    useCallback(
-      ({ data, index, style }) => {
-        const farm = data[index]
-        return (
-          <FarmCard
-            key={farm.pid}
-            farm={farm}
-            displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-            cakePrice={cakePrice}
-            account={account}
-            removed={false}
-            toggleExpand={toggleExpand(index)}
-            expand={expandIndex.includes(index)}
-          />
-        )
-      },
-      [account, cakePrice],
-    ),
+  const toggleExpand = useCallback(
+    (index) => () => {
+      setExpandIndex((expandIndex) => {
+        if (expandIndex.includes(index)) {
+          const newArray = [...expandIndex]
+          remove(newArray, (n) => n === index)
+          return newArray
+        } else {
+          return [...expandIndex, index]
+          // setExpandIndex(array => [...array, index])
+        }
+      })
+      virtualListRef.current?.resetAfterIndex(index)
+    },
+    [],
   )
-
   const itemKey = useCallback((index, data) => data[index].pid, [])
   const VariableList = useMemo(() => {
     return (
@@ -68,7 +65,9 @@ const FarmsPage = () => {
         height={height || 500}
         ref={virtualListRef}
         width="100%"
-        itemData={chosenFarmsMemoized}
+        itemData={chosenFarmsMemoized.map((item) => {
+          return { farm: item, toggleExpand, cakePrice, account }
+        })}
         itemCount={chosenFarmsMemoized.length}
         itemSize={(index) => (expandIndex.includes(index) ? 568 : 448)}
         itemKey={itemKey}
@@ -78,7 +77,7 @@ const FarmsPage = () => {
         {Row}
       </VariableSizeList>
     )
-  }, [chosenFarmsMemoized, itemKey, expandIndex])
+  }, [chosenFarmsMemoized, itemKey, expandIndex, cakePrice, account, toggleExpand])
   return <view style={{ maxWidth: 'unset', margin: 'unset' }}>{VariableList}</view>
 }
 
