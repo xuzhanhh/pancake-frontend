@@ -1,3 +1,4 @@
+import React from 'react'
 import Trans from 'components/Trans'
 import { VaultKey } from 'state/types'
 import { CHAIN_ID } from './networks'
@@ -55,20 +56,6 @@ const pools: SerializedPoolConfig[] = [
     tokenPerBlock: '10',
     sortOrder: 1,
     isFinished: false,
-  },
-  {
-    sousId: 277,
-    stakingToken: serializedTokens.cake,
-    earningToken: serializedTokens.ankr,
-    contractAddress: {
-      97: '',
-      56: '0xc581345e1648CcE154978eA80bF8A584EC8aFDe0',
-    },
-    poolCategory: PoolCategory.CORE,
-    harvest: true,
-    sortOrder: 999,
-    tokenPerBlock: '4.6296',
-    version: 3,
   },
   {
     sousId: 276,
