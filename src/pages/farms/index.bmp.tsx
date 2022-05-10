@@ -70,14 +70,13 @@ const FarmsPage = () => {
         })}
         itemCount={chosenFarmsMemoized.length}
         itemSize={(index) => (expandIndex.includes(index) ? 568 : 448)}
-        itemKey={itemKey}
         overscanCount={4}
         // onScrollToLower={setVisible}
       >
         {Row}
       </VariableSizeList>
     )
-  }, [chosenFarmsMemoized, itemKey, expandIndex, cakePrice, account, toggleExpand])
+  }, [chosenFarmsMemoized, cakePrice, account, height, toggleExpand])
   return <view style={{ maxWidth: 'unset', margin: 'unset' }}>{VariableList}</view>
 }
 

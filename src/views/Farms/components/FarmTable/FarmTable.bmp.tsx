@@ -159,7 +159,7 @@ const FarmTable: React.FC<ITableProps> = (props) => {
         {VirtualListRow}
       </VariableSizeList>
     )
-  }, [rows, userDataReady])
+  }, [rows, userDataReady, height, makeExpand, toggleExpand])
   return (
     <Container id="farms-table">
       <TableContainer id="table-container">
