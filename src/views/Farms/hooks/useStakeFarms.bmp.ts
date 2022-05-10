@@ -33,7 +33,7 @@ const useStakeFarms = (pid: number) => {
         onError(receipt)
       }
     },
-    [masterChefContract, pid],
+    [masterChefContract, pid, tracker],
   )
 
   return { onStake: handleStake }

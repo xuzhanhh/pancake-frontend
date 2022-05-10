@@ -33,7 +33,7 @@ const useHarvestFarm = (farmPid: number) => {
         onError(receipt)
       }
     },
-    [farmPid, masterChefContract],
+    [farmPid, masterChefContract, tracker],
   )
 
   return { onReward: handleHarvest }
