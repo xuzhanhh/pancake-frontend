@@ -21,7 +21,7 @@ const useStakeFarms = (pid: number) => {
         new HitBuilders.EventBuilder()
           .setCategory('farm')
           .setAction('stake')
-          .setLabel(JSON.stringify({ tx })) //  optional
+          .setLabel(JSON.stringify({ tx: tx.hash })) //  optional
           .setValue(1)
           .build(),
       )
