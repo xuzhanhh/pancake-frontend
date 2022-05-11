@@ -65,6 +65,20 @@ const setExpandIndex = (func) => {
   const result = func(expandIndex)
   expandIndex = result
 }
+const VirtualListRow = React.memo(({ data, index, style }) => {
+  const { row, userDataReady, toggleExpand, makeExpand } = data[index]
+  return (
+    <Row
+      {...row.original}
+      userDataReady={userDataReady}
+      index={index}
+      toggleExpand={toggleExpand(index)}
+      makeExpand={makeExpand(index)}
+      expand={expandIndex.includes(index)}
+    />
+  )
+  // return <view>{index}</view>
+})
 
 const FarmTable: React.FC<ITableProps> = (props) => {
   // const tableWrapperEl = useRef<HTMLDivElement>(null)
@@ -82,52 +96,38 @@ const FarmTable: React.FC<ITableProps> = (props) => {
   // useEffect(() => {
   //   triggerReRender((n) => n + 1)
   // }, [data])
-  const toggleExpand = (index) => () => {
-    setExpandIndex((expandIndex) => {
-      if (expandIndex.includes(index)) {
-        const newArray = [...expandIndex]
-        remove(newArray, (n) => n === index)
-        return newArray
-      } else {
-        return [...expandIndex, index]
-        // setExpandIndex(array => [...array, index])
-      }
-    })
-    virtualListRef.current?.resetAfterIndex(index)
-  }
+  const toggleExpand = useCallback(
+    (index) => () => {
+      setExpandIndex((expandIndex) => {
+        if (expandIndex.includes(index)) {
+          const newArray = [...expandIndex]
+          remove(newArray, (n) => n === index)
+          return newArray
+        } else {
+          return [...expandIndex, index]
+          // setExpandIndex(array => [...array, index])
+        }
+      })
+      virtualListRef.current?.resetAfterIndex(index)
+    },
+    [],
+  )
 
-  const makeExpand = (index) => () => {
-    setExpandIndex((expandIndex) => {
-      if (expandIndex.includes(index)) {
-        // const newArray = [...expandIndex]
-        // remove(newArray, (n) => n === index)
-        // return newArray
-      } else {
-        return [...expandIndex, index]
-        // setExpandIndex(array => [...array, index])
-      }
-    })
-    virtualListRef.current?.resetAfterIndex(index)
-  }
-
-  const VirtualListRow = React.memo(
-    useCallback(
-      ({ data, index, style }) => {
-        const row = data[index]
-        return (
-          <Row
-            {...row.original}
-            userDataReady={userDataReady}
-            index={index}
-            toggleExpand={toggleExpand(index)}
-            makeExpand={makeExpand(index)}
-            expand={expandIndex.includes(index)}
-          />
-        )
-        // return <view>{index}</view>
-      },
-      [userDataReady],
-    ),
+  const makeExpand = useCallback(
+    (index) => () => {
+      setExpandIndex((expandIndex) => {
+        if (expandIndex.includes(index)) {
+          // const newArray = [...expandIndex]
+          // remove(newArray, (n) => n === index)
+          // return newArray
+        } else {
+          return [...expandIndex, index]
+          // setExpandIndex(array => [...array, index])
+        }
+      })
+      virtualListRef.current?.resetAfterIndex(index)
+    },
+    [],
   )
 
   const VariableList = useMemo(() => {
@@ -137,7 +137,9 @@ const FarmTable: React.FC<ITableProps> = (props) => {
         // height={500}
         ref={virtualListRef}
         width="100%"
-        itemData={rows}
+        itemData={rows.map((item) => {
+          return { row: item, userDataReady, toggleExpand: toggleExpand, makeExpand: makeExpand }
+        })}
         itemCount={rows.length}
         itemSize={(index) => {
           let origin = expandIndex.includes(index) ? 636 : 135
@@ -157,7 +159,7 @@ const FarmTable: React.FC<ITableProps> = (props) => {
         {VirtualListRow}
       </VariableSizeList>
     )
-  }, [rows])
+  }, [rows, userDataReady, height, makeExpand, toggleExpand])
   return (
     <Container id="farms-table">
       <TableContainer id="table-container">
