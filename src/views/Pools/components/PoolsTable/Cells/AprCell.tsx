@@ -1,11 +1,10 @@
-import React from 'react'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import { DeserializedPool } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import BaseCell, { CellContent } from './BaseCell'
-import Apr from '../Apr'
+import Apr from '../../Apr'
 
 interface AprCellProps {
   pool: DeserializedPool
