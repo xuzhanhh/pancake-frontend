@@ -103,6 +103,58 @@ function CurrencyRow({
   )
 }
 
+const Row = React.memo(({ data, index, style }) => {
+  const {
+    currency,
+    chainId,
+    inactiveTokens,
+    onCurrencySelect,
+    otherCurrency,
+    selectedCurrency,
+    setImportToken,
+    showImportView,
+    breakIndex,
+    t,
+  } = data[index]
+  const isSelected = Boolean(selectedCurrency && currencyEquals(selectedCurrency, currency))
+  const otherSelected = Boolean(otherCurrency && currencyEquals(otherCurrency, currency))
+  const handleSelect = () => onCurrencySelect(currency)
+
+  const token = wrappedCurrency(currency, chainId)
+
+  const showImport = inactiveTokens && token && Object.keys(inactiveTokens).includes(token.address)
+
+  if (index === breakIndex || !data) {
+    return (
+      <FixedContentRow style={style}>
+        <LightGreyCard padding="8px 12px" borderRadius="8px">
+          <RowBetween>
+            <Text small>{t('Expanded results from inactive Token Lists')}</Text>
+            <QuestionHelper
+              text={t(
+                "Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.",
+              )}
+              ml="4px"
+            />
+          </RowBetween>
+        </LightGreyCard>
+      </FixedContentRow>
+    )
+  }
+
+  if (showImport && token) {
+    return <ImportRow style={style} token={token} showImportView={showImportView} setImportToken={setImportToken} dim />
+  }
+  return (
+    <CurrencyRow
+      style={style}
+      currency={currency}
+      isSelected={isSelected}
+      onSelect={handleSelect}
+      otherSelected={otherSelected}
+    />
+  )
+})
 export default function CurrencyList({
   height,
   currencies,
@@ -144,72 +196,6 @@ export default function CurrencyList({
     [address: string]: Token
   } = useAllInactiveTokens()
   // const listRef = useRef()
-  const Row = React.memo(
-    useCallback(
-      ({ data, index, style }) => {
-        const currency: Currency = data[index]
-        const isSelected = Boolean(selectedCurrency && currencyEquals(selectedCurrency, currency))
-        const otherSelected = Boolean(otherCurrency && currencyEquals(otherCurrency, currency))
-        const handleSelect = () => onCurrencySelect(currency)
-
-        const token = wrappedCurrency(currency, chainId)
-
-        const showImport = inactiveTokens && token && Object.keys(inactiveTokens).includes(token.address)
-
-        if (index === breakIndex || !data) {
-          return (
-            <FixedContentRow style={style}>
-              <LightGreyCard padding="8px 12px" borderRadius="8px">
-                <RowBetween>
-                  <Text small>{t('Expanded results from inactive Token Lists')}</Text>
-                  <QuestionHelper
-                    text={t(
-                      "Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.",
-                    )}
-                    ml="4px"
-                  />
-                </RowBetween>
-              </LightGreyCard>
-            </FixedContentRow>
-          )
-        }
-
-        if (showImport && token) {
-          return (
-            <ImportRow
-              style={style}
-              token={token}
-              showImportView={showImportView}
-              setImportToken={setImportToken}
-              dim
-            />
-          )
-        }
-        return (
-          <>
-            <CurrencyRow
-              style={style}
-              currency={currency}
-              isSelected={isSelected}
-              onSelect={handleSelect}
-              otherSelected={otherSelected}
-            />
-          </>
-        )
-      },
-      [
-        chainId,
-        inactiveTokens,
-        onCurrencySelect,
-        otherCurrency,
-        selectedCurrency,
-        setImportToken,
-        showImportView,
-        breakIndex,
-        t,
-      ],
-    ),
-  )
 
   const itemKey = useCallback((index: number, data: any) => currencyKey(data[index]), [])
   return (
@@ -217,12 +203,24 @@ export default function CurrencyList({
       height={Number(safeArea.height / 2) - (showCommonBases ? 76 : 0)}
       ref={fixedListRef as any}
       width="100%"
-      itemData={itemData}
+      itemData={itemData.map((item) => {
+        return {
+          currency: item,
+          chainId,
+          inactiveTokens,
+          onCurrencySelect,
+          otherCurrency,
+          selectedCurrency,
+          setImportToken,
+          showImportView,
+          breakIndex,
+          t,
+        }
+      })}
       itemCount={itemData.length}
-      // itemSize={(index) => (index === activeIndex ? 100 : 56)}
       itemSize={56}
       overscanCount={10}
-      itemKey={itemKey}
+      // itemKey={itemKey}
     >
       {Row}
     </FixedSizeList>
