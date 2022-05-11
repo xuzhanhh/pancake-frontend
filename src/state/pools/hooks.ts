@@ -1,11 +1,9 @@
 import { useEffect, useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { BIG_ZERO } from 'utils/bigNumber'
-import { getAprData } from 'views/Pools/helpers'
 import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import farmsConfig from 'config/constants/farms'
 import {
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
@@ -13,32 +11,34 @@ import {
   fetchCakeVaultUserData,
   fetchCakeVaultFees,
   fetchPoolsStakingLimitsAsync,
-  fetchIfoPoolFees,
-  fetchIfoPoolPublicData,
-  fetchIfoPoolUserAndCredit,
-  initialPoolVaultState,
-  fetchCakePoolPublicDataAsync,
-  fetchCakePoolUserDataAsync,
 } from '.'
-import { State, DeserializedPool, VaultKey } from '../types'
-import { transformPool } from './helpers'
-import { fetchFarmsPublicDataAsync, nonArchivedFarms } from '../farms'
+import { DeserializedPool, VaultKey } from '../types'
+import { fetchFarmsPublicDataAsync } from '../farms'
+import {
+  poolsWithUserDataLoadingSelector,
+  makePoolWithUserDataLoadingSelector,
+  makeVaultPoolByKey,
+  poolsWithVaultSelector,
+} from './selectors'
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
 
-  useSlowRefreshEffect(() => {
-    const fetchPoolsDataWithFarms = async () => {
-      const activeFarms = nonArchivedFarms.filter((farm) => farm.pid !== 0)
-      await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
-      batch(() => {
-        dispatch(fetchPoolsPublicDataAsync())
-        dispatch(fetchPoolsStakingLimitsAsync())
-      })
-    }
+  useSlowRefreshEffect(
+    (currentBlock) => {
+      const fetchPoolsDataWithFarms = async () => {
+        const activeFarms = farmsConfig.filter((farm) => farm.pid !== 0)
+        await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+        batch(() => {
+          dispatch(fetchPoolsPublicDataAsync(currentBlock))
+          dispatch(fetchPoolsStakingLimitsAsync())
+        })
+      }
 
-    fetchPoolsDataWithFarms()
-  }, [dispatch])
+      fetchPoolsDataWithFarms()
+    },
+    [dispatch],
+  )
 }
 
 export const useFetchUserPools = (account) => {
@@ -52,64 +52,37 @@ export const useFetchUserPools = (account) => {
 }
 
 export const usePools = (): { pools: DeserializedPool[]; userDataLoaded: boolean } => {
-  const { pools, userDataLoaded } = useSelector((state: State) => ({
-    pools: state.pools.data,
-    userDataLoaded: state.pools.userDataLoaded,
-  }))
-  return { pools: pools.map(transformPool), userDataLoaded }
+  return useSelector(poolsWithUserDataLoadingSelector)
 }
 
 export const usePool = (sousId: number): { pool: DeserializedPool; userDataLoaded: boolean } => {
-  const { pool, userDataLoaded } = useSelector((state: State) => ({
-    pool: state.pools.data.find((p) => p.sousId === sousId),
-    userDataLoaded: state.pools.userDataLoaded,
-  }))
-  return { pool: transformPool(pool), userDataLoaded }
+  const poolWithUserDataLoadingSelector = useMemo(() => makePoolWithUserDataLoadingSelector(sousId), [sousId])
+  return useSelector(poolWithUserDataLoadingSelector)
 }
 
-export const useFetchCakeVault = () => {
-  const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
-
-  useFastRefreshEffect(() => {
-    dispatch(fetchCakeVaultPublicData())
-  }, [dispatch])
-
-  useFastRefreshEffect(() => {
-    dispatch(fetchCakeVaultUserData({ account }))
-  }, [dispatch, account])
-
-  useEffect(() => {
-    dispatch(fetchCakeVaultFees())
-  }, [dispatch])
+export const usePoolsWithVault = () => {
+  return useSelector(poolsWithVaultSelector)
 }
 
-export const useFetchIfoPool = (fetchCakePool = true) => {
+export const usePoolsPageFetch = () => {
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
+  useFetchPublicPoolsData()
 
   useFastRefreshEffect(() => {
     batch(() => {
-      if (fetchCakePool) {
-        dispatch(fetchCakePoolPublicDataAsync())
+      dispatch(fetchCakeVaultPublicData())
+      if (account) {
+        dispatch(fetchPoolsUserDataAsync(account))
+        dispatch(fetchCakeVaultUserData({ account }))
       }
-      dispatch(fetchIfoPoolPublicData())
     })
-  }, [dispatch, fetchCakePool])
-
-  useFastRefreshEffect(() => {
-    if (account) {
-      batch(() => {
-        dispatch(fetchIfoPoolUserAndCredit({ account }))
-        if (fetchCakePool) {
-          dispatch(fetchCakePoolUserDataAsync(account))
-        }
-      })
-    }
-  }, [dispatch, account, fetchCakePool])
+  }, [account, dispatch])
 
   useEffect(() => {
-    dispatch(fetchIfoPoolFees())
+    batch(() => {
+      dispatch(fetchCakeVaultFees())
+    })
   }, [dispatch])
 }
 
@@ -118,118 +91,17 @@ export const useCakeVault = () => {
 }
 
 export const useVaultPools = () => {
-  return {
-    [VaultKey.CakeVault]: useVaultPoolByKey(VaultKey.CakeVault),
-    [VaultKey.IfoPool]: useVaultPoolByKey(VaultKey.IfoPool),
-  }
+  const cakeVault = useVaultPoolByKey(VaultKey.CakeVault)
+  const vaults = useMemo(() => {
+    return {
+      [VaultKey.CakeVault]: cakeVault,
+    }
+  }, [cakeVault])
+  return vaults
 }
 
 export const useVaultPoolByKey = (key: VaultKey) => {
-  const {
-    totalShares: totalSharesAsString,
-    pricePerFullShare: pricePerFullShareAsString,
-    totalCakeInVault: totalCakeInVaultAsString,
-    estimatedCakeBountyReward: estimatedCakeBountyRewardAsString,
-    totalPendingCakeHarvest: totalPendingCakeHarvestAsString,
-    fees: { performanceFee, callFee, withdrawalFee, withdrawalFeePeriod },
-    userData: {
-      isLoading,
-      userShares: userSharesAsString,
-      cakeAtLastUserAction: cakeAtLastUserActionAsString,
-      lastDepositedTime,
-      lastUserActionTime,
-    },
-  } = useSelector((state: State) => (key ? state.pools[key] : initialPoolVaultState))
+  const vaultPoolByKey = useMemo(() => makeVaultPoolByKey(key), [key])
 
-  const estimatedCakeBountyReward = useMemo(() => {
-    return new BigNumber(estimatedCakeBountyRewardAsString)
-  }, [estimatedCakeBountyRewardAsString])
-
-  const totalPendingCakeHarvest = useMemo(() => {
-    return new BigNumber(totalPendingCakeHarvestAsString)
-  }, [totalPendingCakeHarvestAsString])
-
-  const totalShares = useMemo(() => {
-    return new BigNumber(totalSharesAsString)
-  }, [totalSharesAsString])
-
-  const pricePerFullShare = useMemo(() => {
-    return new BigNumber(pricePerFullShareAsString)
-  }, [pricePerFullShareAsString])
-
-  const totalCakeInVault = useMemo(() => {
-    return new BigNumber(totalCakeInVaultAsString)
-  }, [totalCakeInVaultAsString])
-
-  const userShares = useMemo(() => {
-    return new BigNumber(userSharesAsString)
-  }, [userSharesAsString])
-
-  const cakeAtLastUserAction = useMemo(() => {
-    return new BigNumber(cakeAtLastUserActionAsString)
-  }, [cakeAtLastUserActionAsString])
-
-  const performanceFeeAsDecimal = performanceFee && performanceFee / 100
-
-  return {
-    totalShares,
-    pricePerFullShare,
-    totalCakeInVault,
-    estimatedCakeBountyReward,
-    totalPendingCakeHarvest,
-    fees: {
-      performanceFeeAsDecimal,
-      performanceFee,
-      callFee,
-      withdrawalFee,
-      withdrawalFeePeriod,
-    },
-    userData: {
-      isLoading,
-      userShares,
-      cakeAtLastUserAction,
-      lastDepositedTime,
-      lastUserActionTime,
-    },
-  }
-}
-
-export const useIfoPoolVault = () => {
-  return useVaultPoolByKey(VaultKey.IfoPool)
-}
-
-export const useIfoPoolCreditBlock = () => {
-  return useSelector((state: State) => ({
-    creditStartBlock: state.pools.ifoPool.creditStartBlock,
-    creditEndBlock: state.pools.ifoPool.creditEndBlock,
-    hasEndBlockOver: state.block.currentBlock >= state.pools.ifoPool.creditEndBlock,
-  }))
-}
-
-export const useIfoPoolCredit = () => {
-  const creditAsString = useSelector((state: State) => state.pools.ifoPool.userData?.credit ?? BIG_ZERO)
-  const credit = useMemo(() => {
-    return new BigNumber(creditAsString)
-  }, [creditAsString])
-
-  return credit
-}
-
-export const useIfoWithApr = () => {
-  const {
-    fees: { performanceFeeAsDecimal },
-  } = useIfoPoolVault()
-  const { pool: poolZero } = usePool(0)
-
-  const ifoPoolWithApr = useMemo(() => {
-    const ifoPool = { ...poolZero }
-    ifoPool.vaultKey = VaultKey.IfoPool
-    ifoPool.apr = getAprData(ifoPool, performanceFeeAsDecimal).apr
-    ifoPool.rawApr = poolZero.apr
-    return ifoPool
-  }, [performanceFeeAsDecimal, poolZero])
-
-  return {
-    pool: ifoPoolWithApr,
-  }
+  return useSelector(vaultPoolByKey)
 }

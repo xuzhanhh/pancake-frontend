@@ -61,7 +61,7 @@ const persistedReducer = persistReducer(
   combineReducers({
     block: blockReducer,
     farms: farmsReducer,
-    // pools: poolsReducer,
+    pools: poolsReducer,
     // predictions: predictionsReducer,
     profile: profileReducer,
     // teams: teamsReducer,
