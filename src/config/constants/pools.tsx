@@ -1,4 +1,4 @@
-import React from 'react'
+import { BigNumber } from '@ethersproject/bignumber'
 import Trans from 'components/Trans'
 import { VaultKey } from 'state/types'
 import { CHAIN_ID } from './networks'
@@ -7,7 +7,10 @@ import { SerializedPoolConfig, PoolCategory } from './types'
 
 const serializedTokens = serializeTokens()
 
+export const MAX_LOCK_DURATION = 31536000
 export const UNLOCK_FREE_DURATION = 604800
+export const BOOST_WEIGHT = BigNumber.from('20000000000000')
+export const DURATION_FACTOR = BigNumber.from('31536000')
 
 export const vaultPoolConfig = {
   [VaultKey.CakeVaultV1]: {
@@ -56,6 +59,48 @@ const pools: SerializedPoolConfig[] = [
     tokenPerBlock: '10',
     sortOrder: 1,
     isFinished: false,
+  },
+  {
+    sousId: 279,
+    stakingToken: serializedTokens.cake,
+    earningToken: serializedTokens.gal,
+    contractAddress: {
+      97: '',
+      56: '0xa5D57C5dca083a7051797920c78fb2b19564176B',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    sortOrder: 999,
+    tokenPerBlock: '0.09645',
+    version: 3,
+  },
+  {
+    sousId: 278,
+    stakingToken: serializedTokens.cake,
+    earningToken: serializedTokens.rpg,
+    contractAddress: {
+      97: '',
+      56: '0xD1c395BCdC2d64ac6544A34A36185483B00530a1',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    sortOrder: 999,
+    tokenPerBlock: '0.06794',
+    version: 3,
+  },
+  {
+    sousId: 277,
+    stakingToken: serializedTokens.cake,
+    earningToken: serializedTokens.ankr,
+    contractAddress: {
+      97: '',
+      56: '0xc581345e1648CcE154978eA80bF8A584EC8aFDe0',
+    },
+    poolCategory: PoolCategory.CORE,
+    harvest: true,
+    sortOrder: 999,
+    tokenPerBlock: '4.6296',
+    version: 3,
   },
   {
     sousId: 276,
