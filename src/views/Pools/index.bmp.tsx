@@ -62,17 +62,17 @@ const FilterContainer = styled.div`
     padding: 0;
   }
 `
-
+// FIXME
 const LabelWrapper = styled.div`
-  > ${Text} {
-    font-size: 12px;
-  }
+  /* > ${Text} { */
+  /*   font-size: 12px; */
+  /* } */
 `
 
 const ControlStretch = styled(Flex)`
-  > div {
-    flex: 1;
-  }
+  /* > div { */
+  /*   flex: 1; */
+  /* } */
 `
 
 const FinishedTextContainer = styled(Flex)`
@@ -271,80 +271,81 @@ const Pools: React.FC = () => {
         </Flex>
       </PageHeader>
       <Page>
-        <PoolControls>
-          <PoolTabButtons
-            stakedOnly={stakedOnly}
-            setStakedOnly={setStakedOnly}
-            hasStakeInFinishedPools={hasStakeInFinishedPools}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-          />
-          <FilterContainer>
-            <LabelWrapper>
-              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
-                {t('Sort by')}
-              </Text>
-              <ControlStretch>
-                <Select
-                  options={[
-                    {
-                      label: t('Hot'),
-                      value: 'hot',
-                    },
-                    {
-                      label: t('APR'),
-                      value: 'apr',
-                    },
-                    {
-                      label: t('Earned'),
-                      value: 'earned',
-                    },
-                    {
-                      label: t('Total staked'),
-                      value: 'totalStaked',
-                    },
-                    {
-                      label: t('Latest'),
-                      value: 'latest',
-                    },
-                  ]}
-                  onOptionChange={handleSortOptionChange}
-                />
-              </ControlStretch>
-            </LabelWrapper>
-            <LabelWrapper style={{ marginLeft: 16 }}>
-              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
-                {t('Search')}
-              </Text>
-              <SearchInput onChange={handleChangeSearchQuery} placeholder="Search Pools" />
-            </LabelWrapper>
-          </FilterContainer>
-        </PoolControls>
-        {/* {showFinishedPools && ( */}
-        {/*   <FinishedTextContainer> */}
-        {/*     <Text fontSize={['16px', null, '20px']} color="failure" pr="4px"> */}
-        {/*       {t('Looking for v1 CAKE syrup pools?')} */}
-        {/*     </Text> */}
-        {/*     <FinishedTextLink href="/migration" fontSize={['16px', null, '20px']} color="failure"> */}
-        {/*       {t('Go to migration page')}. */}
-        {/*     </FinishedTextLink> */}
-        {/*   </FinishedTextContainer> */}
-        {/* )} */}
-        {account && !userDataLoaded && stakedOnly && (
-          <Flex justifyContent="center" mb="4px">
-            <Loading />
-          </Flex>
-        )}
-        {viewMode === ViewMode.CARD ? cardLayout : tableLayout}
-        <div ref={observerRef} />
-        <Image
-          mx="auto"
-          mt="12px"
-          src="/images/decorations/3d-syrup-bunnies.png"
-          alt="Pancake illustration"
-          width={192}
-          height={184.5}
-        />
+        {/*   <PoolControls> */}
+        {/*     <PoolTabButtons */}
+        {/*       stakedOnly={stakedOnly} */}
+        {/*       setStakedOnly={setStakedOnly} */}
+        {/*       hasStakeInFinishedPools={hasStakeInFinishedPools} */}
+        {/*       viewMode={viewMode} */}
+        {/*       setViewMode={setViewMode} */}
+        {/*     /> */}
+        {/*     <FilterContainer> */}
+        {/*       <LabelWrapper> */}
+        {/*         <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase"> */}
+        {/*           {t('Sort by')} */}
+        {/*         </Text> */}
+        {/*         <ControlStretch> */}
+        {/*           <Select */}
+        {/*             options={[ */}
+        {/*               { */}
+        {/*                 label: t('Hot'), */}
+        {/*                 value: 'hot', */}
+        {/*               }, */}
+        {/*               { */}
+        {/*                 label: t('APR'), */}
+        {/*                 value: 'apr', */}
+        {/*               }, */}
+        {/*               { */}
+        {/*                 label: t('Earned'), */}
+        {/*                 value: 'earned', */}
+        {/*               }, */}
+        {/*               { */}
+        {/*                 label: t('Total staked'), */}
+        {/*                 value: 'totalStaked', */}
+        {/*               }, */}
+        {/*               { */}
+        {/*                 label: t('Latest'), */}
+        {/*                 value: 'latest', */}
+        {/*               }, */}
+        {/*             ]} */}
+        {/*             onOptionChange={handleSortOptionChange} */}
+        {/*           /> */}
+        {/*         </ControlStretch> */}
+        {/*       </LabelWrapper> */}
+        {/*       <LabelWrapper style={{ marginLeft: 16 }}> */}
+        {/*         <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase"> */}
+        {/*           {t('Search')} */}
+        {/*         </Text> */}
+        {/*         <SearchInput onChange={handleChangeSearchQuery} placeholder="Search Pools" /> */}
+        {/*       </LabelWrapper> */}
+        {/*     </FilterContainer> */}
+        {/*   </PoolControls> */}
+        {/*   {showFinishedPools && ( */}
+        {/*     <FinishedTextContainer> */}
+        {/*       <Text fontSize={['16px', null, '20px']} color="failure" pr="4px"> */}
+        {/*         {t('Looking for v1 CAKE syrup pools?')} */}
+        {/*       </Text> */}
+        {/*       <FinishedTextLink href="/migration" fontSize={['16px', null, '20px']} color="failure"> */}
+        {/*         {t('Go to migration page')}. */}
+        {/*       </FinishedTextLink> */}
+        {/*     </FinishedTextContainer> */}
+        {/*   )} */}
+        {/*   {account && !userDataLoaded && stakedOnly && ( */}
+        {/*     <Flex justifyContent="center" mb="4px"> */}
+        {/*       <Loading /> */}
+        {/*     </Flex> */}
+        {/*   )} */}
+        {cardLayout}
+        {/* {viewMode === ViewMode.CARD ? cardLayout : tableLayout} */}
+        {/*   <div ref={observerRef} /> */}
+        {/*   <Image */}
+        {/*     mx="auto" */}
+        {/*     mt="12px" */}
+        {/*     src="/images/decorations/3d-syrup-bunnies.png" */}
+        {/*     alt="Pancake illustration" */}
+        {/*     width={192} */}
+        {/*     height={184.5} */}
+        {/*   /> */}
       </Page>
     </>
   )

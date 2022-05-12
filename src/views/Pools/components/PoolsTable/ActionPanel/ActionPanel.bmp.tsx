@@ -91,7 +91,7 @@ interface ActionPanelProps {
   expanded: boolean
   breakpoints: MediaBreakpoints
 }
-
+// FIXME
 const InfoSection = styled(Box)`
   flex-grow: 0;
   flex-shrink: 0;
@@ -101,9 +101,9 @@ const InfoSection = styled(Box)`
   ${({ theme }) => theme.mediaQueries.lg} {
     padding: 0;
     flex-basis: 230px;
-    ${Text} {
-      font-size: 14px;
-    }
+    /* ${Text} { */
+    /*   font-size: 14px; */
+    /* } */
   }
 `
 

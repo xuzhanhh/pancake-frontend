@@ -16,7 +16,7 @@ const ToggleWrapper = styled.div`
     margin-left: 8px;
   }
 `
-
+// FIXME
 const ViewControls = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
@@ -24,29 +24,29 @@ const ViewControls = styled.div`
   align-items: center;
   width: 100%;
 
-  > div {
-    padding: 8px 0px;
-  }
+  /* > div { */
+  /*   padding: 8px 0px; */
+  /* } */
 
   ${({ theme }) => theme.mediaQueries.sm} {
     justify-content: flex-start;
     width: auto;
 
-    > div {
-      padding: 0;
-    }
+    /* > div { */
+    /*   padding: 0; */
+    /* } */
   }
 `
-
+// FIXME
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 
-  a {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
+  /* a { */
+  /*   padding-left: 12px; */
+  /*   padding-right: 12px; */
+  /* } */
 
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-left: 16px;

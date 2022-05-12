@@ -4,8 +4,8 @@ export default {
     'views/Swap/bmp/index',
     'views/bmp/liquidity/index',
     'views/bmp/farms/index',
+    'views/bmp/pools/index',
     'views/webview',
-    'views/Pools/index',
   ],
   darkmode: true,
   window: {
@@ -39,6 +39,12 @@ export default {
         selectedIconPath: 'images/farm-select.png',
         pagePath: 'views/bmp/farms/index',
         text: 'Farm',
+      },
+      {
+        iconPath: 'images/pools.png',
+        selectedIconPath: 'images/pools-select.png',
+        pagePath: 'views/bmp/pools/index',
+        text: 'Pools',
       },
     ],
   },
