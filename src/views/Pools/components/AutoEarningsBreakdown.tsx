@@ -1,3 +1,4 @@
+import React from 'react'
 import { Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { differenceInHours } from 'date-fns'

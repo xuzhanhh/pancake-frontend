@@ -1,3 +1,4 @@
+import React from 'react'
 import { Box, Flex, Skeleton, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import Balance from 'components/Balance'

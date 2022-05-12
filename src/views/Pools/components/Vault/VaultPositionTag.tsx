@@ -2,7 +2,7 @@ import { Tag, TagProps, Text, SplitIcon, LockIcon, UnlockIcon, HotIcon, Box } fr
 import { FlexGap, FlexGapProps } from 'components/Layout/Flex'
 import Trans from 'components/Trans'
 import { useTranslation } from 'contexts/Localization'
-import { FC, ReactNode, useMemo } from 'react'
+import React, { FC, ReactNode, useMemo } from 'react'
 import { DeserializedLockedVaultUser } from 'state/types'
 import { VaultPosition, getVaultPosition } from 'utils/cakePool'
 

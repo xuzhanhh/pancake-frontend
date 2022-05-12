@@ -1,4 +1,4 @@
-import { useState, useCallback, memo, useMemo } from 'react'
+import React, { useState, useCallback, memo, useMemo } from 'react'
 import useInterval from 'hooks/useInterval'
 
 import getTimePeriods from 'utils/getTimePeriods'

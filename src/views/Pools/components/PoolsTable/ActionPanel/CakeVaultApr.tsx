@@ -1,3 +1,4 @@
+import React from 'react'
 import { Box, Button, Flex, Skeleton, Text, CalculateIcon, useModal } from '@pancakeswap/uikit'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'

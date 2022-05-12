@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import React, { memo, useCallback } from 'react'
 import { Button, ButtonProps } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 

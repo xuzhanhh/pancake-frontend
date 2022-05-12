@@ -1,3 +1,4 @@
+import React from 'react'
 import { Flex, Skeleton, useModal } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import { DeserializedPool } from 'state/types'

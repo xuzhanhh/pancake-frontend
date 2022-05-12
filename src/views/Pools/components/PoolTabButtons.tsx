@@ -1,5 +1,6 @@
-import { NextLinkFromReactRouter } from 'components/NextLink'
-// import ToggleView from 'components/ToggleView/ToggleView'
+import React from 'react'
+// import { NextLinkFromReactRouter } from 'components/NextLink'
+import ToggleView from 'components/ToggleView/ToggleView'
 import { ViewMode } from 'state/user/actions'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
@@ -62,17 +63,17 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, hasStakeInFinishedPools, vi
   const viewModeToggle = (
     <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
   )
-
+  // FIXME remove for try running, need recovery later
   const liveOrFinishedSwitch = (
     <Wrapper>
       <ButtonMenu activeIndex={isExact ? 0 : 1} scale="sm" variant="subtle">
-        <ButtonMenuItem as={NextLinkFromReactRouter} to="/pools" replace>
-          {t('Live')}
-        </ButtonMenuItem>
+        {/* <ButtonMenuItem as={NextLinkFromReactRouter} to="/pools" replace> */}
+        {/*   {t('Live')} */}
+        {/* </ButtonMenuItem> */}
         <NotificationDot show={hasStakeInFinishedPools}>
-          <ButtonMenuItem id="finished-pools-button" as={NextLinkFromReactRouter} to="/pools/history" replace>
-            {t('Finished')}
-          </ButtonMenuItem>
+          {/* <ButtonMenuItem id="finished-pools-button" as={NextLinkFromReactRouter} to="/pools/history" replace> */}
+          {/*   {t('Finished')} */}
+          {/* </ButtonMenuItem> */}
         </NotificationDot>
       </ButtonMenu>
     </Wrapper>

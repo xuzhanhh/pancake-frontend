@@ -1,3 +1,4 @@
+import React from 'react'
 import BigNumber from 'bignumber.js'
 import { vaultPoolConfig } from 'config/constants/pools'
 import { DeserializedPool } from 'state/types'

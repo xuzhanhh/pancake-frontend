@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { Button, ChevronUpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'

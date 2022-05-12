@@ -1,4 +1,4 @@
-import { useMemo, useCallback, memo } from 'react'
+import React, { useMemo, useCallback, memo } from 'react'
 import { Button, useModal, Skeleton } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { differenceInSeconds } from 'date-fns'

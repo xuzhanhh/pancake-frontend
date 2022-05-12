@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Button, useModal, ButtonProps } from '@pancakeswap/uikit'
 
 import ExtendDurationModal from '../Modals/ExtendDurationModal'

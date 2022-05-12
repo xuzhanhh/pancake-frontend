@@ -1,3 +1,4 @@
+import React from 'react'
 import { Flex, Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 

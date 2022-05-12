@@ -3,7 +3,7 @@ import RoiCalculatorModal, { RoiCalculatorModalProps } from 'components/RoiCalcu
 import { CalculatorMode } from 'components/RoiCalculatorModal/useRoiCalculatorReducer'
 import { useTranslation } from 'contexts/Localization'
 import { useVaultApy } from 'hooks/useVaultApy'
-import { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { DeserializedPool } from 'state/types'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { getRoi } from 'utils/compoundApyHelpers'

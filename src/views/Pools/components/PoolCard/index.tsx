@@ -1,3 +1,4 @@
+import React from 'react'
 import BigNumber from 'bignumber.js'
 
 import { CardBody, Flex, Text, CardRibbon } from '@pancakeswap/uikit'

@@ -1,3 +1,4 @@
+import React from 'react'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'

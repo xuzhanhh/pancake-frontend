@@ -1,4 +1,4 @@
-import { memo, ReactNode } from 'react'
+import React, { memo, ReactNode } from 'react'
 import { Message, MessageText, Box, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import Trans from 'components/Trans'

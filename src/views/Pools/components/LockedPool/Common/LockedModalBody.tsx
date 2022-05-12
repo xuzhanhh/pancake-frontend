@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Button, AutoRenewIcon, Box, Flex } from '@pancakeswap/uikit'
 import _noop from 'lodash/noop'
 import { useTranslation } from 'contexts/Localization'

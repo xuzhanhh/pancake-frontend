@@ -1,3 +1,4 @@
+import React from 'react'
 import { Text, Flex, Image, Box } from '@pancakeswap/uikit'
 import { BalanceWithLoading } from 'components/Balance'
 import Divider from 'components/Divider'

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Skeleton, Text, Flex, Button, CalculateIcon, useModal, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import Balance from 'components/Balance'

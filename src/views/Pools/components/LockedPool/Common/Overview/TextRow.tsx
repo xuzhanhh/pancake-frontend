@@ -1,3 +1,4 @@
+import React from 'react'
 import { Text, Flex } from '@pancakeswap/uikit'
 import isUndefinedOrNull from 'utils/isUndefinedOrNull'
 import CrossText from './CrossText'

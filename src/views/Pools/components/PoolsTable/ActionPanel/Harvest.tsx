@@ -1,3 +1,4 @@
+import React from 'react'
 import { Button, Text, useModal, Flex, Skeleton, Heading } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'

@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 import { Flex, Link, Skeleton, Text, TimerIcon } from '@pancakeswap/uikit'
 import { getBscScanLink } from 'utils'

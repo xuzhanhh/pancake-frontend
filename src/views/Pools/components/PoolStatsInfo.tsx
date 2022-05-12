@@ -2,7 +2,7 @@ import { Button, Flex, Link, LinkExternal, MetamaskIcon, Skeleton, Text, TimerIc
 import Balance from 'components/Balance'
 import { BASE_BSC_SCAN_URL } from 'config'
 import { useTranslation } from 'contexts/Localization'
-import { memo } from 'react'
+import React, { memo } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { DeserializedPool } from 'state/types'
