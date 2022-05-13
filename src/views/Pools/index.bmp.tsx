@@ -4,7 +4,7 @@ import { BigNumber as EthersBigNumber } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Heading, Flex, Image, Text, Link } from '@pancakeswap/uikit'
+import { Heading, Flex, Box, Image, Text, Link } from '@pancakeswap/uikit'
 import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
 import { useTranslation } from 'contexts/Localization'
@@ -254,22 +254,20 @@ const Pools: React.FC = () => {
 
   return (
     <>
-      <PageHeader>
-        <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
-          <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
-            <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Syrup Pools')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('Just stake some tokens to earn.')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('High APR, low risk.')}
-            </Heading>
-          </Flex>
-        </Flex>
-      </PageHeader>
       <Page>
+        <Box marginBottom="24px">
+          <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
+            <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
+              <Heading scale="lg" color="secondary" mb="8px">
+                {t('Syrup Pools')}
+              </Heading>
+              <Text fontSize="14px" color="text" fontWeight="bold">
+                {t('Just stake some tokens to earn.')}
+                {t('High APR, low risk.')}
+              </Text>
+            </Flex>
+          </Flex>
+        </Box>
         {/*   <PoolControls> */}
         {/*     <PoolTabButtons */}
         {/*       stakedOnly={stakedOnly} */}

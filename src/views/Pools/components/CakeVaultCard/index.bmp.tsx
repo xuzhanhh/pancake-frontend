@@ -47,7 +47,7 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, default
     return null
   }
   return (
-    <StyledCard isActive {...props}>
+    <StyledCard style={{ maxWidth: '100% !important', margin: '0' }} isActive {...props}>
       <PoolCardHeader isStaking={accountHasSharesStaked}>
         <PoolCardHeaderTitle
           title={vaultPoolConfig[pool.vaultKey].name}
