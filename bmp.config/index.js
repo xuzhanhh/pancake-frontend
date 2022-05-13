@@ -37,6 +37,7 @@ module.exports = {
     'redux-localstorage-simple': path.resolve(__dirname, './adaptor/redux-localstorage-simple'),
     'react-window': path.resolve(__dirname, './adaptor/react-window.jsx'),
     'redux-persist/lib/storage': path.resolve(__dirname, './adaptor/redux-persist-storage.js'),
+    'react-countup': path.resolve(__dirname, './adaptor/react-countup'),
   },
 
   entry: {
