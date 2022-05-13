@@ -337,11 +337,11 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ pool, userDataLoa
                   <MinusIcon color="primary" width="14px" />
                 </IconButton>
                 {reachStakingLimit ? (
-                  <span onClick={onPresent}>
+                  <view onClick={onPresent}>
                     <IconButton variant="secondary" disabled>
                       <AddIcon color="textDisabled" width="24px" height="24px" />
                     </IconButton>
-                  </span>
+                  </view>
                 ) : (
                   <IconButton
                     variant="secondary"
