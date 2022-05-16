@@ -113,7 +113,7 @@ const PoolStatsInfo: React.FC<ExpandedFooterProps> = ({
       )}
       {vaultKey && <PerformanceFee userData={userData} performanceFeeAsDecimal={performanceFeeAsDecimal} />}
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={`/info/token/${earningToken.address}`} bold={false} small>
+        <LinkExternal href={`https://pancakeswap.finance/info/token/${earningToken.address}`} bold={false} small>
           {t('See Token Info')}
         </LinkExternal>
       </Flex>
