@@ -61,6 +61,7 @@ import SwapWarningModal from '../components/SwapWarningModal'
 import PriceChartContainer from '../components/Chart/PriceChartContainer'
 import { StyledInputCurrencyWrapper, StyledSwapContainer } from '../styles'
 import CurrencyInputHeader from '../components/CurrencyInputHeader'
+import { useDidShow } from '@binance/mp-service'
 
 const Label = styled(Text)`
   font-size: 12px;
@@ -327,6 +328,16 @@ function Swap() {
 
     [onCurrencySelection],
   )
+
+  useDidShow(() => {
+    if (globalThis.jumpToSwap) {
+      if (globalThis.currency2) {
+        handleOutputSelect(new Token(56, globalThis.currency2, 8))
+      }
+      globalThis.jumpToSwap = undefined
+      globalThis.currency2 = undefined
+    }
+  })
 
   const swapIsUnsupported = useIsTransactionUnsupported(currencies?.INPUT, currencies?.OUTPUT)
 

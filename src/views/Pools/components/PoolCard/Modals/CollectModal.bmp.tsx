@@ -24,6 +24,7 @@ import { useAppDispatch } from 'state'
 import useHarvestPool from '../../../hooks/useHarvestPool'
 import useStakePool from '../../../hooks/useStakePool'
 import { useTooltip } from 'contexts/bmp/TooltipContext'
+import { FloatLayout } from 'components/FloatLayout'
 
 interface CollectModalProps {
   formattedBalance: string
@@ -93,7 +94,7 @@ const CollectModal: React.FC<CollectModalProps> = ({
   }
 
   return (
-    <Modal
+    <FloatLayout
       title={`${earningToken.symbol} ${isCompoundPool ? t('Collect') : t('Harvest')}`}
       onDismiss={onDismiss}
       headerBackground={theme.colors.gradients.cardHeader}
@@ -139,7 +140,7 @@ const CollectModal: React.FC<CollectModalProps> = ({
       <Button variant="text" onClick={onDismiss} pb="0px">
         {t('Close Window')}
       </Button>
-    </Modal>
+    </FloatLayout>
   )
 }
 
