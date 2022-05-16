@@ -1,0 +1,6 @@
+.decoration {
+  -webkit-text-decoration-style: dotted;
+  text-decoration-style: dotted;
+  text-decoration-line: underline;
+  -webkit-text-decoration-line: underline;
+}

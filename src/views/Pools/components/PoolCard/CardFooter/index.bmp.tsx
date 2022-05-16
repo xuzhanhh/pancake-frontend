@@ -50,7 +50,7 @@ const Footer: React.FC<FooterProps> = ({ pool, account, defaultExpanded, childre
             <HelpIcon ml="4px" width="20px" height="20px" color="textSubtle" />
           </Flex>
         </Flex>
-        <ExpandableLabel expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)}>
+        <ExpandableLabel style={{ padding: '0px' }} expanded={isExpanded} onClick={() => setIsExpanded(!isExpanded)}>
           {isExpanded ? t('Hide') : t('Details')}
         </ExpandableLabel>
       </ExpandableButtonWrapper>
