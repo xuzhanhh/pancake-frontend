@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import parse from 'url-parse'
 import styled from 'styled-components'
 import { Flex, Box, Text, ExpandableLabel, LinkExternal, Grid, HelpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getApy } from 'utils/compoundApyHelpers'
 import { useTooltip } from 'contexts/bmp/TooltipContext'
+import { jumpToSwap } from 'utils/bmp/jump'
 
 const Footer = styled(Flex)`
   background: ${({ theme }) => theme.colors.dropdown};
@@ -34,7 +36,8 @@ const ListText = styled(Text)`
 
 interface RoiCalculatorFooterProps {
   isFarm: boolean
-  apr: number
+  apr?: number
+  apy?: number
   displayApr: string
   autoCompoundFrequency: number
   multiplier: string
@@ -48,11 +51,13 @@ interface RoiCalculatorFooterProps {
 const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
   isFarm,
   apr,
+  apy,
   displayApr,
   autoCompoundFrequency,
   multiplier,
   linkLabel,
   performanceFee,
+  linkHref,
   onDismiss,
   jumpToLiquidity,
 }) => {
@@ -73,10 +78,16 @@ const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
   )
 
   const gridRowCount = isFarm ? 4 : 2
-  const apy = (getApy(apr, autoCompoundFrequency > 0 ? autoCompoundFrequency : 1, 365, performanceFee) * 100).toFixed(2)
 
-  const onGetLPClick = () => {
-    jumpToLiquidity()
+  const onLabelClick = () => {
+    if (jumpToLiquidity) {
+      jumpToLiquidity()
+    } else {
+      const url = parse(linkHref, true)
+      if (url.pathname === '/swap') {
+        jumpToSwap(url.query.outputCurrency)
+      }
+    }
     onDismiss()
   }
   return (
@@ -104,20 +115,33 @@ const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
                 </Text>
               </>
             )}
-            <Text color="textSubtle" small>
-              {isFarm ? t('Base APR (CAKE yield only)') : t('APR')}
-            </Text>
+            {!Number.isFinite(apy) ? (
+              <Text color="textSubtle" small>
+                {isFarm ? t('Base APR (CAKE yield only)') : t('APR')}
+              </Text>
+            ) : (
+              <Text color="textSubtle" small>
+                {t('APY')}
+              </Text>
+            )}
             <Text small textAlign="right">
-              {apr.toFixed(2)}%
+              {(apy ?? apr).toFixed(2)}%
             </Text>
-            <Text color="textSubtle" small>
-              {t('APY (%compoundTimes%x daily compound)', {
-                compoundTimes: autoCompoundFrequency > 0 ? autoCompoundFrequency : 1,
-              })}
-            </Text>
-            <Text small textAlign="right">
-              {apy}%
-            </Text>
+            {!Number.isFinite(apy) && (
+              <Text color="textSubtle" small>
+                {t('APY (%compoundTimes%x daily compound)', {
+                  compoundTimes: autoCompoundFrequency > 0 ? autoCompoundFrequency : 1,
+                })}
+              </Text>
+            )}
+            {!Number.isFinite(apy) && (
+              <Text small textAlign="right">
+                {(
+                  getApy(apr, autoCompoundFrequency > 0 ? autoCompoundFrequency : 1, 365, performanceFee) * 100
+                ).toFixed(2)}
+                %
+              </Text>
+            )}
             {isFarm && (
               <>
                 <Text color="textSubtle" small>
@@ -135,13 +159,13 @@ const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
             )}
           </Grid>
           <BulletList>
-            <ListText>{t('Calculated based on current rates.')}</ListText>
+            <ListText lineHeight="1.1">{t('Calculated based on current rates.')}</ListText>
             {isFarm && (
               <ListText>
                 {t('LP rewards: 0.17% trading fees, distributed proportionally among LP token holders.')}
               </ListText>
             )}
-            <ListText>
+            <ListText lineHeight="1.1">
               {t(
                 'All figures are estimates provided for your convenience only, and by no means represent guaranteed returns.',
               )}
@@ -154,7 +178,7 @@ const RoiCalculatorFooter: React.FC<RoiCalculatorFooterProps> = ({
               </ListText>
             )}
           </BulletList>
-          <Flex justifyContent="center" mt="24px" mb="16px" onClick={onGetLPClick}>
+          <Flex justifyContent="center" mt="24px" mb="16px" onClick={onLabelClick}>
             <LinkExternal>{linkLabel}</LinkExternal>
           </Flex>
         </Box>

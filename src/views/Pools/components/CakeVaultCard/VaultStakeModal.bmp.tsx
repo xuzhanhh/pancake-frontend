@@ -41,6 +41,7 @@ import ConvertToLock from '../LockedPool/Common/ConvertToLock'
 import FeeSummary from './FeeSummary'
 import { FloatLayout } from 'components/FloatLayout/index.bmp'
 import mpService from '@binance/mp-service'
+import { jumpToSwap } from 'utils/bmp/jump'
 // min deposit and withdraw amount
 const MIN_AMOUNT = new BigNumber(10000000000000)
 
@@ -116,13 +117,6 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
   const annualRoi = interestBreakdown[3] * pool.earningTokenPrice
   const formattedAnnualRoi = formatNumber(annualRoi, annualRoi > 10000 ? 0 : 2, annualRoi > 10000 ? 0 : 2)
 
-  const jumpToSwap = () => {
-    mpService.switchTab({
-      url: '/views/Swap/bmp/index',
-    })
-    globalThis.jumpToSwap = 1
-    globalThis.currency2 = stakingToken.address
-  }
   const convertedStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), stakingToken.decimals)
 
   const handleStakeInputChange = (input: string) => {
@@ -309,7 +303,12 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
           {pendingTx ? t('Confirming') : t('Confirm')}
         </Button>
         {!isRemovingStake && (
-          <Button mt="8px" style={{ width: '100%' }} onClick={jumpToSwap} variant="secondary">
+          <Button
+            mt="8px"
+            style={{ width: '100%' }}
+            onClick={() => jumpToSwap(stakingToken.address)}
+            variant="secondary"
+          >
             {t('Get %symbol%', { symbol: stakingToken.symbol })}
           </Button>
         )}
