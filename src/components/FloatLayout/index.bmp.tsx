@@ -79,7 +79,7 @@ export const FloatLayout: React.FC<FloatLayoutProps> = ({ children, onBack, onDi
 
 export const FloatHeader = styled(ModalHeader)`
   padding: 10px 10px 0px 20px;
-  borderbottom: unset;
+  border-bottom: unset;
   background: ${({ theme }) => theme.modal.background};
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
