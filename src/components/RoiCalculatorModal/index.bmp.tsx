@@ -147,7 +147,11 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
       onBack={onBack ?? null}
       headerBackground="gradients.cardHeader"
     >
-      <ScrollView scrollY showScrollbar style={{ maxHeight: '70vh', width: 'unset' }}>
+      <ScrollView
+        scrollY
+        showScrollbar
+        style={{ padding: '24px', paddingBottom: 0, maxHeight: '70vh', width: 'unset' }}
+      >
         {strategy ? (
           strategy(state, dispatch)
         ) : (
@@ -161,7 +165,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
           />
         )}
         {header}
-        <view style={{ padding: '24px' }}>
+        <view style={{ paddingBottom: '24px' }}>
           <Flex flexDirection="column" mb="8px">
             <Text color="secondary" bold fontSize="12px" textTransform="uppercase">
               {t('%asset% staked', { asset: stakingTokenSymbol })}
