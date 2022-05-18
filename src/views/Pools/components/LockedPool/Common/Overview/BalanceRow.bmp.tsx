@@ -32,7 +32,7 @@ const DiffBalance: React.FC<DiffBalancePropsType> = ({ value, newValue, decimals
           prefix={prefix}
         />
       </CrossText>
-      {`->`}
+      <Text>{`->`}</Text>
       <BalanceWithLoading
         bold
         color="failure"
