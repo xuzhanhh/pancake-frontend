@@ -256,6 +256,7 @@ export default function FullPositionCard({ pair, ...props }: PositionCardProps) 
                 variant="text"
                 startIcon={<AddIcon color="primary" />}
                 width="100%"
+                style={{ lineHeight: 'unset', whiteSpace: 'unset' }}
                 onClick={() => {
                   dispatch({ type: 'setPage', page: LiquidityPage.Add })
                   dispatch({ type: 'setCurrency', currency1: currencyId(currency0), currency2: currencyId(currency1) })
