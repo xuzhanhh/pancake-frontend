@@ -34,23 +34,23 @@ function DisclaimerModal(props) {
             <Text key={item}>{t(`user-service-agreement-${item + 1}`)}</Text>
           ))}
         </TextWrap>
-      </ScrollView>
-      <Flex paddingTop="16px" justifyContent="space-between" alignItems="center">
-        <Flex>
-          <Checkbox scale="sm" disabled={confirmDisabled} checked={checked} onChange={() => setChecked(!checked)} />
-          <Text style={{ marginLeft: '8px' }}>I understand</Text>
+        <Flex paddingTop="16px" justifyContent="space-between" alignItems="center">
+          <Flex>
+            <Checkbox scale="sm" disabled={confirmDisabled} checked={checked} onChange={() => setChecked(!checked)} />
+            <Text style={{ marginLeft: '8px' }}>I understand</Text>
+          </Flex>
+          <Button
+            width="132px"
+            onClick={() => {
+              if (props.onClick) props.onClick()
+              props.onDismiss()
+            }}
+            disabled={!checked}
+          >
+            Start
+          </Button>
         </Flex>
-        <Button
-          width="132px"
-          onClick={() => {
-            if (props.onClick) props.onClick()
-            props.onDismiss()
-          }}
-          disabled={!checked}
-        >
-          Start
-        </Button>
-      </Flex>
+      </ScrollView>
     </Modal>
   )
 }
