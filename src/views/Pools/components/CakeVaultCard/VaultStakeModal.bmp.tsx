@@ -42,6 +42,8 @@ import FeeSummary from './FeeSummary'
 import { FloatLayout } from 'components/FloatLayout/index.bmp'
 import mpService from '@binance/mp-service'
 import { jumpToSwap } from 'utils/bmp/jump'
+import { useTracker } from 'contexts/AnalyticsContext'
+import { HitBuilders } from 'utils/ga'
 // min deposit and withdraw amount
 const MIN_AMOUNT = new BigNumber(10000000000000)
 
@@ -99,6 +101,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
   const cakePriceBusd = usePriceCakeBusd()
   const usdValueStaked = new BigNumber(stakeAmount).times(cakePriceBusd)
   const formattedUsdValueStaked = cakePriceBusd.gt(0) && stakeAmount ? formatNumber(usdValueStaked.toNumber()) : ''
+  const tracker = useTracker()
 
   const { flexibleApy } = useVaultApy()
 
@@ -155,6 +158,14 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     })
 
     if (receipt?.status) {
+      tracker.send(
+        new HitBuilders.EventBuilder()
+          .setCategory('pools')
+          .setAction('remove')
+          .setLabel(JSON.stringify({ txHash: receipt.transactionHash })) //  optional
+          .setValue(1)
+          .build(),
+      )
       toastSuccess(
         t('Unstaked!'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
@@ -175,6 +186,14 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     })
 
     if (receipt?.status) {
+      tracker.send(
+        new HitBuilders.EventBuilder()
+          .setCategory('pools')
+          .setAction('add')
+          .setLabel(JSON.stringify({ txHash: receipt.transactionHash })) //  optional
+          .setValue(1)
+          .build(),
+      )
       toastSuccess(
         t('Staked!'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>

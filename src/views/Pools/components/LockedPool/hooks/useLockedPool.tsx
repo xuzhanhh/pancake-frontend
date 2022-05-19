@@ -13,9 +13,11 @@ import { fetchCakeVaultUserData } from 'state/pools'
 import { Token } from '@pancakeswap/sdk'
 import { vaultPoolConfig } from 'config/constants/pools'
 import { VaultKey } from 'state/types'
-
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { HitBuilders } from 'utils/ga'
+import { useTracker } from 'contexts/AnalyticsContext'
+
 import { PrepConfirmArg } from '../types'
 
 const ONE_WEEK_DEFAULT = 604800
@@ -49,6 +51,7 @@ export default function useLockedPool(hookArgs: HookArgs): HookReturn {
   const { toastSuccess } = useToast()
   const [duration, setDuration] = useState(ONE_WEEK_DEFAULT)
   const usdValueStaked = useBUSDCakeAmount(lockedAmount.toNumber())
+  const tracker = useTracker()
 
   const handleDeposit = useCallback(
     async (convertedStakeAmount: BigNumber, lockDuration: number) => {
@@ -64,6 +67,14 @@ export default function useLockedPool(hookArgs: HookArgs): HookReturn {
       })
 
       if (receipt?.status) {
+        tracker.send(
+          new HitBuilders.EventBuilder()
+            .setCategory('pools')
+            .setAction('addLocked')
+            .setLabel(JSON.stringify({ txHash: receipt.transactionHash })) //  optional
+            .setValue(1)
+            .build(),
+        )
         toastSuccess(
           t('Staked!'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>
