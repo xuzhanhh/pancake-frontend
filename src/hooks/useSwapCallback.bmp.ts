@@ -1,11 +1,11 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { useTracker } from 'contexts/AnalyticsContext'
 import { Contract } from '@ethersproject/contracts'
 import { Currency, JSBI, Percent, Router, SwapParameters, Trade, TradeType } from '@pancakeswap/sdk'
 import { TranslateFunction, useTranslation } from 'contexts/Localization'
 import { useMemo } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useGasPrice } from 'state/user/hooks'
+import { captureException } from '@binance/sentry-miniapp'
 import truncateHash from 'utils/truncateHash'
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../config/constants'
 import { useTransactionAdder } from '../state/transactions/hooks'
@@ -13,9 +13,8 @@ import { calculateGasMargin, getRouterContract, isAddress } from '../utils'
 import isZero from '../utils/isZero'
 import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './ENS/useENS'
-import { captureException } from '@binance/sentry-miniapp'
-import { HitBuilders } from 'utils/ga'
 import { useBUSDCurrencyAmount } from './useBUSDPrice'
+import { useHandleTrack } from './bmp/useHandleTrack'
 
 export enum SwapCallbackState {
   INVALID,
@@ -133,11 +132,11 @@ export function useSwapCallback(
   const { t } = useTranslation()
 
   const addTransaction = useTransactionAdder()
+  const { trackSwapSubmitted } = useHandleTrack()
 
   const { address: recipientAddress } = useENS(recipientAddressOrName)
   const recipient = recipientAddressOrName === null ? account : recipientAddress
 
-  const tracker = useTracker()
   return useMemo(() => {
     if (!trade || !library || !account || !chainId) {
       return { state: SwapCallbackState.INVALID, callback: null, error: 'Missing dependencies' }
@@ -242,15 +241,7 @@ export function useSwapCallback(
               to: `${outputAmount} ${outputSymbol}`,
               value: tradeVolume.toFixed(3),
             }
-
-            tracker.send(
-              new HitBuilders.EventBuilder()
-                .setCategory('swap')
-                .setAction('transactionSubmitted')
-                .setLabel(JSON.stringify(track)) //  optional
-                .setValue(Math.ceil(tradeVolume))
-                .build(),
-            )
+            trackSwapSubmitted(JSON.stringify(track), Math.ceil(tradeVolume))
             return response.hash
           })
           .catch((error: any) => {

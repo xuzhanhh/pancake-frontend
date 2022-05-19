@@ -15,8 +15,7 @@ import { vaultPoolConfig } from 'config/constants/pools'
 import { VaultKey } from 'state/types'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { HitBuilders } from 'utils/ga'
-import { useTracker } from 'contexts/AnalyticsContext'
+import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 
 import { PrepConfirmArg } from '../types'
 
@@ -51,8 +50,7 @@ export default function useLockedPool(hookArgs: HookArgs): HookReturn {
   const { toastSuccess } = useToast()
   const [duration, setDuration] = useState(ONE_WEEK_DEFAULT)
   const usdValueStaked = useBUSDCakeAmount(lockedAmount.toNumber())
-  const tracker = useTracker()
-
+  const { trackPoolsAddLocked } = useHandleTrack()
   const handleDeposit = useCallback(
     async (convertedStakeAmount: BigNumber, lockDuration: number) => {
       const callOptions = {
@@ -67,14 +65,7 @@ export default function useLockedPool(hookArgs: HookArgs): HookReturn {
       })
 
       if (receipt?.status) {
-        tracker.send(
-          new HitBuilders.EventBuilder()
-            .setCategory('pools')
-            .setAction('addLocked')
-            .setLabel(JSON.stringify({ txHash: receipt.transactionHash })) //  optional
-            .setValue(1)
-            .build(),
-        )
+        trackPoolsAddLocked(receipt.transactionHash)
         toastSuccess(
           t('Staked!'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>
@@ -85,7 +76,17 @@ export default function useLockedPool(hookArgs: HookArgs): HookReturn {
         dispatch(fetchCakeVaultUserData({ account }))
       }
     },
-    [fetchWithCatchTxError, toastSuccess, dispatch, onDismiss, account, vaultPoolContract, t, callWithGasPrice],
+    [
+      fetchWithCatchTxError,
+      toastSuccess,
+      dispatch,
+      onDismiss,
+      account,
+      vaultPoolContract,
+      t,
+      callWithGasPrice,
+      trackPoolsAddLocked,
+    ],
   )
 
   const handleConfirmClick = useCallback(async () => {
