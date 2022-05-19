@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTracker } from 'contexts/AnalyticsContext'
-import { HitBuilders } from 'utils/ga'
 import styled, { useTheme } from 'styled-components'
 import { CurrencyAmount, JSBI, Token, Trade } from '@pancakeswap/sdk'
 import {
@@ -62,6 +61,8 @@ import PriceChartContainer from '../components/Chart/PriceChartContainer'
 import { StyledInputCurrencyWrapper, StyledSwapContainer } from '../styles'
 import CurrencyInputHeader from '../components/CurrencyInputHeader'
 import { useDidShow } from '@binance/mp-service'
+import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
+import { HitBuilders } from 'utils/ga'
 
 const Label = styled(Text)`
   font-size: 12px;
@@ -96,6 +97,7 @@ function Swap() {
   useDisclaimer()
 
   const tracker = useTracker()
+  const { trackSwapClickSwap } = useHandleTrack()
   useEffect(() => {
     tracker.setScreenName('swap')
     tracker.send(new HitBuilders.ScreenViewBuilder().build())
@@ -518,7 +520,7 @@ function Swap() {
                     <Button
                       variant={isValid && priceImpactSeverity > 2 ? 'danger' : 'primary'}
                       onClick={() => {
-                        tracker.send(new HitBuilders.EventBuilder().setCategory('swap').setAction('clickSwap').build())
+                        trackSwapClickSwap()
                         if (isExpertMode) {
                           handleSwap()
                         } else {
@@ -548,7 +550,7 @@ function Swap() {
                   <Button
                     variant={isValid && priceImpactSeverity > 2 && !swapCallbackError ? 'danger' : 'primary'}
                     onClick={() => {
-                      tracker.send(new HitBuilders.EventBuilder().setCategory('swap').setAction('clickSwap').build())
+                      trackSwapClickSwap()
                       if (isExpertMode) {
                         handleSwap()
                       } else {

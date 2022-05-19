@@ -2,12 +2,11 @@ import { useCallback } from 'react'
 import { stakeFarm } from 'utils/calls'
 import { useMasterchef } from 'hooks/useContract'
 import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
-import { useTracker } from 'contexts/AnalyticsContext'
-import { HitBuilders } from 'utils/ga'
+import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 
 const useStakeFarms = (pid: number) => {
   const masterChefContract = useMasterchef()
-  const tracker = useTracker()
+  const { trackFarmStake } = useHandleTrack()
 
   const handleStake = useCallback(
     async (
@@ -17,14 +16,7 @@ const useStakeFarms = (pid: number) => {
       onError: (receipt: TransactionReceipt) => void,
     ) => {
       const tx = await stakeFarm(masterChefContract, pid, amount)
-      tracker.send(
-        new HitBuilders.EventBuilder()
-          .setCategory('farm')
-          .setAction('stake')
-          .setLabel(JSON.stringify({ tx: tx.hash })) //  optional
-          .setValue(1)
-          .build(),
-      )
+      trackFarmStake(tx.hash)
       onTransactionSubmitted(tx)
       const receipt = await tx.wait()
       if (receipt.status) {
@@ -33,7 +25,7 @@ const useStakeFarms = (pid: number) => {
         onError(receipt)
       }
     },
-    [masterChefContract, pid, tracker],
+    [masterChefContract, pid, trackFarmStake],
   )
 
   return { onStake: handleStake }
