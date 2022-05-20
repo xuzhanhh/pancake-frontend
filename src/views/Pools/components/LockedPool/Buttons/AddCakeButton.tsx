@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, memo } from 'react'
+import React, { useCallback, memo } from 'react'
 import { Button, useModal, Skeleton } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { differenceInSeconds } from 'date-fns'
@@ -19,22 +19,13 @@ const AddCakeButton: React.FC<AddButtonProps> = ({
   const { userDataLoaded } = usePoolsWithVault()
 
   const { t } = useTranslation()
-  const remainingDuration = useMemo(
-    () => differenceInSeconds(new Date(convertTimeToSeconds(lockEndTime)), new Date()),
-    [lockEndTime],
-  )
-  const passedDuration = useMemo(
-    () => differenceInSeconds(new Date(), new Date(convertTimeToSeconds(lockStartTime))),
-    [lockStartTime],
-  )
 
   const [openAddAmountModal] = useModal(
     <AddAmountModal
-      passedDuration={passedDuration}
       currentLockedAmount={currentLockedAmount}
-      remainingDuration={remainingDuration}
       currentBalance={currentBalance}
       stakingToken={stakingToken}
+      lockStartTime={lockStartTime}
       lockEndTime={lockEndTime}
       stakingTokenBalance={stakingTokenBalance}
     />,

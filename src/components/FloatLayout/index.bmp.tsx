@@ -48,7 +48,7 @@ export const FloatLayout: React.FC<FloatLayoutProps> = ({ children, onBack, onDi
           </FloatHeader>
         )}
         <scroll-view
-          style={{ maxHeight: windowHeight - 110 - 68 }}
+          style={{ maxHeight: windowHeight - 110 - 58 - 34 }}
           scroll-y="true"
           upper-threshold="50"
           lower-threshold="50"
