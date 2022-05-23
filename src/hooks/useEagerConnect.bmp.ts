@@ -9,6 +9,8 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 import warning from 'tiny-warning'
 import { captureException } from '@binance/sentry-miniapp'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
+import useToast from './useToast'
+import { useTranslation } from 'contexts/Localization'
 
 const __DEV__ = process.env.NODE_ENV !== 'production'
 
@@ -183,33 +185,41 @@ const isOldVersion = () => {
 
 export const useActiveHandle = () => {
   const handleActive = useActive()
-  return async () => {
+  const { toastSuccess } = useToast()
+  const { t } = useTranslation()
+
+  const main = async () => {
     /**
      *  backward
      */
     const address = await injected.getAccount()
-    let isLogin = true
-    if (!address && isOldVersion()) {
-      injected.bnEthereum.ready = true
-      injected.bnEthereum
-        .request({
-          method: 'personal_sign',
-          params: ['test'],
-        })
-        .catch((error) => {
-          if (error && error?._code === '600005') {
-            isLogin = false
-            mpService.login().then(() => {
-              handleActive()
-            })
-          }
-        })
-      injected.bnEthereum.ready = false
-    }
-    if (isLogin) {
-      handleActive()
-    }
-    console.log('🚀 ~ file: useEagerConnect.bmp.ts ~ line 199 v5 ~ return ~ address', address)
+    return new Promise((resolve) => {
+      let isLogin = true
+      if (!address && isOldVersion()) {
+        injected.bnEthereum.ready = true
+        injected.bnEthereum
+          .request({
+            method: 'personal_sign',
+            params: ['test'],
+          })
+          .catch((error) => {
+            if (error && error?._code === '600005') {
+              isLogin = false
+              mpService.login().then(() => {
+                handleActive().then(resolve)
+              })
+            }
+          })
+        injected.bnEthereum.ready = false
+      }
+      if (isLogin) {
+        handleActive().then(resolve)
+      }
+    })
+  }
+  return async () => {
+    await main()
+    toastSuccess(t('Success'), 'Wallet connected')
   }
 }
 export default useEagerConnect
