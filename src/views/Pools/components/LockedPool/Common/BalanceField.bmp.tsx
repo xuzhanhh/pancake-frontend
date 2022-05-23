@@ -54,8 +54,8 @@ const BalanceField: React.FC<PropsType> = ({
       // } else {
       //   setPercent(0)
       // }
-
-      setLockedAmount(input)
+      const newInput = input.replace(',', '.')
+      setLockedAmount(newInput)
     },
     [setLockedAmount],
   )
