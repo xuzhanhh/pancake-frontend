@@ -99,7 +99,7 @@ const BmpPage = ({ activeId = ActiveId.SWAP, children }) => {
       <StyledPage activeId={activeId}>
         <CustomNav top={statusBarHeight} height={CUSTOM_NAV_HEIGHT} />
         {children}
-        {activeId !== ActiveId.FARMS && <Footer activeId={activeId} />}
+        {activeId !== ActiveId.FARMS && activeId !== ActiveId.Pools && <Footer activeId={activeId} />}
       </StyledPage>
     </Providers>
   )
