@@ -449,6 +449,7 @@ const Fetcher = React.memo(({ setFarmsData, setCakePrice }) => {
   useEffect(() => {
     setCakePrice(cakePrice)
   }, [cakePrice, setCakePrice])
+  usePollFarmsWithUserData(false)
   return null
 })
 
@@ -462,7 +463,6 @@ const FramsWrapper = ({ children }) => {
   useDidHide(() => {
     setIsHide(true)
   })
-  usePollFarmsWithUserData(false)
   return (
     <view>
       <Farms farmsData={farmsData} cakePrice={cakePrice} children={children} />

@@ -28,6 +28,8 @@ import CakeVaultCard from './components/CakeVaultCard'
 import PoolTabButtons from './components/PoolTabButtons'
 import PoolsTable from './components/PoolsTable/PoolsTable'
 import { getCakeVaultEarnings } from './helpers'
+import { useDidHide, useDidShow } from '@binance/mp-service'
+import { isEqual } from 'lodash'
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -153,15 +155,13 @@ const sortPools = (account: string, sortOption: string, pools: DeserializedPool[
 
 const POOL_START_BLOCK_THRESHOLD = (60 / BSC_BLOCK_TIME) * 4
 
-const Pools: React.FC = () => {
+const Pools: React.FC = ({ pools, userDataLoaded }) => {
   // const router = useRouter()
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { pools, userDataLoaded } = usePoolsWithVault()
-  const [stakedOnly, setStakedOnly] = useUserPoolStakedOnly()
   const [viewMode, setViewMode] = useUserPoolsViewMode()
   const [numberOfPoolsVisible, setNumberOfPoolsVisible] = useState(NUMBER_OF_POOLS_VISIBLE)
-  const { observerRef, isIntersecting } = useIntersectionObserver()
+  // const { observerRef, isIntersecting } = useIntersectionObserver()
   const [searchQuery, setSearchQuery] = useState('')
   const [sortOption, setSortOption] = useState('hot')
   const chosenPoolsLength = useRef(0)
@@ -199,18 +199,16 @@ const Pools: React.FC = () => {
   }, [openPoolsWithStartBlockFilter])
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0
 
-  usePoolsPageFetch()
-
-  useEffect(() => {
-    if (isIntersecting) {
-      setNumberOfPoolsVisible((poolsCurrentlyVisible) => {
-        if (poolsCurrentlyVisible <= chosenPoolsLength.current) {
-          return poolsCurrentlyVisible + NUMBER_OF_POOLS_VISIBLE
-        }
-        return poolsCurrentlyVisible
-      })
-    }
-  }, [isIntersecting])
+  // useEffect(() => {
+  //   if (isIntersecting) {
+  //     setNumberOfPoolsVisible((poolsCurrentlyVisible) => {
+  //       if (poolsCurrentlyVisible <= chosenPoolsLength.current) {
+  //         return poolsCurrentlyVisible + NUMBER_OF_POOLS_VISIBLE
+  //       }
+  //       return poolsCurrentlyVisible
+  //     })
+  //   }
+  // }, [isIntersecting])
 
   // const showFinishedPools = router.pathname.includes('history')
 
@@ -225,7 +223,8 @@ const Pools: React.FC = () => {
   // if (showFinishedPools) {
   //   chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
   // } else {
-  chosenPools = stakedOnly ? stakedOnlyOpenPools() : openPoolsWithStartBlockFilter
+  // chosenPools = stakedOnly ? stakedOnlyOpenPools() : openPoolsWithStartBlockFilter
+  chosenPools = openPoolsWithStartBlockFilter
   // }
 
   chosenPools = useMemo(() => {
@@ -243,7 +242,7 @@ const Pools: React.FC = () => {
     <CardLayout>
       {chosenPools.map((pool) =>
         pool.vaultKey ? (
-          <CakeVaultCard key={pool.vaultKey} pool={pool} showStakedOnly={stakedOnly} />
+          <CakeVaultCard key={pool.vaultKey} pool={pool} showStakedOnly={false} />
         ) : // <PoolCard key={pool.sousId} pool={pool} account={account} />
         null,
       )}
@@ -348,4 +347,48 @@ const Pools: React.FC = () => {
   )
 }
 
-export default Pools
+const Fetcher = ({ pools: oldPools, setPools, userDataLoaded: oldUserDataLoaded, setUserDataLoaded }) => {
+  const { pools, userDataLoaded } = usePoolsWithVault()
+  useEffect(() => {
+    if (!isEqual(pools, oldPools)) {
+      setPools(pools)
+    }
+  }, [pools])
+  useEffect(() => {
+    if (userDataLoaded !== oldUserDataLoaded) {
+      setUserDataLoaded(userDataLoaded)
+    }
+  }, [userDataLoaded])
+  // const [stakedOnly, setStakedOnly] = useUserPoolStakedOnly()
+  usePoolsPageFetch()
+  return null
+}
+
+const PoolsWrapper = () => {
+  const [fetchingData, setFetchingData] = useState(true)
+  const [pools, setPools] = useState([])
+  const [userDataLoaded, setUserDataLoaded] = useState(false)
+
+  useDidShow(() => {
+    setFetchingData(true)
+  })
+  useDidHide(() => {
+    setFetchingData(false)
+  })
+
+  return (
+    <view>
+      <Pools pools={pools} userDataLoaded={userDataLoaded} />
+      {fetchingData && (
+        <Fetcher
+          pools={pools}
+          setPools={setPools}
+          userDataLoaded={userDataLoaded}
+          setUserDataLoaded={setUserDataLoaded}
+        />
+      )}
+    </view>
+  )
+}
+
+export default PoolsWrapper
