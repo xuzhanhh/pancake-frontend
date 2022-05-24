@@ -22,6 +22,7 @@ const RoiCardInner = styled(Box)`
 `
 
 const RoiInputContainer = styled(Box)`
+  width: 100%;
   position: relative;
   & > input {
     padding-left: 28px;
