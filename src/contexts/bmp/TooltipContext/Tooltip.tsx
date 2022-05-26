@@ -1,5 +1,5 @@
 import React from 'react'
-import { CloseIcon, Overlay, Box, IconButton } from '@pancakeswap/uikit'
+import { CloseIcon, Overlay, Text, IconButton } from '@pancakeswap/uikit'
 import styled from '@binance/mp-styled'
 
 const OverlayInner = styled.div`
@@ -19,7 +19,7 @@ const Tooltip = ({ visible, onClose, children }) => {
     return (
       <Overlay onClick={onClose} style={{ height: '100vh', zIndex: 1111 }}>
         <OverlayInner>
-          <Box style={{ marginRight: 20 }}>{children}</Box>
+          <Text style={{ marginRight: 20 }}>{children}</Text>
           <IconButton
             variant="text"
             style={{ position: 'absolute', top: 0, right: 0 }}

@@ -74,12 +74,23 @@ const Footer = ({ activeId = ActiveId.SWAP }) => {
     </Flex>
   )
 }
+const calculatePadding = (activeId) => {
+  switch (activeId) {
+    case ActiveId.FARMS:
+      return '16px 16px 0px 16px'
 
+    case ActiveId.Pools:
+      return '0px'
+    default:
+      return '16px 16px 100px 16px'
+  }
+}
 const StyledPage = styled.div`
   background: ${({ theme }) => theme.colors.gradients.bubblegum};
   min-height: calc(100vh - 64px);
+  max-height: 100vh;
   overflow-y: scroll;
-  padding: ${({ activeId }) => (activeId === ActiveId.FARMS ? '16px 16px 0px 16px' : '16px 16px 100px 16px')};
+  padding: ${({ activeId }) => calculatePadding(activeId)};
 `
 const { statusBarHeight } = getSystemInfoSync()
 const CUSTOM_NAV_HEIGHT = 44
@@ -89,7 +100,7 @@ const BmpPage = ({ activeId = ActiveId.SWAP, children }) => {
       <StyledPage activeId={activeId}>
         <CustomNav top={statusBarHeight} height={CUSTOM_NAV_HEIGHT} />
         {children}
-        {activeId !== ActiveId.FARMS && <Footer activeId={activeId} />}
+        {activeId !== ActiveId.FARMS && activeId !== ActiveId.Pools && <Footer activeId={activeId} />}
       </StyledPage>
     </Providers>
   )

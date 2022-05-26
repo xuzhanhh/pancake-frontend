@@ -38,6 +38,12 @@ const defaultState = {
       pagePath: 'views/bmp/farms/index',
       text: 'Farms',
     },
+    {
+      iconPath: 'images/pools.png',
+      selectedIconPath: 'images/pools-select.png',
+      pagePath: 'views/bmp/pools/index',
+      text: 'Pools',
+    },
   ],
 }
 const Title = ({ selected, title }) => {

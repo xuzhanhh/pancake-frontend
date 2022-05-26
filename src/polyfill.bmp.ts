@@ -273,6 +273,12 @@ if (platform === 'android') {
     prespace: '{{code}} {{num}}',
   }
   Number.prototype.toLocaleString = function (locale, options) {
+    if (!options) {
+      options = {}
+    }
+    if (typeof options.maximumFractionDigits !== 'number') {
+      options.maximumFractionDigits = 3
+    }
     if (locale && locale.length < 2) throw new RangeError('Invalid language tag: ' + locale)
     var sNum = this
     if (options && options.minimumFractionDigits !== undefined) {

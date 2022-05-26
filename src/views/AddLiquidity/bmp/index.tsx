@@ -8,9 +8,10 @@ import { useTranslation } from 'contexts/Localization'
 import UnsupportedCurrencyFooter from 'components/UnsupportedCurrencyFooter'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useDispatch } from 'react-redux'
-import { useTracker } from 'contexts/AnalyticsContext'
-import { HitBuilders } from 'utils/ga'
 import { useLiquidity, LiquidityPage } from 'views/bmp/liquidity/liquidityContext'
+import { AddLiquidityTip } from 'views/Pool/index.bmp'
+import { CHAIN_ID } from 'config/constants/networks'
+import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 // import { useRouter } from 'next/router'
 import { AppDispatch } from '../../../state'
 import { LightCard } from '../../../components/Card'
@@ -44,8 +45,6 @@ import Dots from '../../../components/Loader/Dots'
 import ConfirmAddModalBottom from '../ConfirmAddModalBottom'
 import { currencyId } from '../../../utils/currencyId'
 import PoolPriceBar from '../PoolPriceBar'
-import { AddLiquidityTip } from 'views/Pool/index.bmp'
-import { CHAIN_ID } from 'config/constants/networks'
 function AddLiquidity() {
   // const router = useRouter()
   // const [currencyIdA, currencyIdB] = router.query.currency || []
@@ -139,7 +138,7 @@ function AddLiquidity() {
 
   const addTransaction = useTransactionAdder()
 
-  const tracker = useTracker()
+  const { trackLiquidityAdd } = useHandleTrack()
   async function onAdd() {
     if (!chainId || !library || !account) return
     const routerContract = getRouterContract(chainId, library, account)
@@ -204,14 +203,7 @@ function AddLiquidity() {
             } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(3)} ${currencies[Field.CURRENCY_B]?.symbol}`,
           })
 
-          tracker.send(
-            new HitBuilders.EventBuilder()
-              .setCategory('liquidity')
-              .setAction('addLiquidity')
-              .setLabel(JSON.stringify({ txHash: response.hash })) //  optional
-              .setValue(1)
-              .build(),
-          )
+          trackLiquidityAdd(response.hash)
           setTxHash(response.hash)
         }),
       )

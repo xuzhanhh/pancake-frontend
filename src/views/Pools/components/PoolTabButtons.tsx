@@ -1,11 +1,11 @@
 import React from 'react'
-import { NextLinkFromReactRouter } from 'components/NextLink'
+// import { NextLinkFromReactRouter } from 'components/NextLink'
+import ToggleView from 'components/ToggleView/ToggleView'
 import { ViewMode } from 'state/user/actions'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { ButtonMenu, ButtonMenuItem, Toggle, Text, NotificationDot } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
-import ToggleView from './ToggleView/ToggleView'
 
 const ToggleWrapper = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ const ToggleWrapper = styled.div`
     margin-left: 8px;
   }
 `
-
+// FIXME
 const ViewControls = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
@@ -24,29 +24,29 @@ const ViewControls = styled.div`
   align-items: center;
   width: 100%;
 
-  > div {
-    padding: 8px 0px;
-  }
+  /* > div { */
+  /*   padding: 8px 0px; */
+  /* } */
 
   ${({ theme }) => theme.mediaQueries.sm} {
     justify-content: flex-start;
     width: auto;
 
-    > div {
-      padding: 0;
-    }
+    /* > div { */
+    /*   padding: 0; */
+    /* } */
   }
 `
-
+// FIXME
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 
-  a {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
+  /* a { */
+  /*   padding-left: 12px; */
+  /*   padding-right: 12px; */
+  /* } */
 
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-left: 16px;
@@ -60,18 +60,20 @@ const PoolTabButtons = ({ stakedOnly, setStakedOnly, hasStakeInFinishedPools, vi
 
   const isExact = router.asPath === '/pools'
 
-  const viewModeToggle = <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
-
+  const viewModeToggle = (
+    <ToggleView idPrefix="clickPool" viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
+  )
+  // FIXME remove for try running, need recovery later
   const liveOrFinishedSwitch = (
     <Wrapper>
       <ButtonMenu activeIndex={isExact ? 0 : 1} scale="sm" variant="subtle">
-        <ButtonMenuItem as={NextLinkFromReactRouter} to="/pools" replace>
-          {t('Live')}
-        </ButtonMenuItem>
+        {/* <ButtonMenuItem as={NextLinkFromReactRouter} to="/pools" replace> */}
+        {/*   {t('Live')} */}
+        {/* </ButtonMenuItem> */}
         <NotificationDot show={hasStakeInFinishedPools}>
-          <ButtonMenuItem id="finished-pools-button" as={NextLinkFromReactRouter} to="/pools/history" replace>
-            {t('Finished')}
-          </ButtonMenuItem>
+          {/* <ButtonMenuItem id="finished-pools-button" as={NextLinkFromReactRouter} to="/pools/history" replace> */}
+          {/*   {t('Finished')} */}
+          {/* </ButtonMenuItem> */}
         </NotificationDot>
       </ButtonMenu>
     </Wrapper>

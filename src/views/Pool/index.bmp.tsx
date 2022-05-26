@@ -19,6 +19,7 @@ import noLiquidityImage from '../../../public/images/no-liquidity.png'
 import AddLiquidityTipImage from '../../images/add-liquidity-tip.png'
 import { useTooltip } from 'contexts/bmp/TooltipContext'
 import mpService from '@binance/mp-service'
+import './index.css'
 
 const Body = styled(CardBody)`
   display: flex;
@@ -53,7 +54,7 @@ export const AddLiquidityTip = (props) => {
     <Flex justifyContent="center" {...props}>
       <Text color="textSubtle" textAlign="center" mb="16px">
         {t('add-liquidity-tip-0')} {t('add-liquidity-tip-1')}{' '}
-        <Text onClick={onPresent} style={{ display: 'inline', textDecoration: 'underline dotted' }}>
+        <Text onClick={onPresent} className="decoration" style={{ display: 'inline' }}>
           {' '}
           {t('add-liquidity-tip-2')}
         </Text>{' '}

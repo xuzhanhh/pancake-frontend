@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { ScrollView } from '@binance/mp-components'
 import styled from 'styled-components'
 import {
@@ -19,15 +19,20 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useTooltip } from 'contexts/bmp/TooltipContext'
 import RoiCalculatorFooter from './RoiCalculatorFooter.bmp'
 import RoiCard from './RoiCard'
-import useRoiCalculatorReducer, { CalculatorMode, EditingCurrency } from './useRoiCalculatorReducer'
+import useRoiCalculatorReducer, {
+  CalculatorMode,
+  DefaultCompoundStrategy,
+  EditingCurrency,
+} from './useRoiCalculatorReducer'
 import AnimatedArrow from './AnimatedArrow'
 import { FloatLayout } from 'components/FloatLayout/index.bmp'
 
-interface RoiCalculatorModalProps {
+export interface RoiCalculatorModalProps {
   onDismiss?: () => void
   onBack?: () => void
   earningTokenPrice: number
-  apr: number
+  apr?: number
+  apy?: number
   displayApr?: string
   linkLabel: string
   linkHref: string
@@ -39,16 +44,12 @@ interface RoiCalculatorModalProps {
   autoCompoundFrequency?: number
   performanceFee?: number
   isFarm?: boolean
+  initialState?: any
   initialValue?: string
+  strategy?: any
+  header?: React.ReactNode
   jumpToLiquidity: () => void
 }
-
-const StyledModal = styled(Modal)`
-  width: 345px;
-  & > :nth-child(2) {
-    padding: 0;
-  }
-`
 
 const FullWidthButtonMenu = styled(ButtonMenu)<{ disabled?: boolean }>`
   width: 100%;
@@ -74,6 +75,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
   onBack,
   earningTokenPrice,
   apr,
+  apy,
   displayApr,
   linkLabel,
   linkHref,
@@ -86,6 +88,10 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
   autoCompoundFrequency = 0,
   performanceFee = 0,
   isFarm = false,
+  initialState,
+  strategy,
+  header,
+  children,
   jumpToLiquidity,
 }) => {
   const { t } = useTranslation()
@@ -101,7 +107,8 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
     setCompoundingFrequency,
     setCalculatorMode,
     setTargetRoi,
-  } = useRoiCalculatorReducer(stakingTokenPrice, earningTokenPrice, apr, autoCompoundFrequency, performanceFee)
+    dispatch,
+  } = useRoiCalculatorReducer({ stakingTokenPrice, earningTokenPrice, autoCompoundFrequency }, initialState)
 
   const { compounding, activeCompoundingIndex, stakingDuration, editingCurrency } = state.controls
   const { principalAsUSD, principalAsToken } = state.data
@@ -131,6 +138,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
   const conversionUnit = editingCurrency === EditingCurrency.TOKEN ? 'USD' : stakingTokenSymbol
   const conversionValue = editingCurrency === EditingCurrency.TOKEN ? principalAsUSD : principalAsToken
   const onUserInput = editingCurrency === EditingCurrency.TOKEN ? setPrincipalFromTokenValue : setPrincipalFromUSDValue
+  const DURATION = useMemo(() => [t('1D'), t('7D'), t('30D'), t('1Y'), t('5Y')], [t])
 
   return (
     <FloatLayout
@@ -139,13 +147,33 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
       onBack={onBack ?? null}
       headerBackground="gradients.cardHeader"
     >
-      <ScrollView scrollY showScrollbar style={{ maxHeight: '70vh', width: 'unset' }}>
-        <view style={{ padding: '24px' }}>
+      <ScrollView
+        scrollY
+        showScrollbar
+        style={{ padding: '24px', paddingBottom: 0, maxHeight: '70vh', width: 'unset' }}
+      >
+        {strategy ? (
+          strategy(state, dispatch)
+        ) : (
+          <DefaultCompoundStrategy
+            apr={apy ?? apr}
+            dispatch={dispatch}
+            state={state}
+            earningTokenPrice={earningTokenPrice}
+            performanceFee={performanceFee}
+            stakingTokenPrice={stakingTokenPrice}
+          />
+        )}
+        {header}
+        <view style={{ paddingBottom: '24px' }}>
           <Flex flexDirection="column" mb="8px">
             <Text color="secondary" bold fontSize="12px" textTransform="uppercase">
               {t('%asset% staked', { asset: stakingTokenSymbol })}
             </Text>
             <BalanceInput
+              inputProps={{
+                scale: 'sm',
+              }}
               currencyValue={`${conversionValue} ${conversionUnit}`}
               placeholder="0.00"
               value={editingValue}
@@ -177,7 +205,12 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
               </Button>
               <Button
                 style={{ flex: 2 }}
-                disabled={!stakingTokenBalance.isFinite() || stakingTokenBalance.lte(0) || !account}
+                disabled={
+                  !Number.isFinite(stakingTokenPrice) ||
+                  !stakingTokenBalance.isFinite() ||
+                  stakingTokenBalance.lte(0) ||
+                  !account
+                }
                 scale="xs"
                 p="4px 16px"
                 width="128px"
@@ -192,16 +225,20 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
                 <HelpIcon width="16px" height="16px" color="textSubtle" />
               </Flex>
             </PricesWrap>
-            <Text mt="24px" color="secondary" bold fontSize="12px" textTransform="uppercase">
-              {t('Staked for')}
-            </Text>
-            <FullWidthButtonMenu activeIndex={stakingDuration} onItemClick={setStakingDuration} scale="sm">
-              <ButtonMenuItem variant="tertiary">{t('1D')}</ButtonMenuItem>
-              <ButtonMenuItem variant="tertiary">{t('7D')}</ButtonMenuItem>
-              <ButtonMenuItem variant="tertiary">{t('30D')}</ButtonMenuItem>
-              <ButtonMenuItem variant="tertiary">{t('1Y')}</ButtonMenuItem>
-              <ButtonMenuItem variant="tertiary">{t('5Y')}</ButtonMenuItem>
-            </FullWidthButtonMenu>
+            {children || (
+              <>
+                <Text mt="24px" color="secondary" bold fontSize="12px" textTransform="uppercase">
+                  {t('Staked for')}
+                </Text>
+                <FullWidthButtonMenu activeIndex={stakingDuration} onItemClick={setStakingDuration} scale="sm">
+                  {DURATION.map((duration) => (
+                    <ButtonMenuItem key={duration} variant="tertiary">
+                      {duration}
+                    </ButtonMenuItem>
+                  ))}
+                </FullWidthButtonMenu>
+              </>
+            )}
             {autoCompoundFrequency === 0 && (
               <>
                 <Text mt="24px" color="secondary" bold fontSize="12px" textTransform="uppercase">
@@ -243,6 +280,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
           jumpToLiquidity={jumpToLiquidity}
           isFarm={isFarm}
           apr={apr}
+          apy={apy}
           displayApr={displayApr}
           autoCompoundFrequency={autoCompoundFrequency}
           multiplier={multiplier}

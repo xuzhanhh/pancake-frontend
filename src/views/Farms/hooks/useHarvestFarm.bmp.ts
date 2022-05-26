@@ -3,12 +3,11 @@ import { harvestFarm } from 'utils/calls'
 import { useMasterchef } from 'hooks/useContract'
 import { TransactionResponse } from '@ethersproject/providers'
 import { TransactionReceipt } from '@ethersproject/abstract-provider/src.ts/index'
-import { useTracker } from 'contexts/AnalyticsContext'
-import { HitBuilders } from 'utils/ga'
+import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 
 const useHarvestFarm = (farmPid: number) => {
   const masterChefContract = useMasterchef()
-  const tracker = useTracker()
+  const { trackFarmHarvest } = useHandleTrack()
 
   const handleHarvest = useCallback(
     async (
@@ -17,14 +16,7 @@ const useHarvestFarm = (farmPid: number) => {
       onError: (receipt: TransactionReceipt) => void,
     ) => {
       const tx = await harvestFarm(masterChefContract, farmPid)
-      tracker.send(
-        new HitBuilders.EventBuilder()
-          .setCategory('farm')
-          .setAction('harvest')
-          .setLabel(JSON.stringify({ tx: tx.hash })) //  optional
-          .setValue(1)
-          .build(),
-      )
+      trackFarmHarvest(tx.hash)
       onTransactionSubmitted(tx)
       const receipt = await tx.wait()
       if (receipt.status) {
@@ -33,7 +25,7 @@ const useHarvestFarm = (farmPid: number) => {
         onError(receipt)
       }
     },
-    [farmPid, masterChefContract, tracker],
+    [farmPid, masterChefContract, trackFarmHarvest],
   )
 
   return { onReward: handleHarvest }
