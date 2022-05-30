@@ -167,6 +167,7 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
   const chosenPoolsLength = useRef(0)
   const initialBlock = useInitialBlock()
 
+  const [stakedOnly, setStakedOnly] = useUserPoolStakedOnly()
   const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools])
   const openPoolsWithStartBlockFilter = useMemo(
     () =>
@@ -210,7 +211,7 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
   //   }
   // }, [isIntersecting])
 
-  // const showFinishedPools = router.pathname.includes('history')
+  const [showFinishedPools, setShowFinishedPools] = useState(false)
 
   const handleChangeSearchQuery = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value),
@@ -220,12 +221,12 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
   const handleSortOptionChange = useCallback((option: OptionProps) => setSortOption(option.value), [])
 
   let chosenPools
-  // if (showFinishedPools) {
-  //   chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
-  // } else {
-  // chosenPools = stakedOnly ? stakedOnlyOpenPools() : openPoolsWithStartBlockFilter
-  chosenPools = openPoolsWithStartBlockFilter
-  // }
+  if (showFinishedPools) {
+    chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
+  } else {
+    chosenPools = stakedOnly ? stakedOnlyOpenPools() : openPoolsWithStartBlockFilter
+    // chosenPools = openPoolsWithStartBlockFilter
+  }
 
   chosenPools = useMemo(() => {
     const sortedPools = sortPools(account, sortOption, pools, chosenPools).slice(0, numberOfPoolsVisible)
@@ -240,11 +241,14 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
 
   const cardLayout = (
     <CardLayout>
-      {chosenPools.map((pool) =>
-        pool.vaultKey ? (
-          <CakeVaultCard key={pool.vaultKey} pool={pool} showStakedOnly={false} />
-        ) : // <PoolCard key={pool.sousId} pool={pool} account={account} />
-        null,
+      {chosenPools.map(
+        (pool) =>
+          pool.vaultKey ? (
+            <CakeVaultCard key={pool.vaultKey} pool={pool} showStakedOnly={stakedOnly} />
+          ) : (
+            <PoolCard key={pool.sousId} pool={pool} account={account} />
+          ),
+        // null,
       )}
     </CardLayout>
   )
@@ -267,55 +271,57 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
             </Flex>
           </Flex>
         </Box>
-        {/*   <PoolControls> */}
-        {/*     <PoolTabButtons */}
-        {/*       stakedOnly={stakedOnly} */}
-        {/*       setStakedOnly={setStakedOnly} */}
-        {/*       hasStakeInFinishedPools={hasStakeInFinishedPools} */}
-        {/*       viewMode={viewMode} */}
-        {/*       setViewMode={setViewMode} */}
-        {/*     /> */}
-        {/*     <FilterContainer> */}
-        {/*       <LabelWrapper> */}
-        {/*         <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase"> */}
-        {/*           {t('Sort by')} */}
-        {/*         </Text> */}
-        {/*         <ControlStretch> */}
-        {/*           <Select */}
-        {/*             options={[ */}
-        {/*               { */}
-        {/*                 label: t('Hot'), */}
-        {/*                 value: 'hot', */}
-        {/*               }, */}
-        {/*               { */}
-        {/*                 label: t('APR'), */}
-        {/*                 value: 'apr', */}
-        {/*               }, */}
-        {/*               { */}
-        {/*                 label: t('Earned'), */}
-        {/*                 value: 'earned', */}
-        {/*               }, */}
-        {/*               { */}
-        {/*                 label: t('Total staked'), */}
-        {/*                 value: 'totalStaked', */}
-        {/*               }, */}
-        {/*               { */}
-        {/*                 label: t('Latest'), */}
-        {/*                 value: 'latest', */}
-        {/*               }, */}
-        {/*             ]} */}
-        {/*             onOptionChange={handleSortOptionChange} */}
-        {/*           /> */}
-        {/*         </ControlStretch> */}
-        {/*       </LabelWrapper> */}
-        {/*       <LabelWrapper style={{ marginLeft: 16 }}> */}
-        {/*         <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase"> */}
-        {/*           {t('Search')} */}
-        {/*         </Text> */}
-        {/*         <SearchInput onChange={handleChangeSearchQuery} placeholder="Search Pools" /> */}
-        {/*       </LabelWrapper> */}
-        {/*     </FilterContainer> */}
-        {/*   </PoolControls> */}
+        <PoolControls>
+          <PoolTabButtons
+            stakedOnly={stakedOnly}
+            setStakedOnly={setStakedOnly}
+            hasStakeInFinishedPools={hasStakeInFinishedPools}
+            viewMode={viewMode}
+            setViewMode={setViewMode}
+            setShowFinishedPools={setShowFinishedPools}
+            showFinishedPools={showFinishedPools}
+          />
+          <FilterContainer>
+            <LabelWrapper>
+              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+                {t('Sort by')}
+              </Text>
+              <ControlStretch>
+                <Select
+                  options={[
+                    {
+                      label: t('Hot'),
+                      value: 'hot',
+                    },
+                    {
+                      label: t('APR'),
+                      value: 'apr',
+                    },
+                    {
+                      label: t('Earned'),
+                      value: 'earned',
+                    },
+                    {
+                      label: t('Total staked'),
+                      value: 'totalStaked',
+                    },
+                    {
+                      label: t('Latest'),
+                      value: 'latest',
+                    },
+                  ]}
+                  onOptionChange={handleSortOptionChange}
+                />
+              </ControlStretch>
+            </LabelWrapper>
+            <LabelWrapper style={{ marginLeft: 16 }}>
+              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
+                {t('Search')}
+              </Text>
+              <SearchInput onChange={handleChangeSearchQuery} placeholder="Search Pools" />
+            </LabelWrapper>
+          </FilterContainer>
+        </PoolControls>
         {/*   {showFinishedPools && ( */}
         {/*     <FinishedTextContainer> */}
         {/*       <Text fontSize={['16px', null, '20px']} color="failure" pr="4px"> */}
@@ -331,8 +337,8 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
         {/*       <Loading /> */}
         {/*     </Flex> */}
         {/*   )} */}
-        {cardLayout}
-        {/* {viewMode === ViewMode.CARD ? cardLayout : tableLayout} */}
+        {/* {cardLayout} */}
+        {viewMode === ViewMode.CARD ? cardLayout : tableLayout}
         {/*   <div ref={observerRef} /> */}
         {/*   <Image */}
         {/*     mx="auto" */}
@@ -359,7 +365,6 @@ const Fetcher = ({ pools: oldPools, setPools, userDataLoaded: oldUserDataLoaded,
       setUserDataLoaded(userDataLoaded)
     }
   }, [userDataLoaded])
-  // const [stakedOnly, setStakedOnly] = useUserPoolStakedOnly()
   usePoolsPageFetch()
   return null
 }

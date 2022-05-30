@@ -168,11 +168,13 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
         <Flex flexDirection="column" mb="8px">
           <PoolStatsInfo pool={pool} account={account} showTotalStaked={isMobile} alignLinksToRight={isMobile} />
         </Flex>
-        {vaultKey ? <CompoundingPoolTag /> : <ManualPoolTag />}
-        {/* {tagTooltipVisible && tagTooltip} */}
-        <span onClick={onPresent}>
-          <HelpIcon ml="4px" width="20px" height="20px" color="textSubtle" />
-        </span>
+        <view style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {vaultKey ? <CompoundingPoolTag /> : <ManualPoolTag />}
+          {/* {tagTooltipVisible && tagTooltip} */}
+          <view onClick={onPresent}>
+            <HelpIcon ml="4px" width="20px" height="20px" color="textSubtle" />
+          </view>
+        </view>
       </InfoSection>
       <ActionContainer>
         {isMobile && vaultKey && vaultPosition === VaultPosition.None && (
