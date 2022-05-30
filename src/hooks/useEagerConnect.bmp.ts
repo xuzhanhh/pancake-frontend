@@ -9,8 +9,8 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 import warning from 'tiny-warning'
 import { captureException } from '@binance/sentry-miniapp'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
-import useToast from './useToast'
 import { useTranslation } from 'contexts/Localization'
+import useToast from './useToast'
 
 const __DEV__ = process.env.NODE_ENV !== 'production'
 
@@ -152,6 +152,7 @@ class BnInjectedConnector extends AbstractConnector {
 }
 
 const injected = new BnInjectedConnector({ supportedChainIds: [56, 97] })
+const getAccount = () => injected.getAccount()
 
 const useActive = () => {
   const { activate } = useWeb3React()
@@ -192,7 +193,7 @@ export const useActiveHandle = () => {
     /**
      *  backward
      */
-    const address = await injected.getAccount()
+    const address = await getAccount()
     return new Promise((resolve) => {
       let isLogin = true
       if (!address && isOldVersion()) {
@@ -219,7 +220,10 @@ export const useActiveHandle = () => {
   }
   return async () => {
     await main()
-    toastSuccess(t('Success'), 'Wallet connected')
+    const address = await getAccount()
+    if (address) {
+      toastSuccess(t('Success'), 'Wallet connected')
+    }
   }
 }
 export default useEagerConnect
