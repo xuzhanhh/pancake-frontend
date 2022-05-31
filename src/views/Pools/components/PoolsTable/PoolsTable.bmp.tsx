@@ -1,14 +1,17 @@
-import React, { useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Button, ChevronUpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { DeserializedPool } from 'state/types'
 import PoolRow from './PoolRow'
+import { VariableSizeList } from 'views/bmp/BmpPage/components/VirtualList'
+import remove from 'lodash/remove'
 
 interface PoolsTableProps {
   pools: DeserializedPool[]
   userDataLoaded: boolean
   account: string
+  remainHeight?: number
 }
 
 const StyledTable = styled.div`
@@ -35,26 +38,66 @@ const ScrollButtonContainer = styled.div`
   padding-bottom: 5px;
 `
 
-const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account }) => {
-  // const { t } = useTranslation()
-  // const tableWrapperEl = useRef<HTMLDivElement>(null)
-  // const scrollToTop = (): void => {
-  //   tableWrapperEl.current.scrollIntoView({
-  //     behavior: 'smooth',
-  //   })
-  // }
+const VirtualListRow = React.memo(({ data, index, style }) => {
+  const { pool, userDataLoaded, account, expanded, toggleExpand } = data[index]
+  return (
+    <PoolRow
+      pool={pool}
+      account={account}
+      userDataLoaded={userDataLoaded}
+      expanded={expanded}
+      toggleExpand={toggleExpand}
+    />
+  )
+})
+const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account, remainHeight }) => {
+  const [expandIndex, setExpandIndex] = useState([])
+  const virtualListRef = useRef()
+  const toggleExpand = useCallback(
+    (index) => () => {
+      setExpandIndex((expandIndex) => {
+        if (expandIndex.includes(index)) {
+          const newArray = [...expandIndex]
+          remove(newArray, (n) => n === index)
+          return newArray
+        } else {
+          return [...expandIndex, index]
+        }
+      })
+      virtualListRef.current?.resetAfterIndex(index)
+    },
+    [],
+  )
   return (
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table">
-        {pools.map((pool) => (
-          <PoolRow key={pool.vaultKey ?? pool.sousId} pool={pool} account={account} userDataLoaded={userDataLoaded} />
-        ))}
-        {/* <ScrollButtonContainer> */}
-        {/*   <Button variant="text" onClick={scrollToTop}> */}
-        {/*     {t('To Top')} */}
-        {/*     <ChevronUpIcon color="primary" /> */}
-        {/*   </Button> */}
-        {/* </ScrollButtonContainer> */}
+        <VariableSizeList
+          height={remainHeight || 500}
+          ref={virtualListRef}
+          width="100%"
+          itemData={pools.map((item, index) => {
+            return {
+              pool: item,
+              account,
+              userDataLoaded,
+              expanded: expandIndex.includes(index),
+              toggleExpand: toggleExpand(index),
+            }
+          })}
+          itemCount={pools.length}
+          itemSize={(index) => {
+            if (expandIndex.includes(index)) {
+              if (index === 0) {
+                return 677
+              }
+              return 529
+            }
+            return 90
+          }}
+          overscanCount={4}
+        >
+          {VirtualListRow}
+        </VariableSizeList>
       </StyledTable>
     </StyledTableBorder>
   )

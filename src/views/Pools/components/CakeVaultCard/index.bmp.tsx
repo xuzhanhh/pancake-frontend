@@ -26,10 +26,11 @@ const StyledCardBody = styled(CardBody)<{ isLoading: boolean }>`
 interface CakeVaultProps extends CardProps {
   pool: DeserializedPool
   showStakedOnly: boolean
-  defaultFooterExpanded?: boolean
+  expanded?: boolean
+  toggleExpand: any
 }
 
-const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, defaultFooterExpanded, ...props }) => {
+const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, expanded, toggleExpand, ...props }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
 
@@ -47,7 +48,7 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, default
     return null
   }
   return (
-    <StyledCard style={{ maxWidth: '100% !important', margin: '0' }} isActive {...props}>
+    <StyledCard style={{ maxWidth: '100% !important' }} isActive {...props}>
       <PoolCardHeader isStaking={accountHasSharesStaked}>
         <PoolCardHeaderTitle
           title={vaultPoolConfig[pool.vaultKey].name}
@@ -101,7 +102,7 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, default
           </>
         )}
       </StyledCardBody>
-      <CardFooter defaultExpanded={defaultFooterExpanded} pool={pool} account={account} />
+      <CardFooter expanded={expanded} toggleExpand={toggleExpand} pool={pool} account={account} />
     </StyledCard>
   )
 }

@@ -210,7 +210,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           <Text bold>{isRemovingStake ? t('Unstake') : t('Stake')}:</Text>
           <Flex alignItems="center" minWidth="70px">
             <Image
-              src={`/images/tokens/${stakingToken.address}.png`}
+              src={`https://pancakeswap.finance/images/tokens/${stakingToken.address}.png`}
               width={24}
               height={24}
               alt={stakingToken.symbol}

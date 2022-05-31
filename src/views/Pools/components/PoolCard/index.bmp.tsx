@@ -13,7 +13,12 @@ import CardFooter from './CardFooter'
 import PoolCardHeader, { PoolCardHeaderTitle } from './PoolCardHeader'
 import CardActions from './CardActions'
 
-const PoolCard: React.FC<{ pool: DeserializedPool; account: string }> = ({ pool, account }) => {
+const PoolCard: React.FC<{ pool: DeserializedPool; account: string; expanded: boolean; toggleExpand: any }> = ({
+  pool,
+  account,
+  expanded,
+  toggleExpand,
+}) => {
   const { sousId, stakingToken, earningToken, isFinished, userData } = pool
   const { t } = useTranslation()
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
@@ -49,7 +54,7 @@ const PoolCard: React.FC<{ pool: DeserializedPool; account: string }> = ({ pool,
           )}
         </Flex>
       </CardBody>
-      <CardFooter pool={pool} account={account} />
+      <CardFooter pool={pool} account={account} expanded={expanded} toggleExpand={toggleExpand} />
     </StyledCard>
   )
 }

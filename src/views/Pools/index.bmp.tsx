@@ -28,8 +28,9 @@ import CakeVaultCard from './components/CakeVaultCard'
 import PoolTabButtons from './components/PoolTabButtons'
 import PoolsTable from './components/PoolsTable/PoolsTable'
 import { getCakeVaultEarnings } from './helpers'
-import { useDidHide, useDidShow } from '@binance/mp-service'
-import { isEqual } from 'lodash'
+import { getSystemInfoSync, useDidHide, useDidShow } from '@binance/mp-service'
+import { isEqual, remove } from 'lodash'
+import { VariableSizeList } from 'views/bmp/BmpPage/components/VirtualList'
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -43,7 +44,7 @@ const PoolControls = styled.div`
 
   justify-content: space-between;
   flex-direction: column;
-  margin-bottom: 32px;
+  margin-bottom: 12px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
@@ -78,7 +79,7 @@ const ControlStretch = styled(Flex)`
 `
 
 const FinishedTextContainer = styled(Flex)`
-  padding-bottom: 32px;
+  padding-bottom: 16px;
   flex-direction: column;
   ${({ theme }) => theme.mediaQueries.md} {
     flex-direction: row;
@@ -91,7 +92,7 @@ const FinishedTextLink = styled(Link)`
   text-decoration: underline;
 `
 
-const NUMBER_OF_POOLS_VISIBLE = 12
+const NUMBER_OF_POOLS_VISIBLE = 1000
 
 const sortPools = (account: string, sortOption: string, pools: DeserializedPool[], poolsToSort: DeserializedPool[]) => {
   switch (sortOption) {
@@ -154,6 +155,73 @@ const sortPools = (account: string, sortOption: string, pools: DeserializedPool[
 }
 
 const POOL_START_BLOCK_THRESHOLD = (60 / BSC_BLOCK_TIME) * 4
+
+const VirtualListRow = React.memo(({ data, index, style }) => {
+  const { pool, stakedOnly, account, expanded, toggleExpand } = data[index]
+  return pool.vaultKey ? (
+    <CakeVaultCard
+      key={pool.vaultKey}
+      pool={pool}
+      showStakedOnly={stakedOnly}
+      expanded={expanded}
+      toggleExpand={toggleExpand}
+    />
+  ) : (
+    <PoolCard key={pool.sousId} pool={pool} account={account} expanded={expanded} toggleExpand={toggleExpand} />
+  )
+})
+
+const CardDisplay = ({ chosenPools, remainHeight, account, stakedOnly }) => {
+  const [expandIndex, setExpandIndex] = useState([])
+  const virtualListRef = useRef()
+  const toggleExpand = useCallback(
+    (index) => () => {
+      setExpandIndex((expandIndex) => {
+        if (expandIndex.includes(index)) {
+          const newArray = [...expandIndex]
+          remove(newArray, (n) => n === index)
+          return newArray
+        } else {
+          return [...expandIndex, index]
+        }
+      })
+      virtualListRef.current?.resetAfterIndex(index)
+    },
+    [],
+  )
+  return (
+    <VariableSizeList
+      height={remainHeight || 500}
+      ref={virtualListRef}
+      width="100%"
+      itemData={chosenPools.map((item, index) => {
+        return {
+          pool: item,
+          account,
+          stakedOnly,
+          expanded: expandIndex.includes(index),
+          toggleExpand: toggleExpand(index),
+        }
+      })}
+      itemCount={chosenPools.length}
+      itemSize={(index) => {
+        if (expandIndex.includes(index)) {
+          if (index === 0) {
+            return 692 + 24
+          }
+          return 570 + 24
+        }
+        if (index === 0) {
+          return 577 + 24
+        }
+        return 457 + 24
+      }}
+      overscanCount={4}
+    >
+      {VirtualListRow}
+    </VariableSizeList>
+  )
+}
 
 const Pools: React.FC = ({ pools, userDataLoaded }) => {
   // const router = useRouter()
@@ -239,26 +307,31 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
   }, [account, sortOption, pools, chosenPools, numberOfPoolsVisible, searchQuery])
   chosenPoolsLength.current = chosenPools.length
 
+  const [remainHeight, setRemainHeight] = useState(null)
+  useEffect(() => {
+    setTimeout(() => {
+      bn.createSelectorQuery()
+        .selectAll('.pools-control')
+        .boundingClientRect(function (rect) {
+          const { safeArea } = getSystemInfoSync()
+          setRemainHeight(safeArea.height - rect[0].height - 16 - 55 - 50 - 50 - 20)
+        })
+        .exec()
+    }, 0)
+  }, [remainHeight])
+
   const cardLayout = (
-    <CardLayout>
-      {chosenPools.map(
-        (pool) =>
-          pool.vaultKey ? (
-            <CakeVaultCard key={pool.vaultKey} pool={pool} showStakedOnly={stakedOnly} />
-          ) : (
-            <PoolCard key={pool.sousId} pool={pool} account={account} />
-          ),
-        // null,
-      )}
-    </CardLayout>
+    <CardDisplay chosenPools={chosenPools} account={account} remainHeight={remainHeight} stakedOnly={stakedOnly} />
   )
 
-  const tableLayout = <PoolsTable pools={chosenPools} account={account} userDataLoaded={userDataLoaded} />
+  const tableLayout = (
+    <PoolsTable pools={chosenPools} account={account} userDataLoaded={userDataLoaded} remainHeight={remainHeight} />
+  )
 
   return (
     <>
-      <Page>
-        <Box marginBottom="24px">
+      <Page style={{ paddingBottom: '0px', minHeight: 'unset' }}>
+        <Box marginBottom="12px">
           <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
             <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
               <Heading scale="lg" color="secondary" mb="8px">
@@ -271,7 +344,7 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
             </Flex>
           </Flex>
         </Box>
-        <PoolControls>
+        <PoolControls className="pools-control">
           <PoolTabButtons
             stakedOnly={stakedOnly}
             setStakedOnly={setStakedOnly}
