@@ -65,12 +65,10 @@ const FilterContainer = styled.div`
     padding: 0;
   }
 `
-// FIXME
-const LabelWrapper = styled.div`
-  /* > ${Text} { */
-  /*   font-size: 12px; */
-  /* } */
+const LabelWrapperText = styled(Text)`
+  font-size: 12px;
 `
+const LabelWrapper = styled.div``
 
 const ControlStretch = styled(Flex)`
   /* > div { */
@@ -189,6 +187,10 @@ const CardDisplay = ({ chosenPools, remainHeight, account, stakedOnly }) => {
     },
     [],
   )
+  useEffect(() => {
+    virtualListRef.current?.resetAfterIndex(0)
+  }, [chosenPools.map((item) => item.sousId).join('-')])
+
   return (
     <VariableSizeList
       height={remainHeight || 500}
@@ -206,12 +208,12 @@ const CardDisplay = ({ chosenPools, remainHeight, account, stakedOnly }) => {
       itemCount={chosenPools.length}
       itemSize={(index) => {
         if (expandIndex.includes(index)) {
-          if (index === 0) {
+          if (chosenPools[index].vaultKey) {
             return 692 + 24
           }
           return 570 + 24
         }
-        if (index === 0) {
+        if (chosenPools[index].vaultKey) {
           return 577 + 24
         }
         return 457 + 24
@@ -354,45 +356,48 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
             setShowFinishedPools={setShowFinishedPools}
             showFinishedPools={showFinishedPools}
           />
-          <FilterContainer>
+          <FilterContainer style={{ paddingBottom: 0 }}>
+            <LabelWrapperText style={{ minWidth: '136px' }} textTransform="uppercase">
+              {t('Sort by')}
+            </LabelWrapperText>
+            <LabelWrapperText style={{ width: '100%', marginLeft: '16px' }} textTransform="uppercase">
+              {t('Search')}
+            </LabelWrapperText>
+          </FilterContainer>
+          <FilterContainer style={{ paddingTop: 0 }}>
             <LabelWrapper>
-              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
-                {t('Sort by')}
-              </Text>
-              <ControlStretch>
-                <Select
-                  options={[
-                    {
-                      label: t('Hot'),
-                      value: 'hot',
-                    },
-                    {
-                      label: t('APR'),
-                      value: 'apr',
-                    },
-                    {
-                      label: t('Earned'),
-                      value: 'earned',
-                    },
-                    {
-                      label: t('Total staked'),
-                      value: 'totalStaked',
-                    },
-                    {
-                      label: t('Latest'),
-                      value: 'latest',
-                    },
-                  ]}
-                  onOptionChange={handleSortOptionChange}
-                />
-              </ControlStretch>
+              {/* <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase"> */}
+              {/*   {t('Sort by')} */}
+              {/* </Text> */}
+              {/* <ControlStretch> */}
+              <Select
+                options={[
+                  {
+                    label: t('Hot'),
+                    value: 'hot',
+                  },
+                  {
+                    label: t('APR'),
+                    value: 'apr',
+                  },
+                  {
+                    label: t('Earned'),
+                    value: 'earned',
+                  },
+                  {
+                    label: t('Total staked'),
+                    value: 'totalStaked',
+                  },
+                  {
+                    label: t('Latest'),
+                    value: 'latest',
+                  },
+                ]}
+                onOptionChange={handleSortOptionChange}
+              />
+              {/* </ControlStretch> */}
             </LabelWrapper>
-            <LabelWrapper style={{ marginLeft: 16 }}>
-              <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
-                {t('Search')}
-              </Text>
-              <SearchInput onChange={handleChangeSearchQuery} placeholder="Search Pools" />
-            </LabelWrapper>
+            <SearchInput style={{ marginLeft: 16 }} onChange={handleChangeSearchQuery} placeholder="Search Pools" />
           </FilterContainer>
         </PoolControls>
         {/*   {showFinishedPools && ( */}

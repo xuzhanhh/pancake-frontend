@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Button, ChevronUpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
@@ -68,6 +68,11 @@ const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account,
     },
     [],
   )
+
+  useEffect(() => {
+    virtualListRef.current?.resetAfterIndex(0)
+  }, [pools.map((item) => item.sousId).join('-')])
+
   return (
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table">
@@ -87,7 +92,7 @@ const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account,
           itemCount={pools.length}
           itemSize={(index) => {
             if (expandIndex.includes(index)) {
-              if (index === 0) {
+              if (pools[index].vaultKey) {
                 return 677
               }
               return 529

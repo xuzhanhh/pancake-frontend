@@ -132,6 +132,10 @@ const pools: SerializedPoolConfig[] = [
     tokenPerBlock: '4.6296',
     version: 3,
   },
+].filter((p) => !!p.contractAddress[CHAIN_ID])
+
+// known finished pools
+const finishedPools = [
   {
     sousId: 276,
     stakingToken: serializedTokens.cake,
@@ -3768,6 +3772,8 @@ const pools: SerializedPoolConfig[] = [
     sortOrder: 999,
     tokenPerBlock: '7.502',
   },
-].filter((p) => !!p.contractAddress[CHAIN_ID])
+]
+  .filter((p) => !!p.contractAddress[CHAIN_ID])
+  .map((p) => ({ ...p, isFinished: true }))
 
-export default pools
+export default [...pools, ...finishedPools]
