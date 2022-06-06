@@ -14,7 +14,7 @@ interface HandlerParams {
 export function useHandleTrack() {
   const tracker = useTracker()
   const trackHandle = useCallback(
-    ({ label, value, config }: HandlerParams) => {
+    ({ label, value = 1, config }: HandlerParams) => {
       tracker.send(
         new HitBuilders.EventBuilder()
           .setCategory(config.category)
