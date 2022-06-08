@@ -73,7 +73,7 @@ const FarmsHome = () => {
   //   if (isHide) {
   //     return null
   //   }
-  return <WebView className="web-view" src="http://192.168.31.88:3000/farms" onMessage={onMessage} />
+  return <WebView className="web-view" src="https://web-git-mp-farms-webview.pancake.run/farms-mp" onMessage={onMessage} />
   return (
     <BmpPage activeId={ActiveId.FARMS}>
       <FarmsProvider>
