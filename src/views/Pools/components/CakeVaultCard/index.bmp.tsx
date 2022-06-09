@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, CardBody, CardProps, Flex, Text, TokenPairImage } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -19,7 +19,7 @@ import { StakingApy } from './StakingApy'
 import VaultCardActions from './VaultCardActions'
 import LockedStakingApy from '../LockedPool/LockedStakingApy'
 
-const StyledCardBody = styled(CardBody)<{ isLoading: boolean }>`
+const StyledCardBody = styled(CardBody) <{ isLoading: boolean }>`
   min-height: ${({ isLoading }) => (isLoading ? '0' : '254px')};
 `
 
@@ -28,14 +28,19 @@ interface CakeVaultProps extends CardProps {
   showStakedOnly: boolean
   expanded?: boolean
   toggleExpand: any
+  setIsLocked: (locked: boolean) => void
+  setIsShared: (shared: boolean) => void
 }
 
-const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, expanded, toggleExpand, ...props }) => {
+const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, expanded, toggleExpand, setIsLocked, setIsShared, ...props }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
 
   const vaultPool = useVaultPoolByKey(pool.vaultKey)
 
+  useEffect(() => {
+    setIsLocked(vaultPool?.userData?.locked)
+  }, [vaultPool?.userData?.locked])
   const {
     userData: { userShares, isLoading: isVaultUserDataLoading },
     fees: { performanceFeeAsDecimal },
@@ -43,7 +48,9 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, expande
 
   const accountHasSharesStaked = userShares && userShares.gt(0)
   const isLoading = !pool.userData || isVaultUserDataLoading
-
+  useEffect(() => {
+    setIsShared(accountHasSharesStaked)
+  }, [accountHasSharesStaked])
   if (showStakedOnly && !accountHasSharesStaked) {
     return null
   }
@@ -108,3 +115,5 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, expande
 }
 
 export default CakeVaultCard
+
+

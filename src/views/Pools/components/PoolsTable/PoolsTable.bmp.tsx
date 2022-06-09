@@ -39,7 +39,7 @@ const ScrollButtonContainer = styled.div`
 `
 
 const VirtualListRow = React.memo(({ data, index, style }) => {
-  const { pool, userDataLoaded, account, expanded, toggleExpand } = data[index]
+  const { pool, userDataLoaded, account, expanded, toggleExpand, setIsLocked, setIsShared } = data[index]
   return (
     <PoolRow
       pool={pool}
@@ -47,11 +47,20 @@ const VirtualListRow = React.memo(({ data, index, style }) => {
       userDataLoaded={userDataLoaded}
       expanded={expanded}
       toggleExpand={toggleExpand}
+      setIsLocked={setIsLocked}
+      setIsShared={setIsShared}
     />
   )
 })
 const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account, remainHeight }) => {
   const [expandIndex, setExpandIndex] = useState([])
+  const [isLocked, setIsLocked] = useState(false)
+  const [isShared, setIsShared] = useState(false)
+
+  useEffect(() => {
+    virtualListRef.current?.resetAfterIndex(0)
+  }, [isLocked, isShared])
+
   const virtualListRef = useRef()
   const toggleExpand = useCallback(
     (index) => () => {
@@ -71,7 +80,13 @@ const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account,
 
   useEffect(() => {
     virtualListRef.current?.resetAfterIndex(0)
-  }, [pools.map((item) => item.sousId).join('-')])
+  }, [
+    pools
+      .map((item) => {
+        return item.sousId.toString()
+      })
+      .join('-'),
+  ])
 
   return (
     <StyledTableBorder>
@@ -87,19 +102,27 @@ const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account,
               userDataLoaded,
               expanded: expandIndex.includes(index),
               toggleExpand: toggleExpand(index),
+              setIsLocked,
+              setIsShared,
             }
           })}
           itemCount={pools.length}
           itemSize={(index) => {
             if (expandIndex.includes(index)) {
               if (pools[index].vaultKey) {
+                if (!isLocked && isShared) {
+                  return 750
+                }
+                if (!isShared) {
+                  return 667
+                }
                 return 677
               }
               return 529
             }
             return 90
           }}
-          overscanCount={4}
+          overscanCount={1}
         >
           {VirtualListRow}
         </VariableSizeList>

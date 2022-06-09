@@ -28,7 +28,15 @@ const StyledRow = styled.div`
   toggleExpand: any:
 `
 
-const PoolRow: React.FC<PoolRowProps> = ({ pool, account, userDataLoaded, expanded, toggleExpand }) => {
+const PoolRow: React.FC<PoolRowProps> = ({
+  pool,
+  account,
+  userDataLoaded,
+  expanded,
+  toggleExpand,
+  setIsLocked,
+  setIsShared,
+}) => {
   const { isXs, isSm, isMd, isLg, isXl, isXxl, isTablet, isDesktop } = useMatchBreakpoints()
   const isLargerScreen = isLg || isXl || isXxl
   const isXLargerScreen = isXl || isXxl
@@ -67,6 +75,8 @@ const PoolRow: React.FC<PoolRowProps> = ({ pool, account, userDataLoaded, expand
           userDataLoaded={userDataLoaded}
           expanded={expanded}
           breakpoints={{ isXs, isSm, isMd, isLg, isXl, isXxl }}
+          setIsLocked={setIsLocked}
+          setIsShared={setIsShared}
         />
       )}
     </>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled, { keyframes, css } from 'styled-components'
 import { Box, Flex, HelpIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useVaultPoolByKey } from 'state/pools/hooks'
@@ -121,7 +121,14 @@ const YieldBoostDurationRow = ({ lockEndTime, lockStartTime }) => {
   )
 }
 
-const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded, expanded }) => {
+const ActionPanel: React.FC<ActionPanelProps> = ({
+  account,
+  pool,
+  userDataLoaded,
+  expanded,
+  setIsLocked,
+  setIsShared,
+}) => {
   const { userData, vaultKey } = pool
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
@@ -140,7 +147,12 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
 
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
-
+  useEffect(() => {
+    setIsLocked(locked)
+  }, [locked])
+  useEffect(() => {
+    setIsShared(stakingTokenBalance.gt(BIG_ZERO))
+  }, [stakingTokenBalance])
   const poolStakingTokenBalance = vaultKey
     ? cakeAsBigNumber.plus(stakingTokenBalance)
     : stakedBalance.plus(stakingTokenBalance)
