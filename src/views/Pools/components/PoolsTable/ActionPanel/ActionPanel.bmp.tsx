@@ -126,8 +126,9 @@ const ActionPanel: React.FC<ActionPanelProps> = ({
   pool,
   userDataLoaded,
   expanded,
-  setIsLocked,
-  setIsShared,
+  // setIsLocked,
+  // setIsShared,
+  // trigger,
 }) => {
   const { userData, vaultKey } = pool
   const { t } = useTranslation()
@@ -147,12 +148,13 @@ const ActionPanel: React.FC<ActionPanelProps> = ({
 
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
-  useEffect(() => {
-    setIsLocked(locked)
-  }, [locked])
-  useEffect(() => {
-    setIsShared(stakingTokenBalance.gt(BIG_ZERO))
-  }, [stakingTokenBalance])
+
+  // useEffect(() => {
+  //   pool.vaultKey && trigger(n => n + 1)
+  // }, [locked, stakingTokenBalance.toString()])
+  // useEffect(() => {
+  //   pool.vaultKey && trigger(n => n + 1)
+  // }, [stakingTokenBalance])
   const poolStakingTokenBalance = vaultKey
     ? cakeAsBigNumber.plus(stakingTokenBalance)
     : stakedBalance.plus(stakingTokenBalance)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DeserializedPool, VaultKey } from 'state/types'
@@ -13,6 +13,7 @@ import ActionPanel from './ActionPanel/ActionPanel'
 import AutoEarningsCell from './Cells/AutoEarningsCell'
 import AutoAprCell from './Cells/AutoAprCell'
 import StakedCell from './Cells/StakedCell'
+import { getVaultPosition } from 'utils/cakePool'
 
 interface PoolRowProps {
   pool: DeserializedPool
@@ -34,12 +35,14 @@ const PoolRow: React.FC<PoolRowProps> = ({
   userDataLoaded,
   expanded,
   toggleExpand,
-  setIsLocked,
-  setIsShared,
+  // setIsLocked,
+  // setIsShared,
+  setHeight,
 }) => {
   const { isXs, isSm, isMd, isLg, isXl, isXxl, isTablet, isDesktop } = useMatchBreakpoints()
   const isLargerScreen = isLg || isXl || isXxl
   const isXLargerScreen = isXl || isXxl
+  // const [triggerCount, trigger] = useState(0)
   // const [innerExpanded, setExpanded] = useState(expanded)
   // const shouldRenderActionPanel = useDelayedUnmount(expanded, 300)
 
@@ -47,11 +50,26 @@ const PoolRow: React.FC<PoolRowProps> = ({
   //   setExpanded((prev) => !prev)
   //   toggleExpand()
   // }
+  //
+  const position = useMemo(() => getVaultPosition(pool?.userData), [pool?.userData])
+  useEffect(() => {
+    setTimeout(() => {
+      pool.vaultKey &&
+        expanded &&
+        bn
+          .createSelectorQuery()
+          .selectAll(`.row-${pool.sousId}`)
+          .boundingClientRect(function (rect) {
+            setHeight(rect[0].height)
+          })
+          .exec()
+    }, 500)
+  }, [expanded, position])
 
   const isCakePool = pool.sousId === 0
 
   return (
-    <>
+    <view className={`row-${pool.sousId}`}>
       <StyledRow role="row" onClick={toggleExpand}>
         <NameCell pool={pool} />
         {pool.vaultKey ? (
@@ -75,11 +93,12 @@ const PoolRow: React.FC<PoolRowProps> = ({
           userDataLoaded={userDataLoaded}
           expanded={expanded}
           breakpoints={{ isXs, isSm, isMd, isLg, isXl, isXxl }}
-          setIsLocked={setIsLocked}
-          setIsShared={setIsShared}
+          // setIsLocked={setIsLocked}
+          // setIsShared={setIsShared}
+          // trigger={trigger}
         />
       )}
-    </>
+    </view>
   )
 }
 

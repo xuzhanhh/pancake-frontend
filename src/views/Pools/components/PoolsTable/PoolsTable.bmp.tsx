@@ -39,7 +39,7 @@ const ScrollButtonContainer = styled.div`
 `
 
 const VirtualListRow = React.memo(({ data, index, style }) => {
-  const { pool, userDataLoaded, account, expanded, toggleExpand, setIsLocked, setIsShared } = data[index]
+  const { pool, userDataLoaded, account, expanded, toggleExpand, setHeight } = data[index]
   return (
     <PoolRow
       pool={pool}
@@ -47,19 +47,19 @@ const VirtualListRow = React.memo(({ data, index, style }) => {
       userDataLoaded={userDataLoaded}
       expanded={expanded}
       toggleExpand={toggleExpand}
-      setIsLocked={setIsLocked}
-      setIsShared={setIsShared}
+      setHeight={setHeight}
     />
   )
 })
 const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account, remainHeight }) => {
   const [expandIndex, setExpandIndex] = useState([])
-  const [isLocked, setIsLocked] = useState(false)
-  const [isShared, setIsShared] = useState(false)
+  // const [isLocked, setIsLocked] = useState(false)
+  // const [isShared, setIsShared] = useState(false)
+  const [height, setHeight] = useState(0)
 
   useEffect(() => {
     virtualListRef.current?.resetAfterIndex(0)
-  }, [isLocked, isShared])
+  }, [height])
 
   const virtualListRef = useRef()
   const toggleExpand = useCallback(
@@ -102,21 +102,23 @@ const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account,
               userDataLoaded,
               expanded: expandIndex.includes(index),
               toggleExpand: toggleExpand(index),
-              setIsLocked,
-              setIsShared,
+              // setIsLocked,
+              // setIsShared,
+              setHeight,
             }
           })}
           itemCount={pools.length}
           itemSize={(index) => {
             if (expandIndex.includes(index)) {
               if (pools[index].vaultKey) {
-                if (!isLocked && isShared) {
-                  return 750
-                }
-                if (!isShared) {
-                  return 667
-                }
-                return 677
+                return height || 750
+                // if (!isLocked && isShared) {
+                //   return 750
+                // }
+                // if (!isShared) {
+                //   return 667
+                // }
+                // return 677
               }
               return 529
             }

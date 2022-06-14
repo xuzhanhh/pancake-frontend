@@ -155,7 +155,7 @@ const sortPools = (account: string, sortOption: string, pools: DeserializedPool[
 const POOL_START_BLOCK_THRESHOLD = (60 / BSC_BLOCK_TIME) * 4
 
 const VirtualListRow = React.memo(({ data, index, style }) => {
-  const { pool, stakedOnly, account, expanded, toggleExpand, setIsLocked, setIsShared } = data[index]
+  const { pool, stakedOnly, account, expanded, toggleExpand, setHeight } = data[index]
   return pool.vaultKey ? (
     <CakeVaultCard
       key={pool.vaultKey}
@@ -163,8 +163,7 @@ const VirtualListRow = React.memo(({ data, index, style }) => {
       showStakedOnly={stakedOnly}
       expanded={expanded}
       toggleExpand={toggleExpand}
-      setIsLocked={setIsLocked}
-      setIsShared={setIsShared}
+      setHeight={setHeight}
     />
   ) : (
     <PoolCard key={pool.sousId} pool={pool} account={account} expanded={expanded} toggleExpand={toggleExpand} />
@@ -175,6 +174,7 @@ const CardDisplay = ({ chosenPools, remainHeight, account, stakedOnly }) => {
   const [expandIndex, setExpandIndex] = useState([])
   const [isShared, setIsShared] = useState(false)
   const [isLocked, setIsLocked] = useState(false)
+  const [height, setHeight] = useState(0)
   const virtualListRef = useRef()
   const toggleExpand = useCallback(
     (index) => () => {
@@ -193,7 +193,7 @@ const CardDisplay = ({ chosenPools, remainHeight, account, stakedOnly }) => {
   )
   useEffect(() => {
     virtualListRef.current?.resetAfterIndex(0)
-  }, [isLocked, isShared])
+  }, [isLocked, isShared, height])
   useEffect(() => {
     virtualListRef.current?.resetAfterIndex(0)
   }, [chosenPools.map((item) => item.sousId).join('-')])
@@ -212,31 +212,35 @@ const CardDisplay = ({ chosenPools, remainHeight, account, stakedOnly }) => {
           toggleExpand: toggleExpand(index),
           setIsLocked,
           setIsShared,
+          setHeight,
         }
       })}
       itemCount={chosenPools.length}
       itemSize={(index) => {
+        if (chosenPools[index].vaultKey) {
+          return height ? height + 24 : 888
+        }
         if (expandIndex.includes(index)) {
-          if (chosenPools[index].vaultKey) {
-            if (!isLocked && isShared) {
-              return 864 + 24
-            }
-            if (!isShared) {
-              return 659 + 24
-            }
-            return 692 + 24
-          }
+          // if (chosenPools[index].vaultKey) {
+          //   if (!isLocked && isShared) {
+          //     return 864 + 24
+          //   }
+          //   if (!isShared) {
+          //     return 659 + 24
+          //   }
+          //   return 692 + 24
+          // }
           return 570 + 24
         }
-        if (chosenPools[index].vaultKey) {
-          if (!isLocked && isShared) {
-            return 726 + 24
-          }
-          if (!isShared) {
-            return 521 + 24
-          }
-          return 577 + 24
-        }
+        // if (chosenPools[index].vaultKey) {
+        //   if (!isLocked && isShared) {
+        //     return 726 + 24
+        //   }
+        //   if (!isShared) {
+        //     return 521 + 24
+        //   }
+        //   return 577 + 24
+        // }
         return 457 + 24
       }}
       overscanCount={1}
