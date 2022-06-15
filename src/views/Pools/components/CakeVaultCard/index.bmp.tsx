@@ -19,7 +19,7 @@ import { StakingApy } from './StakingApy'
 import VaultCardActions from './VaultCardActions'
 import LockedStakingApy from '../LockedPool/LockedStakingApy'
 
-const StyledCardBody = styled(CardBody)<{ isLoading: boolean }>`
+const StyledCardBody = styled(CardBody) <{ isLoading: boolean }>`
   min-height: ${({ isLoading }) => (isLoading ? '0' : '254px')};
 `
 
@@ -42,6 +42,21 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, default
 
   const accountHasSharesStaked = userShares && userShares.gt(0)
   const isLoading = !pool.userData || isVaultUserDataLoading
+  // useEffect(() => {
+  //   setIsShared(accountHasSharesStaked)
+  // }, [accountHasSharesStaked])
+
+  const position = useMemo(() => getVaultPosition(vaultPool?.userData), [vaultPool?.userData])
+  useEffect(() => {
+    setTimeout(() => {
+      bn.createSelectorQuery()
+        .selectAll(`.vault-pool`)
+        .boundingClientRect(function (rect) {
+          setHeight(rect[0].height)
+        })
+        .exec()
+    }, 10)
+  }, [position, expanded])
 
   if (showStakedOnly && !accountHasSharesStaked) {
     return null
