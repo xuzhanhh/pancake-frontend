@@ -20,7 +20,7 @@ import VaultCardActions from './VaultCardActions'
 import LockedStakingApy from '../LockedPool/LockedStakingApy'
 import { getVaultPosition } from 'utils/cakePool'
 
-const StyledCardBody = styled(CardBody)<{ isLoading: boolean }>`
+const StyledCardBody = styled(CardBody) <{ isLoading: boolean }>`
   min-height: ${({ isLoading }) => (isLoading ? '0' : '254px')};
 `
 
@@ -68,7 +68,7 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({
     setTimeout(() => {
       bn.createSelectorQuery()
         .selectAll(`.vault-pool`)
-        .boundingClientRect(function (rect) {
+        .boundingClientRect(function(rect) {
           setHeight(rect[0].height)
         })
         .exec()
