@@ -49,7 +49,7 @@ const ApyButton: React.FC<ApyButtonProps> = ({
   const { jumpToLiquidity } = useFarms()
   const handleJumpToLiquidity = () => {
     const [currency1, currency2] = liquidityUrlPathParts.split('/')
-    jumpToLiquidity(currency1, currency2)
+    jumpToLiquidity({ currency1, currency2 })
   }
   const [onPresentApyModal] = useModal(
     <RoiCalculatorModal

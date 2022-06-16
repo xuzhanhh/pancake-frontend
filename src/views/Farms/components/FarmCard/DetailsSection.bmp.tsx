@@ -42,7 +42,7 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
         <StyledLinkExternal
           onClick={() => {
             const [currency1, currency2] = liquidityUrlPathParts.split('/')
-            jumpToLiquidity(currency1, currency2)
+            jumpToLiquidity({ currency1, currency2 })
           }}
         >
           {t('Get %symbol%', { symbol: lpLabel })}

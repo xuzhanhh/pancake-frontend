@@ -127,7 +127,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   const goAddLiquidity = () => {
     const urlSplit = addLiquidityUrl.split('/')
 
-    jumpToLiquidity(urlSplit[urlSplit.length - 2], urlSplit[urlSplit.length - 1])
+    jumpToLiquidity({ currency1: urlSplit[urlSplit.length - 2], currency2: urlSplit[urlSplit.length - 1] })
   }
   const [onPresentDeposit] = useModal(
     <DepositModal
