@@ -23,5 +23,7 @@
   "add-liquidity-tip-2": "impermanent loss",
   "add-liquidity-tip-3": "by adding liquidity.",
   "impermanent-loss-tip-1": "Impermanent loss occurs when the prices of your deposited assets change compared to when you deposited them, resulting in a loss in value compared to just holding the same assets in your wallet.",
-  "impermanent-loss-tip-2": "What is Impermanent Loss?"
+  "impermanent-loss-tip-2": "What is Impermanent Loss?",
+  "network-failed-error": "Please retry with a more stable network or update your Binance mobile application to the lastest version (2.47.0).",
+  "Please try again. Confirm the transaction and make sure you are paying enough gas!": "Please try again. Confirm the transaction and make sure you are paying enough gas and using a more stable network or update your Binance mobile application to the lastest version (2.47.0)."
 }

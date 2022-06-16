@@ -32,6 +32,7 @@ import useStakePool from '../../../hooks/useStakePool'
 import useUnstakePool from '../../../hooks/useUnstakePool'
 import { FloatLayout } from 'components/FloatLayout/index.bmp'
 import { jumpToSwap } from 'utils/bmp/jump'
+import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 
 interface StakeModalProps {
   isBnbPool: boolean
@@ -68,6 +69,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
 }) => {
   const { sousId, stakingToken, earningTokenPrice, apr, userData, stakingLimit, earningToken } = pool
   const { account } = useWeb3React()
+  const { trackPoolsAdd, trackPoolsRemove } = useHandleTrack()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -89,7 +91,6 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const userNotEnoughToken = isRemovingStake
     ? userData.stakedBalance.lt(fullDecimalStakeAmount)
     : userData.stakingTokenBalance.lt(fullDecimalStakeAmount)
-  console.log('????')
   const usdValueStaked = new BigNumber(stakeAmount).times(stakingTokenPrice)
   const formattedUsdValueStaked = !usdValueStaked.isNaN() && formatNumber(usdValueStaked.toNumber())
 
@@ -148,6 +149,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
     })
     if (receipt?.status) {
       if (isRemovingStake) {
+        trackPoolsRemove(receipt.transactionHash)
         toastSuccess(
           `${t('Unstaked')}!`,
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>
@@ -157,6 +159,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           </ToastDescriptionWithTx>,
         )
       } else {
+        trackPoolsAdd(receipt.transactionHash)
         toastSuccess(
           `${t('Staked')}!`,
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>
