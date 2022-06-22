@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
+import mpService from '@binance/mp-service'
+import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import Farms from 'pages/farms/index.bmp'
-import BmpPage from '../BmpPage'
-import { ActiveId } from '../BmpPage/constants'
-import { FarmsPage, FarmsProvider, useFarms } from './farmsContext'
-import mpService, { useDidHide, useDidShow } from '@binance/mp-service'
-import { WebView } from '@binance/mp-components'
+import WalletWebView, { BridgeEventData } from './WebviewBridge'
+import { jumpToLiquidity } from 'utils/bmp/jump'
+import { FarmsPage, useFarms } from './farmsContext'
+import { LiquidityPage } from '../liquidity/liquidityContext'
 
 export const FarmsWrapper = () => {
   const {
@@ -20,66 +21,34 @@ export const FarmsWrapper = () => {
       return null
   }
 }
-let webviewContext: Record<string, unknown>
-
-const provider = bn.getWeb3Provider()
-const setWebviewContext = (): Promise<void> => {
-  return new Promise((resolve) => {
-    mpService
-      .createSelectorQuery()
-      .select('.web-view')
-      .context((result) => {
-        // post message
-        webviewContext = result.context
-        resolve()
+const jump = (payload: { path: string; query?: Record<string, string> }) => {
+  switch (payload.path) {
+    case 'add':
+      jumpToLiquidity({
+        page: LiquidityPage.Add,
+        currency1: payload.query.currency1,
+        currency2: payload.query.currency2,
       })
-      .exec()
-  })
-}
-const request = async (payload: any) => {
-  const res = await provider.request(payload)
-  return res
-}
-const on = (payload: { event: string }, id: number) => {
-  const { event } = payload
-  provider.on(event, (params: any) => {
-    webviewContext?.postMessage({ id, payload: params ?? JSON.stringify(params) })
-  })
-}
-const onMessage = async (e) => {
-  const { data } = e.detail
-  console.log('~ mp onMessage: ', data)
-  if (!webviewContext) {
-    await setWebviewContext()
-  }
-  switch (data.action) {
-    case 'request':
-      const res = await request(data.payload)
-      webviewContext.postMessage({ id: data.id, payload: JSON.stringify(res) })
-      break
-    case 'on':
-      on(data.payload, data.id)
       break
   }
+}
+const toWallet = () => {
+  mpService.navigateToMiniProgram({
+    appId: 'hhL98uho2A4sGYSHCEdCCo',
+  })
 }
 const FarmsHome = () => {
-  //   const [isHide, setIsHide] = useState(false)
-  //   useDidShow(() => {
-  //     setIsHide(false)
-  //   })
-  //   useDidHide(() => {
-  //     setIsHide(true)
-  //   })
-  //   if (isHide) {
-  //     return null
-  //   }
-  return <WebView className="web-view" src="https://web-git-mp-farms-webview.pancake.run/farms-mp" onMessage={onMessage} />
-  return (
-    <BmpPage activeId={ActiveId.FARMS}>
-      <FarmsProvider>
-        <FarmsWrapper />
-      </FarmsProvider>
-    </BmpPage>
-  )
+  const handleMessage = (data: BridgeEventData) => {
+    switch (data.action) {
+      case 'jump':
+        jump(data.payload)
+        break
+      case 'getSystemInfo':
+        return getSystemInfoSync()
+      case 'toWallet':
+        return toWallet()
+    }
+  }
+  return <WalletWebView onMessage={handleMessage} src="https://web-git-mp-farms-webview.pancake.run/_mp/farms" />
 }
 export default FarmsHome
