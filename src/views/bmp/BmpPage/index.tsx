@@ -78,7 +78,6 @@ const calculatePadding = (activeId) => {
   switch (activeId) {
     case ActiveId.FARMS:
       return '16px 16px 0px 16px'
-
     case ActiveId.Pools:
       return '0px'
     default:

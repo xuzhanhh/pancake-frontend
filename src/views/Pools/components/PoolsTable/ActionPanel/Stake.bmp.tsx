@@ -1,4 +1,4 @@
-import { React } from 'react'
+import React from 'react'
 import {
   AddIcon,
   Button,
@@ -247,11 +247,25 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ pool, userDataLoa
         <ActionContainer flex={vaultPosition > 1 ? 1.5 : 1}>
           <ActionContent mt={0}>
             <Flex flex="1" flexDirection="column" alignSelf="flex-start">
-              <ActionTitles>
-                <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+              <ActionTitles style={{ display: 'flex' }}>
+                <Text
+                  style={{ display: 'inline', marginRight: '4px' }}
+                  fontSize="12px"
+                  bold
+                  color="secondary"
+                  as="span"
+                  textTransform="uppercase"
+                >
                   {stakingToken.symbol}{' '}
                 </Text>
-                <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
+                <Text
+                  style={{ display: 'inline' }}
+                  fontSize="12px"
+                  bold
+                  color="textSubtle"
+                  as="span"
+                  textTransform="uppercase"
+                >
                   {locked ? t('Locked') : t('Staked')}
                 </Text>
               </ActionTitles>
@@ -426,10 +440,10 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ pool, userDataLoa
   return (
     <ActionContainer>
       <ActionTitles>
-        <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
+        <Text style={{ display: 'inline' }} fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
           {t('Stake')}{' '}
         </Text>
-        <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
+        <Text style={{ display: 'inline' }} fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
           {stakingToken.symbol}
         </Text>
       </ActionTitles>

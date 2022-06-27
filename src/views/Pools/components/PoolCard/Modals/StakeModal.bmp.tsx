@@ -31,6 +31,8 @@ import PercentageButton from './PercentageButton'
 import useStakePool from '../../../hooks/useStakePool'
 import useUnstakePool from '../../../hooks/useUnstakePool'
 import { FloatLayout } from 'components/FloatLayout/index.bmp'
+import { jumpToSwap } from 'utils/bmp/jump'
+import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 
 interface StakeModalProps {
   isBnbPool: boolean
@@ -67,6 +69,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
 }) => {
   const { sousId, stakingToken, earningTokenPrice, apr, userData, stakingLimit, earningToken } = pool
   const { account } = useWeb3React()
+  const { trackPoolsAdd, trackPoolsRemove } = useHandleTrack()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -88,7 +91,6 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const userNotEnoughToken = isRemovingStake
     ? userData.stakedBalance.lt(fullDecimalStakeAmount)
     : userData.stakingTokenBalance.lt(fullDecimalStakeAmount)
-  console.log('????')
   const usdValueStaked = new BigNumber(stakeAmount).times(stakingTokenPrice)
   const formattedUsdValueStaked = !usdValueStaked.isNaN() && formatNumber(usdValueStaked.toNumber())
 
@@ -147,6 +149,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
     })
     if (receipt?.status) {
       if (isRemovingStake) {
+        trackPoolsRemove(receipt.transactionHash)
         toastSuccess(
           `${t('Unstaked')}!`,
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>
@@ -156,6 +159,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
           </ToastDescriptionWithTx>,
         )
       } else {
+        trackPoolsAdd(receipt.transactionHash)
         toastSuccess(
           `${t('Staked')}!`,
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>
@@ -196,112 +200,125 @@ const StakeModal: React.FC<StakeModalProps> = ({
       onDismiss={onDismiss}
       headerBackground={theme.colors.gradients.cardHeader}
     >
-      {stakingLimit.gt(0) && !isRemovingStake && (
-        <Text color="secondary" bold mb="24px" style={{ textAlign: 'center' }} fontSize="16px">
-          {t('Max stake for this pool: %amount% %token%', {
-            amount: getFullDisplayBalance(stakingLimit, stakingToken.decimals, 0),
-            token: stakingToken.symbol,
-          })}
-        </Text>
-      )}
-      <Flex alignItems="center" justifyContent="space-between" mb="8px">
-        <Text bold>{isRemovingStake ? t('Unstake') : t('Stake')}:</Text>
-        <Flex alignItems="center" minWidth="70px">
-          <Image src={`/images/tokens/${stakingToken.address}.png`} width={24} height={24} alt={stakingToken.symbol} />
-          <Text ml="4px" bold>
-            {stakingToken.symbol}
+      <view style={{ padding: '24px' }}>
+        {stakingLimit.gt(0) && !isRemovingStake && (
+          <Text color="secondary" bold mb="24px" style={{ textAlign: 'center' }} fontSize="16px">
+            {t('Max stake for this pool: %amount% %token%', {
+              amount: getFullDisplayBalance(stakingLimit, stakingToken.decimals, 0),
+              token: stakingToken.symbol,
+            })}
           </Text>
+        )}
+        <Flex alignItems="center" justifyContent="space-between" mb="8px">
+          <Text bold>{isRemovingStake ? t('Unstake') : t('Stake')}:</Text>
+          <Flex alignItems="center" minWidth="70px">
+            <Image
+              src={`https://pancakeswap.finance/images/tokens/${stakingToken.address}.png`}
+              width={24}
+              height={24}
+              alt={stakingToken.symbol}
+            />
+            <Text ml="4px" bold>
+              {stakingToken.symbol}
+            </Text>
+          </Flex>
         </Flex>
-      </Flex>
-      <BalanceInput
-        value={stakeAmount}
-        onUserInput={handleStakeInputChange}
-        currencyValue={stakingTokenPrice !== 0 && `~${formattedUsdValueStaked || 0} USD`}
-        isWarning={hasReachedStakeLimit || userNotEnoughToken}
-        decimals={stakingToken.decimals}
-      />
-      {hasReachedStakeLimit && (
-        <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
-          {t('Maximum total stake: %amount% %token%', {
-            amount: getFullDisplayBalance(new BigNumber(stakingLimit), stakingToken.decimals, 0),
-            token: stakingToken.symbol,
-          })}
-        </Text>
-      )}
-      {userNotEnoughToken && (
-        <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
-          {t('Insufficient %symbol% balance', {
-            symbol: stakingToken.symbol,
-          })}
-        </Text>
-      )}
-      <Text ml="auto" color="textSubtle" fontSize="12px" mb="8px">
-        {t('Balance: %balance%', {
-          balance: getFullDisplayBalance(getCalculatedStakingLimit(), stakingToken.decimals),
-        })}
-      </Text>
-      <Slider
-        min={0}
-        max={100}
-        value={percent}
-        onValueChanged={handleChangePercent}
-        name="stake"
-        valueLabel={`${percent}%`}
-        step={1}
-      />
-      <Flex alignItems="center" justifyContent="space-between" mt="8px">
-        <PercentageButton onClick={() => handleChangePercent(25)}>25%</PercentageButton>
-        <PercentageButton onClick={() => handleChangePercent(50)}>50%</PercentageButton>
-        <PercentageButton onClick={() => handleChangePercent(75)}>75%</PercentageButton>
-        <PercentageButton onClick={() => handleChangePercent(100)}>{t('Max')}</PercentageButton>
-      </Flex>
-      {!isRemovingStake && (
-        <Flex mt="24px" alignItems="center" justifyContent="space-between">
-          <Text mr="8px" color="textSubtle">
-            {t('Annual ROI at current rates')}:
+        <BalanceInput
+          value={stakeAmount}
+          onUserInput={handleStakeInputChange}
+          currencyValue={stakingTokenPrice !== 0 && `~${formattedUsdValueStaked || 0} USD`}
+          isWarning={hasReachedStakeLimit || userNotEnoughToken}
+          decimals={stakingToken.decimals}
+        />
+        {hasReachedStakeLimit && (
+          <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
+            {t('Maximum total stake: %amount% %token%', {
+              amount: getFullDisplayBalance(new BigNumber(stakingLimit), stakingToken.decimals, 0),
+              token: stakingToken.symbol,
+            })}
           </Text>
-          {Number.isFinite(annualRoi) ? (
-            <AnnualRoiContainer
-              alignItems="center"
-              onClick={() => {
-                setShowRoiCalculator(true)
-              }}
-            >
-              <AnnualRoiDisplay>${formattedAnnualRoi}</AnnualRoiDisplay>
-              <IconButton variant="text" scale="sm">
-                <CalculateIcon color="textSubtle" width="18px" />
-              </IconButton>
-            </AnnualRoiContainer>
-          ) : (
-            <Skeleton width={60} />
-          )}
+        )}
+        {userNotEnoughToken && (
+          <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
+            {t('Insufficient %symbol% balance', {
+              symbol: stakingToken.symbol,
+            })}
+          </Text>
+        )}
+        <Text ml="auto" color="textSubtle" fontSize="12px" mb="8px">
+          {t('Balance: %balance%', {
+            balance: getFullDisplayBalance(getCalculatedStakingLimit(), stakingToken.decimals),
+          })}
+        </Text>
+        <Slider
+          min={0}
+          max={100}
+          value={percent}
+          onValueChanged={handleChangePercent}
+          name="stake"
+          valueLabel={`${percent}%`}
+          step={1}
+        />
+        <Flex alignItems="center" justifyContent="space-between" mt="8px">
+          <PercentageButton onClick={() => handleChangePercent(25)}>25%</PercentageButton>
+          <PercentageButton onClick={() => handleChangePercent(50)}>50%</PercentageButton>
+          <PercentageButton onClick={() => handleChangePercent(75)}>75%</PercentageButton>
+          <PercentageButton onClick={() => handleChangePercent(100)}>{t('Max')}</PercentageButton>
         </Flex>
-      )}
-      {isRemovingStake && pool.enableEmergencyWithdraw && (
-        <Flex maxWidth="346px" mt="24px">
-          <Text textAlign="center">
-            {t(
-              'This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.',
+        {!isRemovingStake && (
+          <Flex mt="24px" alignItems="center" justifyContent="space-between">
+            <Text mr="8px" color="textSubtle">
+              {t('Annual ROI at current rates')}:
+            </Text>
+            {Number.isFinite(annualRoi) ? (
+              <AnnualRoiContainer
+                alignItems="center"
+                onClick={() => {
+                  setShowRoiCalculator(true)
+                }}
+              >
+                <AnnualRoiDisplay>${formattedAnnualRoi}</AnnualRoiDisplay>
+                <IconButton variant="text" scale="sm">
+                  <CalculateIcon color="textSubtle" width="18px" />
+                </IconButton>
+              </AnnualRoiContainer>
+            ) : (
+              <Skeleton width={60} />
             )}
-          </Text>
-        </Flex>
-      )}
-      <Button
-        isLoading={pendingTx}
-        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-        onClick={handleConfirmClick}
-        disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit || userNotEnoughToken}
-        mt="24px"
-      >
-        {pendingTx ? t('Confirming') : t('Confirm')}
-      </Button>
-      {!isRemovingStake && (
-        <StyledLink external href={getTokenLink}>
-          <Button width="100%" mt="8px" variant="secondary">
+          </Flex>
+        )}
+        {isRemovingStake && pool.enableEmergencyWithdraw && (
+          <Flex maxWidth="346px" mt="24px">
+            <Text textAlign="center">
+              {t(
+                'This pool was misconfigured. Please unstake your tokens from it, emergencyWithdraw method will be used. Your tokens will be returned to your wallet, however rewards will not be harvested.',
+              )}
+            </Text>
+          </Flex>
+        )}
+        <Button
+          isLoading={pendingTx}
+          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          onClick={handleConfirmClick}
+          disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit || userNotEnoughToken}
+          mt="24px"
+          style={{ width: '100%' }}
+        >
+          {pendingTx ? t('Confirming') : t('Confirm')}
+        </Button>
+        {!isRemovingStake && (
+          <Button
+            width="100%"
+            mt="8px"
+            variant="secondary"
+            onClick={() => {
+              jumpToSwap(stakingToken.address)
+            }}
+          >
             {t('Get %symbol%', { symbol: stakingToken.symbol })}
           </Button>
-        </StyledLink>
-      )}
+        )}
+      </view>
     </FloatLayout>
   )
 }

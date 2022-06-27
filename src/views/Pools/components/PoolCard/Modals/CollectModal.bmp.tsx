@@ -99,47 +99,50 @@ const CollectModal: React.FC<CollectModalProps> = ({
       onDismiss={onDismiss}
       headerBackground={theme.colors.gradients.cardHeader}
     >
-      {isCompoundPool && (
-        <Flex justifyContent="center" alignItems="center" mb="24px">
-          <ButtonMenu
-            activeIndex={shouldCompound ? 0 : 1}
-            scale="sm"
-            variant="subtle"
-            onItemClick={(index) => setShouldCompound(!index)}
-          >
-            <ButtonMenuItem as="button">{t('Compound')}</ButtonMenuItem>
-            <ButtonMenuItem as="button">{t('Harvest')}</ButtonMenuItem>
-          </ButtonMenu>
-          <Flex ml="10px" onClick={onPresent}>
-            <HelpIcon color="textSubtle" />
+      <view style={{ padding: '24px' }}>
+        {isCompoundPool && (
+          <Flex justifyContent="center" alignItems="center" mb="24px">
+            <ButtonMenu
+              activeIndex={shouldCompound ? 0 : 1}
+              scale="sm"
+              variant="subtle"
+              onItemClick={(index) => setShouldCompound(!index)}
+            >
+              <ButtonMenuItem as="button">{t('Compound')}</ButtonMenuItem>
+              <ButtonMenuItem as="button">{t('Harvest')}</ButtonMenuItem>
+            </ButtonMenu>
+            <Flex ml="10px" onClick={onPresent}>
+              <HelpIcon color="textSubtle" />
+            </Flex>
+            {/* {tooltipVisible && tooltip} */}
           </Flex>
-          {/* {tooltipVisible && tooltip} */}
-        </Flex>
-      )}
+        )}
 
-      <Flex justifyContent="space-between" alignItems="center" mb="24px">
-        <Text>{shouldCompound ? t('Compounding') : t('Harvesting')}:</Text>
-        <Flex flexDirection="column">
-          <Heading>
-            {formattedBalance} {earningToken.symbol}
-          </Heading>
-          {earningsDollarValue > 0 && (
-            <Text fontSize="12px" color="textSubtle">{`~${formatNumber(earningsDollarValue)} USD`}</Text>
-          )}
+        <Flex justifyContent="space-between" alignItems="center" mb="24px">
+          <Text>{shouldCompound ? t('Compounding') : t('Harvesting')}:</Text>
+          <Flex flexDirection="column">
+            <Heading>
+              {formattedBalance} {earningToken.symbol}
+            </Heading>
+            {earningsDollarValue > 0 && (
+              <Text fontSize="12px" color="textSubtle">{`~${formatNumber(earningsDollarValue)} USD`}</Text>
+            )}
+          </Flex>
         </Flex>
-      </Flex>
 
-      <Button
-        mt="8px"
-        onClick={handleHarvestConfirm}
-        isLoading={pendingTx}
-        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-      >
-        {pendingTx ? t('Confirming') : t('Confirm')}
-      </Button>
-      <Button variant="text" onClick={onDismiss} pb="0px">
-        {t('Close Window')}
-      </Button>
+        <Button
+          mt="8px"
+          onClick={handleHarvestConfirm}
+          isLoading={pendingTx}
+          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          style={{ width: '100%' }}
+        >
+          {pendingTx ? t('Confirming') : t('Confirm')}
+        </Button>
+        <Button variant="text" onClick={onDismiss} pb="0px" style={{ width: '100%' }}>
+          {t('Close Window')}
+        </Button>
+      </view>
     </FloatLayout>
   )
 }

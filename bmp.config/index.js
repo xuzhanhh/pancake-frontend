@@ -30,8 +30,9 @@ module.exports = {
     keccak: path.resolve(__dirname, '../node_modules/keccak/js.js'),
     secp256k1: path.resolve(__dirname, '../node_modules/secp256k1/elliptic.js'),
     'typo-js': path.resolve(__dirname, './adaptor/typo-js.js'),
-    '@pancakeswap/uikit': '@binance/mp-pancake-uikit',
-    'styled-components': '@binance/mp-styled',
+    '@pancakeswap/uikit': '@pancakeswap/mp-uikit',
+    'styled-components': '@pancakeswap/mp-styled',
+    '@binance/mp-styled': '@pancakeswap/mp-styled',
     'next/router': path.resolve(__dirname, './adaptor/next-router'),
     '@ethersproject/web': path.resolve(__dirname, './adaptor/ethers-web'),
     'redux-localstorage-simple': path.resolve(__dirname, './adaptor/redux-localstorage-simple'),
@@ -44,6 +45,7 @@ module.exports = {
     app: ['src/app.bmp'],
   },
   env: envs,
+  debugReact: !(envs['NODE_ENV'] === 'production'),
 
   defineConstants: {
     COMMIT_ID: JSON.stringify(commitHash),

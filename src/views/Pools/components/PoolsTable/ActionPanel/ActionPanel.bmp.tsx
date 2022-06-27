@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled, { keyframes, css } from 'styled-components'
 import { Box, Flex, HelpIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useVaultPoolByKey } from 'state/pools/hooks'
@@ -121,7 +121,15 @@ const YieldBoostDurationRow = ({ lockEndTime, lockStartTime }) => {
   )
 }
 
-const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded, expanded }) => {
+const ActionPanel: React.FC<ActionPanelProps> = ({
+  account,
+  pool,
+  userDataLoaded,
+  expanded,
+  // setIsLocked,
+  // setIsShared,
+  // trigger,
+}) => {
   const { userData, vaultKey } = pool
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
@@ -141,6 +149,12 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
 
+  // useEffect(() => {
+  //   pool.vaultKey && trigger(n => n + 1)
+  // }, [locked, stakingTokenBalance.toString()])
+  // useEffect(() => {
+  //   pool.vaultKey && trigger(n => n + 1)
+  // }, [stakingTokenBalance])
   const poolStakingTokenBalance = vaultKey
     ? cakeAsBigNumber.plus(stakingTokenBalance)
     : stakedBalance.plus(stakingTokenBalance)
@@ -168,11 +182,13 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
         <Flex flexDirection="column" mb="8px">
           <PoolStatsInfo pool={pool} account={account} showTotalStaked={isMobile} alignLinksToRight={isMobile} />
         </Flex>
-        {vaultKey ? <CompoundingPoolTag /> : <ManualPoolTag />}
-        {/* {tagTooltipVisible && tagTooltip} */}
-        <span onClick={onPresent}>
-          <HelpIcon ml="4px" width="20px" height="20px" color="textSubtle" />
-        </span>
+        <view style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {vaultKey ? <CompoundingPoolTag /> : <ManualPoolTag />}
+          {/* {tagTooltipVisible && tagTooltip} */}
+          <view onClick={onPresent}>
+            <HelpIcon ml="4px" width="20px" height="20px" color="textSubtle" />
+          </view>
+        </view>
       </InfoSection>
       <ActionContainer>
         {isMobile && vaultKey && vaultPosition === VaultPosition.None && (
