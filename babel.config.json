@@ -6,6 +6,8 @@
         "framework": "react",
         "ts": true
       }
-    ]
-  ]
+    ],
+      "@linaria",
+  ],
+  "plugins": ["@pancakeswap/mp-styled-2/babel/static-css.js", "@pancakeswap/mp-styled-2/babel/keyframes.js"]
 }

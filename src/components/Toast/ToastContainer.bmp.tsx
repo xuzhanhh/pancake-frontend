@@ -1,6 +1,7 @@
 import React from 'react'
 import { TransitionGroup } from 'react-transition-group'
-import styled from 'styled-components'
+// import { styled } from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import Toast from './Toast'
 import { ToastContainerProps } from './types'
 
