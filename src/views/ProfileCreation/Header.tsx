@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Breadcrumbs, Heading, Text, Link, Button } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { nftsBaseUrl } from 'views/Nft/market/constants'

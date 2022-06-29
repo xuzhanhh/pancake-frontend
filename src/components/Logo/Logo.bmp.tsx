@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Image as MpImage, ImageProps } from '@binance/mp-components'
 import { HelpIcon } from '@pancakeswap/uikit'
 

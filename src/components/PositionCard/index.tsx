@@ -11,7 +11,7 @@ import {
   CardProps,
   AddIcon,
 } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { NextLinkFromReactRouter } from 'components/NextLink'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Button, ChevronUpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { DeserializedPool } from 'state/types'
@@ -40,6 +40,7 @@ const ScrollButtonContainer = styled.div`
 
 const VirtualListRow = React.memo(({ data, index, style }) => {
   const { pool, userDataLoaded, account, expanded, toggleExpand, setHeight } = data[index]
+  console.log('aaa VirtualListRow')
   return (
     <PoolRow
       pool={pool}
@@ -60,7 +61,7 @@ const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account,
   useEffect(() => {
     virtualListRef.current?.resetAfterIndex(0)
   }, [height])
-
+  console.log('aaa PoolsTable', pools)
   const virtualListRef = useRef()
   const toggleExpand = useCallback(
     (index) => () => {

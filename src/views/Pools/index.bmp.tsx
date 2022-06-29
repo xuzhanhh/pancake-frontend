@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { BigNumber as EthersBigNumber } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
 import BigNumber from 'bignumber.js'
@@ -346,7 +346,7 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
         .exec()
     }, 0)
   }, [remainHeight])
-
+  console.log('???',chosenPools, viewMode)
   const cardLayout = (
     <CardDisplay chosenPools={chosenPools} account={account} remainHeight={remainHeight} stakedOnly={stakedOnly} />
   )

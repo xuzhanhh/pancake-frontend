@@ -1,7 +1,7 @@
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo, useRef, useState } from 'react'
 import { Currency, CurrencyAmount, currencyEquals, ETHER, Token } from '@pancakeswap/sdk'
 import { Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 // import { FixedSizeList } from 'react-window'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { LightGreyCard } from 'components/Card'

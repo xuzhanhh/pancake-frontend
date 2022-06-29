@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Pair } from '@pancakeswap/sdk'
 import isEqual from 'lodash/isEqual'
 import { useDidHide, useDidShow } from '@binance/mp-service'

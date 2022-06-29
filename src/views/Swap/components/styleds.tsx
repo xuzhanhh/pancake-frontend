@@ -1,7 +1,7 @@
 import { ErrorIcon, Flex, Text } from '@pancakeswap/uikit'
 import { AutoColumn } from 'components/Layout/Column'
 import React from 'react'
-import styled, { css } from 'styled-components'
+import { styled,  css } from '@pancakeswap/mp-styled-2'
 
 export const Wrapper = styled(Flex)`
   position: relative;
@@ -13,6 +13,11 @@ export const Wrapper = styled(Flex)`
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`
   padding: 2px;
 
+`
+/*
+ *FIXME static
+ *
+ *
   ${({ clickable }) =>
     clickable
       ? css`
@@ -22,8 +27,7 @@ export const ArrowWrapper = styled.div<{ clickable: boolean }>`
           }
         `
       : null}
-`
-
+ */
 export const ErrorText = styled(Text)<{ severity?: 0 | 1 | 2 | 3 | 4 }>`
   color: ${({ theme, severity }) =>
     severity === 3 || severity === 4
@@ -61,7 +65,8 @@ export const StyledBalanceMaxMini = styled.button`
   }
 `
 
-export const TruncatedText = styled(Text).attrs({ ellipsis: true })`
+const EllipsisText = (props) => <Text ellipsis {...props} />
+export const TruncatedText = styled(EllipsisText)`
   width: 220px;
 `
 

@@ -9,7 +9,7 @@ import {
   Button,
   Box,
 } from '@pancakeswap/uikit'
-import styled, { useTheme } from 'styled-components'
+import { styled,  useTheme } from '@pancakeswap/mp-styled-2'
 import usePrevious from 'hooks/usePreviousValue'
 import { TokenList } from '@uniswap/token-lists'
 import { useTranslation } from 'contexts/Localization'

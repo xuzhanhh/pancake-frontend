@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { useMatchBreakpoints, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
@@ -166,7 +166,7 @@ const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
               </FarmMobileCell>
             </view>
             <Flex>
-              <EarnedMobileCell style={{ flexGrow: 0.5 }}>
+              <EarnedMobileCell style={{ flexGrow: '0.5' }}>
                 <CellLayout label={t('Earned')}>
                   <Earned {...props.earned} userDataReady={userDataReady} />
                 </CellLayout>

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import { styled, keyframes } from '@pancakeswap/mp-styled-2'
 import { Box, Flex, Heading, Skeleton } from '@pancakeswap/uikit'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { ChevronRightIcon, Button as UIKitButton, AutoRenewIcon, ChevronDownIcon, Box, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 
@@ -39,9 +39,9 @@ const Button = styled(UIKitButton)`
   }
 `
 
-const iconAttrs = { width: '24px', color: 'textDisabled' }
-
-const ChevronRight = styled(ChevronRightIcon).attrs(iconAttrs)`
+// const iconAttrs = { width: '24px', color: 'textDisabled' }
+const WrappedChevronRightIcon = props => <ChevronRightIcon width="24px" color="textDisabled" {...props}/>
+const ChevronRight = styled(WrappedChevronRightIcon)`
   display: none;
 
   ${({ theme }) => theme.mediaQueries.md} {
@@ -49,7 +49,7 @@ const ChevronRight = styled(ChevronRightIcon).attrs(iconAttrs)`
   }
 `
 
-const ChevronBottom = styled(ChevronDownIcon).attrs(iconAttrs)`
+const ChevronBottom = styled(WrappedChevronRightIcon)`
   display: block;
 
   ${({ theme }) => theme.mediaQueries.md} {

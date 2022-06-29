@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import styled, { useTheme } from 'styled-components'
+import { styled,  useTheme } from '@pancakeswap/mp-styled-2'
 import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'

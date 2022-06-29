@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useFarmUser } from 'state/farms/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { Text } from '@pancakeswap/uikit'

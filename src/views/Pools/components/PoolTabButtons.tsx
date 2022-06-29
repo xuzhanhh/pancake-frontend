@@ -3,7 +3,7 @@ import React from 'react'
 import ToggleView from 'components/ToggleView/ToggleView'
 import { ViewMode } from 'state/user/actions'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { ButtonMenu, ButtonMenuItem, Toggle, Text, NotificationDot } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 

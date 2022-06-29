@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import RulesCard from './RulesCard'
 import FAQs from './FAQs'

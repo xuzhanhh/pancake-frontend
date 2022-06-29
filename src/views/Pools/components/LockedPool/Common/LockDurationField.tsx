@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, Flex, Button, Input, Box } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import _toNumber from 'lodash/toNumber'
 import { secondsToWeeks, weeksToSeconds } from '../utils/formatSecondsToWeeks'

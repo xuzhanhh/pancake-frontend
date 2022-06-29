@@ -1,6 +1,6 @@
 import { ifosConfig } from 'config/constants'
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Box } from '@pancakeswap/uikit'
 
 import useGetPublicIfoV2Data from 'views/Ifos/hooks/v2/useGetPublicIfoData'

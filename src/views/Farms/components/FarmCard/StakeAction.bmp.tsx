@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import BigNumber from 'bignumber.js'
 import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from '@pancakeswap/uikit'
 import useToast from 'hooks/useToast'

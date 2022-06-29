@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { ScrollView } from '@binance/mp-components'
 import mpService from '@binance/mp-service'
 import { useModal, Button, Modal, Flex, Text, Checkbox } from '@pancakeswap/uikit'

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css, DefaultTheme } from 'styled-components'
+import { styled,  css, DefaultTheme } from '@pancakeswap/mp-styled-2'
 import { Box } from '@pancakeswap/uikit'
 import { ClipFill } from '../types'
 

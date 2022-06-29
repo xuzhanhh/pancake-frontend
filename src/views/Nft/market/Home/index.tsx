@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Box, Button, Heading, Flex } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { NextLinkFromReactRouter } from 'components/NextLink'

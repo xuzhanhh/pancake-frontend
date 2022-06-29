@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import PageSection from 'components/PageSection'
 import { useWeb3React } from '@web3-react/core'
 import useTheme from 'hooks/useTheme'

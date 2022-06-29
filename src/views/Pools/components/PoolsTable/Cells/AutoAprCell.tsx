@@ -1,6 +1,6 @@
 import React from 'react'
 import { Skeleton, Text, Flex, Button, CalculateIcon, useModal, useMatchBreakpoints } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import Balance from 'components/Balance'
 import { FlexGap } from 'components/Layout/Flex'
 import { useTranslation } from 'contexts/Localization'

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import parse from 'url-parse'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Flex, Box, Text, ExpandableLabel, LinkExternal, Grid, HelpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getApy } from 'utils/compoundApyHelpers'

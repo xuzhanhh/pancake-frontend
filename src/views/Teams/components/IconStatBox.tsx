@@ -1,6 +1,6 @@
 import React, { ElementType, ReactNode } from 'react'
 import { Flex, Heading, Text, TextProps } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const SecondaryCard = styled(Text)`
   border: 2px solid ${({ theme }) => theme.colors.tertiary};

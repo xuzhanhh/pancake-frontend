@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Skeleton, Text, HelpIcon, Flex, Box, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DeserializedPool } from 'state/types'
 import Balance from 'components/Balance'

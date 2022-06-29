@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import styled, { css, keyframes } from 'styled-components'
+import { styled,  css, keyframes } from '@pancakeswap/mp-styled-2'
 import { Button, CloseIcon, IconButton, TrophyGoldIcon } from '@pancakeswap/uikit'
 import { CSSTransition } from 'react-transition-group'
 import { useTranslation } from 'contexts/Localization'

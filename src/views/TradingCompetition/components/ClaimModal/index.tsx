@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Modal, Button, Flex, AutoRenewIcon, Heading, Text } from '@pancakeswap/uikit'
 import Image from 'next/image'
 import { useTranslation } from 'contexts/Localization'

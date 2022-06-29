@@ -2,7 +2,7 @@ import React from 'react'
 import { AtFloatLayout } from 'taro-ui'
 import 'taro-ui/dist/style/components/float-layout.scss'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
-import styled, { useTheme } from 'styled-components'
+import { styled,  useTheme } from '@pancakeswap/mp-styled-2'
 import { Box, ModalHeader, ModalBackButton, ModalTitle, Heading, ModalCloseButton } from '@pancakeswap/uikit'
 
 const {

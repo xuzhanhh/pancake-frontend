@@ -1,17 +1,19 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import { styled, keyframes } from '@pancakeswap/mp-styled-2'
 
 const rotate = keyframes`
+`
+
+const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
+  @keyframes rotate {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-`
-
-const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
-  animation: ${rotate} 2s linear infinite;
+  }
+  animation: rotate 2s linear infinite;
   height: ${({ size }) => size};
   width: ${({ size }) => size};
   path {

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react'
 import { ScrollView } from '@binance/mp-components'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import {
   Modal,
   Text,

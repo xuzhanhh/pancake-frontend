@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react'
 import { CSSTransition, Transition } from 'react-transition-group'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Alert, alertVariants } from '@pancakeswap/uikit'
 import { ToastProps, types } from './types'
 import Transaction from 'components/App/Transactions/Transaction'

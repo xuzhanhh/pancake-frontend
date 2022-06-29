@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Flex, PrizeIcon, Text } from '@pancakeswap/uikit'
 import { Achievement } from 'state/types'
 import AchievementAvatar from './AchievementAvatar'

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Flex, Text, FlexProps } from '@pancakeswap/uikit'
 
 interface UserRankProps extends FlexProps {

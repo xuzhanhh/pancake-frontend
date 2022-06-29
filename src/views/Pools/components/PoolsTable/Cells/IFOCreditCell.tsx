@@ -5,7 +5,7 @@ import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
 import React from 'react'
 import { VaultKey } from 'state/types'
 import { useIfoPoolCredit, useVaultPoolByKey } from 'state/pools/hooks'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { getBalanceNumber } from 'utils/formatBalance'
 import BaseCell, { CellContent } from './BaseCell'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import BigNumber from 'bignumber.js'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import { useTranslation } from 'contexts/Localization'
 import {

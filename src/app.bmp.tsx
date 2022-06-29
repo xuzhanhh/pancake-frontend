@@ -5,6 +5,7 @@ import { init, bindRequest } from '@binance/sentry-miniapp'
 import { getEnv } from 'utils/bmp/getEnv'
 import './polyfill.bmp'
 import 'utils/apr.bmp'
+import '@pancakeswap/mp-uikit-2/dist/esm/index.css'
 
 declare const COMMIT_ID: string
 declare const env: any

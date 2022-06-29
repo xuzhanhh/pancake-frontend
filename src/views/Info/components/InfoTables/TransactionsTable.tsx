@@ -1,7 +1,7 @@
 // TODO PCS refactor ternaries
 /* eslint-disable no-nested-ternary */
 import React, { useCallback, useState, useMemo, useEffect } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { Text, Flex, Box, Radio, Skeleton, LinkExternal, ArrowForwardIcon, ArrowBackIcon } from '@pancakeswap/uikit'
 import { formatAmount } from 'views/Info/utils/formatInfoNumbers'

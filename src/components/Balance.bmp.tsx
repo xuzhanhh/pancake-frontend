@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import CountUp from 'react-countup'
 import { Text, TextProps, Skeleton } from '@pancakeswap/uikit'
-import styled, { keyframes } from 'styled-components'
+import { styled, keyframes } from '@pancakeswap/mp-styled-2'
 import isUndefinedOrNull from 'utils/isUndefinedOrNull'
 import _toNumber from 'lodash/toNumber'
 import _isNaN from 'lodash/isNaN'
@@ -50,6 +50,10 @@ export const BalanceWithLoading: React.FC<Omit<BalanceProps, 'value'> & { value:
 }
 
 const appear = keyframes`
+  `
+
+export const AnimatedBalance = styled(Balance)`
+  @keyframes appear {
   from {
     opacity:0;
   }
@@ -57,10 +61,8 @@ const appear = keyframes`
   to {
     opacity:1;
   }
-  `
-
-export const AnimatedBalance = styled(Balance)`
-  animation: ${appear} 0.65s ease-in-out forwards;
+  }
+  animation: appear 0.65s ease-in-out forwards;
 `
 
 export default Balance

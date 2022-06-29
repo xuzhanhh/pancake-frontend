@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState, useEffect } from 'react'
 import { Box, BoxProps, Text, Input } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { isAddress } from 'utils'
 import { useTranslation } from 'contexts/Localization'
 import CircleLoader from 'components/Loader/CircleLoader'

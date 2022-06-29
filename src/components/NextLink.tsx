@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import NextLink from 'next/link'
 
 // react-router-dom LinkProps types

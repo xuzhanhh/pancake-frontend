@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Text, ChevronDownIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import BaseCell from './BaseCell'
@@ -16,11 +16,6 @@ const StyledCell = styled(BaseCell)`
   flex: 1;
   padding-right: 12px;
   padding-left: 0px;
-  ${({ theme }) => theme.mediaQueries.md} {
-    flex: 0 0 120px;
-    padding-right: 32px;
-    padding-left: 8px;
-  }
 `
 
 const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
@@ -31,7 +26,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 const TotalStakedCell: React.FC<ExpandActionCellProps> = ({ expanded, isFullLayout }) => {
   const { t } = useTranslation()
   return (
-    <StyledCell role="cell">
+    <StyledCell >
       {isFullLayout && (
         <Text color="primary" bold>
           {expanded ? t('Hide') : t('Details')}

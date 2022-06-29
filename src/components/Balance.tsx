@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import CountUp from 'react-countup'
 import { Text, TextProps, Skeleton } from '@pancakeswap/uikit'
-import styled, { keyframes } from 'styled-components'
+import { styled, keyframes } from '@pancakeswap/mp-styled-2'
 import isUndefinedOrNull from 'utils/isUndefinedOrNull'
 import _toNumber from 'lodash/toNumber'
 import _isNaN from 'lodash/isNaN'

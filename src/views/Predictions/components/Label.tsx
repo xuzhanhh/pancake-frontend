@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useCountUp } from 'react-countup'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { BnbUsdtPairTokenIcon, Box, Flex, PocketWatchIcon, Text } from '@pancakeswap/uikit'
 import { ROUND_BUFFER } from 'state/predictions/config'
 import { formatBigNumberToFixed } from 'utils/formatBalance'

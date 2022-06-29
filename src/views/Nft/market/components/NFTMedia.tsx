@@ -2,7 +2,7 @@ import { Box, BoxProps } from '@pancakeswap/uikit'
 import React, { FC, useEffect, useRef } from 'react'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { NftToken } from 'state/nftMarket/types'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { RoundedImage } from '../Collection/IndividualNFTPage/shared/styles'
 
 const StyledAspectRatio = styled(Box)`

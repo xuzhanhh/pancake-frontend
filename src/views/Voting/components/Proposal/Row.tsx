@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Grid, Box } from '@pancakeswap/uikit'
 
 export const AddressColumn = styled(Box).attrs({ alignItems: 'center' })`

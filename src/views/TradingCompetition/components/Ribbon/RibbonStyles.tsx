@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { RibbonDownMid, RibbonUpMid, RibbonDownSide, RibbonUpSide } from '../../svgs'
 
 const MidRibbonStyles = `

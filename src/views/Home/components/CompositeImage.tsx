@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import { styled, keyframes } from '@pancakeswap/mp-styled-2'
 import { Box } from '@pancakeswap/uikit'
 
 const floatingAnim = (x: string, y: string) => keyframes`

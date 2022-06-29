@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import {
   ChartIcon,
   Flex,
@@ -53,7 +53,7 @@ const CurrencyInputHeader: React.FC<Props> = ({ title, subtitle, setIsChartDispl
             {isChartDisplayed ? <ChartDisableIcon color="textSubtle" /> : <ChartIcon width="24px" color="textSubtle" />}
           </ColoredIconButton>
         )}
-        <Heading as="h2">{title}</Heading>
+        <Heading>{title}</Heading>
         <Flex>
           <NotificationDot show={expertMode}>
             <GlobalSettings color="textSubtle" mr="0" />

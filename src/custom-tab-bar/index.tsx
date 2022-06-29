@@ -3,7 +3,7 @@ import Taro from '@binance/mp-service'
 import { View, Image } from '@binance/mp-components'
 import './index.scss'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
-import { useTheme } from 'styled-components'
+import { useTheme } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 
 const { safeArea, screenHeight } = getSystemInfoSync()

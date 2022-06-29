@@ -1,7 +1,7 @@
 import React from 'react'
 import { NoProfileAvatarIcon, Flex, Heading, Skeleton, Text, Box } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useProfile } from 'state/profile/hooks'
 import ProfileAvatarWithTeam from 'components/ProfileAvatarWithTeam'
 import { useTranslation } from 'contexts/Localization'

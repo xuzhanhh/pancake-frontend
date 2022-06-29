@@ -1,6 +1,6 @@
 import React from 'react'
 import { CloseIcon, Overlay, Text, IconButton } from '@pancakeswap/uikit'
-import styled from '@binance/mp-styled'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const OverlayInner = styled.div`
   background-color: ${({ theme }) => theme.modal.background};

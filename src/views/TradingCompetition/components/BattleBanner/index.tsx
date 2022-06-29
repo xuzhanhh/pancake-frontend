@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex, Text, Heading } from '@pancakeswap/uikit'
 import Image from 'next/image'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import AllBunniesImage from '../../pngs/all-bunnies.png'

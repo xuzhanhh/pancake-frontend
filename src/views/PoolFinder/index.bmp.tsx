@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Currency, ETHER, JSBI, TokenAmount } from '@pancakeswap/sdk'
 import { Button, ChevronDownIcon, Text, AddIcon, useModal } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import { LiquidityPage, useLiquidity } from 'views/bmp/liquidity/liquidityContext'
 import ErrorBoundary from 'components/ErrorBoundary'

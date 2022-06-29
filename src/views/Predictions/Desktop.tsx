@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import Split from 'split-grid'
 import { ArrowDownIcon, Button, ChartIcon } from '@pancakeswap/uikit'
 import debounce from 'lodash/debounce'

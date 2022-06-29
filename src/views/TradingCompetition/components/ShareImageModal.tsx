@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Modal, Flex, Button, Text, Skeleton, Box } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import FlippersShare from '../pngs/flippers-share.png'
 import StormShare from '../pngs/storm-share.png'

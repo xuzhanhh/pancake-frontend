@@ -1,5 +1,5 @@
 import { Box, Flex } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 export const StyledSwapContainer = styled(Flex)<{ $isChartExpanded: boolean }>`
   flex-shrink: 0;

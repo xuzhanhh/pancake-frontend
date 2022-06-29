@@ -1,6 +1,6 @@
 import React, { TextareaHTMLAttributes, useEffect, useRef } from 'react'
 import EasyMde from 'easymde'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import merge from 'lodash/merge'
 
 import 'easymde/dist/easymde.min.css'

@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from '@pancakeswap/mp-styled-2'
 // eslint-disable-next-line import/no-unresolved
 import { PancakeTheme } from '@pancakeswap/uikit/dist/theme'
 
