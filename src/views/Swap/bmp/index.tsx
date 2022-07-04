@@ -60,7 +60,7 @@ import SwapWarningModal from '../components/SwapWarningModal'
 import PriceChartContainer from '../components/Chart/PriceChartContainer'
 import { StyledInputCurrencyWrapper, StyledSwapContainer } from '../styles'
 import CurrencyInputHeader from '../components/CurrencyInputHeader'
-import { useDidShow } from '@binance/mp-service'
+import { useDidHide, useDidShow } from '@binance/mp-service'
 import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 import { HitBuilders } from 'utils/ga'
 
@@ -590,11 +590,16 @@ function Swap() {
   )
 }
 export default function Index() {
+  const [show, setShow] = useState(true)
+  useDidShow(() => {
+    setShow(true)
+  })
+  useDidHide(() => {
+    setShow(false)
+  })
   return (
     <BmpPage>
-      <ErrorBoundary name="swap">
-        <Swap />
-      </ErrorBoundary>
+      <ErrorBoundary name="swap">{show && <Swap />}</ErrorBoundary>
     </BmpPage>
   )
 }
