@@ -34,12 +34,20 @@ const activeFarms = farmsConfig
   )
   .map((farm) => farm.pid)
 
+console.log('???aaa', activeFarms)
+
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
 
   useSlowRefreshEffect(
     (currentBlock) => {
       const fetchPoolsDataWithFarms = async () => {
+        // const activeFarms = farmsConfig.filter((farm) => farm.pid !== 0)
+        // console.log(
+        //   'lallal',
+        //   activeFarms.map((farm) => farm.pid),
+        // )
+        // await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
         await dispatch(fetchFarmsPublicDataAsync(activeFarms))
         batch(() => {
           dispatch(fetchPoolsPublicDataAsync(currentBlock))
