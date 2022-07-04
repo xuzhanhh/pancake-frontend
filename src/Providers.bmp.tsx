@@ -12,11 +12,19 @@ import { fetchStatusMiddleware } from 'hooks/useSWRContract'
 import store, { persistor } from 'state'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 
+import { usePollBlockNumber } from 'state/block/hooks'
+import useEagerConnect from 'hooks/useEagerConnect'
+
 const ThemeProviderWrapper = (props) => {
   const [isDark] = useThemeManager()
   return <ThemeProvider theme={isDark ? dark : light} {...props} />
 }
 
+const Hooks2 = () => {
+  usePollBlockNumber()
+  useEagerConnect()
+  return null
+}
 export const PathContext = React.createContext({
   redirectAddress: '',
   setRedirectAddress: (redirectAddress) => {},
@@ -41,6 +49,7 @@ const Providers: React.FC = ({ children }) => {
               >
                 <PathProvider>
                   <WebviewProvider webviewFilePath="views/webview">{children}</WebviewProvider>
+                  <Hooks2 />
                 </PathProvider>
               </SWRConfig>
             </LanguageProvider>
