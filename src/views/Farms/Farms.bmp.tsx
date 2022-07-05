@@ -454,19 +454,19 @@ const Fetcher = React.memo(({ setFarmsData, setCakePrice }) => {
 })
 
 const FramsWrapper = ({ children }) => {
-  const [isHide, setIsHide] = useState(false)
+  // const [isHide, setIsHide] = useState(false)
   const [farmsData, setFarmsData] = useState({ data: [] })
   const [cakePrice, setCakePrice] = useState(null)
-  useDidShow(() => {
-    setIsHide(false)
-  })
-  useDidHide(() => {
-    setIsHide(true)
-  })
+  // useDidShow(() => {
+  //   setIsHide(false)
+  // })
+  // useDidHide(() => {
+  //   setIsHide(true)
+  // })
   return (
     <view>
       <Farms farmsData={farmsData} cakePrice={cakePrice} children={children} />
-      {!isHide && <Fetcher setFarmsData={setFarmsData} setCakePrice={setCakePrice} />}
+      <Fetcher setFarmsData={setFarmsData} setCakePrice={setCakePrice} />
       {/* <Fetcher setFarmsData={setFarmsData} setCakePrice={setCakePrice} /> */}
     </view>
   )

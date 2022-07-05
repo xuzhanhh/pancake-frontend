@@ -46,8 +46,9 @@ export const useFetchPublicPoolsData = () => {
           dispatch(fetchPoolsStakingLimitsAsync())
         })
       }
-
-      fetchPoolsDataWithFarms()
+      setTimeout(() => {
+        fetchPoolsDataWithFarms()
+      })
     },
     [dispatch],
   )
@@ -81,18 +82,16 @@ export const usePoolsPageFetch = () => {
   const dispatch = useAppDispatch()
   useFetchPublicPoolsData()
   useFastRefreshEffect(() => {
-    console.log('??? running useFastRefreshEffect', account)
-    batch(() => {
-      if (account) {
-        console.log('??? have account')
-        dispatch(fetchPoolsUserDataAsync(account))
-        dispatch(fetchCakeVaultUserData({ account }))
-      }
+    setTimeout(() => {
+      batch(() => {
+        dispatch(fetchCakeVaultPublicData())
+        if (account) {
+          dispatch(fetchPoolsUserDataAsync(account))
+          dispatch(fetchCakeVaultUserData({ account }))
+        }
+      })
     })
   }, [account, dispatch])
-  useFastRefreshEffect(() => {
-    dispatch(fetchCakeVaultPublicData())
-  }, [dispatch])
 
   useEffect(() => {
     batch(() => {

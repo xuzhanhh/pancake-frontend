@@ -15,7 +15,7 @@ export function useFastRefreshEffect(effect: EffectCallback, deps?: DependencyLi
     setShow(false)
   })
 
-  const depsMemo = useMemo(() => [show, data, ...(deps || [])], [show, data, deps])
+  const depsMemo = useMemo(() => [data, ...(deps || [])], [data, deps])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -38,7 +38,7 @@ export function useSlowRefreshEffect(effect: EffectCallback, deps?: DependencyLi
     setShow(false)
   })
 
-  const depsMemo = useMemo(() => [show, data, ...(deps || [])], [show, data, deps])
+  const depsMemo = useMemo(() => [data, ...(deps || [])], [data, deps])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
