@@ -20,6 +20,19 @@ import {
   makeVaultPoolByKey,
   poolsWithVaultSelector,
 } from './selectors'
+import { livePools } from 'config/constants/pools'
+
+const lPoolAddresses = livePools.filter(({ sousId }) => sousId !== 0).map(({ earningToken }) => earningToken.address)
+
+// Only fetch farms for live pools
+const activeFarms = farmsConfig
+  .filter(
+    ({ token, pid, quoteToken }) =>
+      pid !== 0 &&
+      ((token.symbol === 'BUSD' && quoteToken.symbol === 'WBNB') ||
+        lPoolAddresses.find((poolAddress) => poolAddress === token.address)),
+  )
+  .map((farm) => farm.pid)
 
 export const useFetchPublicPoolsData = () => {
   const dispatch = useAppDispatch()
@@ -27,8 +40,7 @@ export const useFetchPublicPoolsData = () => {
   useSlowRefreshEffect(
     (currentBlock) => {
       const fetchPoolsDataWithFarms = async () => {
-        const activeFarms = farmsConfig.filter((farm) => farm.pid !== 0)
-        await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+        await dispatch(fetchFarmsPublicDataAsync([2, ...activeFarms]))
         batch(() => {
           dispatch(fetchPoolsPublicDataAsync(currentBlock))
           dispatch(fetchPoolsStakingLimitsAsync())
@@ -68,16 +80,19 @@ export const usePoolsPageFetch = () => {
   const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   useFetchPublicPoolsData()
-
   useFastRefreshEffect(() => {
+    console.log('??? running useFastRefreshEffect', account)
     batch(() => {
-      dispatch(fetchCakeVaultPublicData())
       if (account) {
+        console.log('??? have account')
         dispatch(fetchPoolsUserDataAsync(account))
         dispatch(fetchCakeVaultUserData({ account }))
       }
     })
   }, [account, dispatch])
+  useFastRefreshEffect(() => {
+    dispatch(fetchCakeVaultPublicData())
+  }, [dispatch])
 
   useEffect(() => {
     batch(() => {

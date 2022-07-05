@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { ModalProvider } from '@pancakeswap/uikit'
 import { ToastsProvider, ToastListener } from 'contexts/ToastsContext'
 
-import useEagerConnect from 'hooks/useEagerConnect'
 import useUserAgent from 'hooks/useUserAgent'
 import { usePollBlockNumber } from 'state/block/hooks'
 import { usePollCoreFarmData } from 'state/farms/hooks'
@@ -16,8 +15,8 @@ import { Blocklist, Updaters } from './index'
 import { useDidHide, useDidShow } from '@binance/mp-service'
 
 const Hooks = () => {
-  useEagerConnect()
-  useBmpInit()
+  // useEagerConnect()
+  // useBmpInit()
   // useFetchProfile()
   // usePollCoreFarmData()
   // useUserAgent()
@@ -50,7 +49,6 @@ const Providers: React.FC = ({ children }) => {
                   <view>
                     {visible && <Updaters />}
                     {visible && <Hooks />}
-                    <Hooks2 />
                   </view>
                   {children}
                   <ToastListener />
