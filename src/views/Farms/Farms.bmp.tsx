@@ -64,7 +64,7 @@ const ToggleWrapperText = styled(Text)`
 const LabelWrapper = styled.div``
 
 const LabelWrapperText = styled(Text)`
-  font-size: 12px;
+  font-size: 12px !important;
 `
 
 const FilterContainer = styled.div`

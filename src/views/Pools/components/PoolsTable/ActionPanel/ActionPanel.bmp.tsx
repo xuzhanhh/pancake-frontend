@@ -27,20 +27,20 @@ const collapseAnimation = keyframes`
 
 const StyledActionPanel = styled.div<{ expanded: boolean }>`
   @keyframes expandAnimation {
-  from {
-    max-height: 0px;
-  }
-  to {
-    max-height: 1000px;
-  }
+    from {
+      max-height: 0px;
+    }
+    to {
+      max-height: 1000px;
+    }
   }
   @keyframes collapseAnimation {
-  from {
-    max-height: 1000px;
-  }
-  to {
-    max-height: 0px;
-  }
+    from {
+      max-height: 1000px;
+    }
+    to {
+      max-height: 0px;
+    }
   }
   animation: ${({ expanded }) =>
     expanded
@@ -63,9 +63,6 @@ const ActionContainer = styled.div<{ isAutoVault?: boolean; hasBalance?: boolean
   flex-direction: column;
   flex: 1;
   flex-wrap: wrap;
-    flex-direction: row;
-    flex-direction: ${({ isAutoVault }) => (isAutoVault ? 'row' : null)};
-    align-items: ${({ isAutoVault, hasBalance }) => (isAutoVault ? (hasBalance ? 'flex-start' : 'stretch') : 'center')};
 `
 
 type MediaBreakpoints = {

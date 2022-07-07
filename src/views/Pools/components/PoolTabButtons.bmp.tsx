@@ -19,35 +19,23 @@ const ViewControls = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-
-  /* > div { */
-  /*   padding: 8px 0px; */
-  /* } */
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    justify-content: flex-start;
-    width: auto;
-
-    /* > div { */
-    /*   padding: 0; */
-    /* } */
-  }
 `
+
+/* > div { */
+/*   padding: 8px 0px; */
+/* } */
+
 // FIXME
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* a { */
-  /*   padding-left: 12px; */
-  /*   padding-right: 12px; */
-  /* } */
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 16px;
-  }
 `
+
+/* a { */
+/*   padding-left: 12px; */
+/*   padding-right: 12px; */
+/* } */
 
 const PoolTabButtons = ({
   stakedOnly,

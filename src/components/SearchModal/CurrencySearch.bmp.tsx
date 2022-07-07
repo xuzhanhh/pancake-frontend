@@ -82,11 +82,11 @@ function CurrencySearch({
   )
 
   // manage focus on modal show
-  const inputRef = useRef<HTMLInputElement>()
+  // const inputRef = useRef<HTMLInputElement>()
 
-  useEffect(() => {
-    inputRef.current.focus()
-  }, [])
+  // useEffect(() => {
+  //   inputRef.current.focus()
+  // }, [])
 
   const handleInput = useCallback((event) => {
     const input = event.target.value
@@ -129,7 +129,7 @@ function CurrencySearch({
               scale="lg"
               autoComplete="off"
               value={searchQuery}
-              ref={inputRef as RefObject<HTMLInputElement>}
+              // ref={inputRef as RefObject<HTMLInputElement>}
               onChange={handleInput}
               onKeyDown={handleEnter}
             />

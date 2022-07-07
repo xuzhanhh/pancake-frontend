@@ -66,7 +66,7 @@ const FilterContainer = styled.div`
   }
 `
 const LabelWrapperText = styled(Text)`
-  font-size: 12px;
+  font-size: 12px !important;
 `
 const LabelWrapper = styled.div``
 
@@ -79,9 +79,6 @@ const ControlStretch = styled(Flex)`
 const FinishedTextContainer = styled(Flex)`
   padding-bottom: 16px;
   flex-direction: column;
-  ${({ theme }) => theme.mediaQueries.md} {
-    flex-direction: row;
-  }
 `
 
 const FinishedTextLink = styled(Link)`
@@ -346,7 +343,7 @@ const Pools: React.FC = ({ pools, userDataLoaded }) => {
         .exec()
     }, 0)
   }, [remainHeight])
-  console.log('???',chosenPools, viewMode)
+  console.log('???', chosenPools, viewMode)
   const cardLayout = (
     <CardDisplay chosenPools={chosenPools} account={account} remainHeight={remainHeight} stakedOnly={stakedOnly} />
   )

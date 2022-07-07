@@ -2,7 +2,7 @@ import React from 'react'
 import { AtFloatLayout } from 'taro-ui'
 import 'taro-ui/dist/style/components/float-layout.scss'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
-import { styled,  useTheme } from '@pancakeswap/mp-styled-2'
+import { styled, useTheme } from '@pancakeswap/mp-styled-2'
 import { Box, ModalHeader, ModalBackButton, ModalTitle, Heading, ModalCloseButton } from '@pancakeswap/uikit'
 
 const {
@@ -78,9 +78,9 @@ export const FloatLayout: React.FC<FloatLayoutProps> = ({ children, onBack, onDi
 // }
 
 export const FloatHeader = styled(ModalHeader)`
-  padding: 10px 10px 0px 20px;
-  border-bottom: unset;
-  background: ${({ theme }) => theme.modal.background};
-  border-top-left-radius: 32px;
-  border-top-right-radius: 32px;
+  padding: 10px 10px 0px 20px !important;
+  border-bottom: unset !important;
+  background: ${({ theme }) => theme.modal.background}!important;
+  border-top-left-radius: 32px !important;
+  border-top-right-radius: 32px !important;
 `

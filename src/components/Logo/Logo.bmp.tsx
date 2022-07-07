@@ -9,7 +9,7 @@ export interface LogoProps extends ImageProps {
   srcs: string[]
 }
 
-const Image = styled(MpImage, { isStyled: false })<LogoProps>``
+const Image = styled(MpImage)<LogoProps>``
 
 /**
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert

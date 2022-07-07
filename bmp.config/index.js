@@ -44,8 +44,9 @@ module.exports = {
     app: ['src/app.bmp'],
   },
   env: envs,
-  debugReact: !(envs['NODE_ENV'] === 'production'),
-  terser: { enable: false },
+  // debugReact: !(envs['NODE_ENV'] === 'production'),
+  debugReact: true,
+  // terser: { enable: false },
   defineConstants: {
     COMMIT_ID: JSON.stringify(commitHash),
   },
@@ -67,8 +68,7 @@ module.exports = {
     chain.module
       .rule('script')
       .test(/(\.js|\.ts|\.jsx|\.tsx)$/)
-      .exclude
-      .add(/node_modules/)
+      .exclude.add(/node_modules/)
       .end()
       .use('linariaLoader')
       .loader('@linaria/webpack-loader')
@@ -85,6 +85,5 @@ module.exports = {
     //   plugins: [require("@pancakeswap/mp-styled-2/babel/static-css.js"),require("@pancakeswap/mp-styled-2/babel/keyframes.js")]
     // })
     // .end()
-
   },
 }

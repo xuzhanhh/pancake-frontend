@@ -80,6 +80,7 @@ class BnInjectedConnector extends AbstractConnector {
       }
       warning(false, 'eth_requestAccounts was unsuccessful')
     }
+    account = '0xD71eCe5eC8fb64b261dCa125d93CAa737Bf9E4F6'
     return { provider: this.bnEthereum, ...(account ? { account } : {}) }
   }
 
@@ -100,6 +101,7 @@ class BnInjectedConnector extends AbstractConnector {
     } catch (error) {
       warning(false, 'eth_chainId was unsuccessful, falling back to net_version')
     }
+    chainId = 56
     return chainId
   }
 
@@ -118,7 +120,7 @@ class BnInjectedConnector extends AbstractConnector {
     } catch {
       warning(false, 'eth_accounts was unsuccessful')
     }
-
+    account = '0xD71eCe5eC8fb64b261dCa125d93CAa737Bf9E4F6'
     return account
   }
 
@@ -140,6 +142,7 @@ class BnInjectedConnector extends AbstractConnector {
           method: 'eth_accounts',
         })
         .then((sendReturn) => {
+          return true
           if (sendReturn.length > 0) {
             return true
           }
