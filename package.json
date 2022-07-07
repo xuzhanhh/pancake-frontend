@@ -19,7 +19,7 @@
     "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
     "updateLPsAPR": "NODE_PATH=./src ts-node --compiler-options '{\"module\":\"commonjs\"}' scripts/updateLPsAPR.ts",
     "prepare": "husky install",
-    "postinstall": "yarn run typechain",
+    "postinstall": "yarn run typechain && cp -r lib node_modules/@linaria/babel-preset/ ",
     "typechain": "typechain --out-dir src/config/abi/types --target=ethers-v5 \"src/config/abi/*.json\""
   },
   "browserslist": {
@@ -55,6 +55,7 @@
     "@linaria/react": "3.0.0-beta.18",
     "@linaria/shaker": "3.0.0-beta.18",
     "@linaria/webpack-loader": "3.0.0-beta.18",
+    "@linaria/preeval": "3.0.0-beta.18",
     "@next/bundle-analyzer": "^12.0.7",
     "@pancakeswap/mp-styled": "1.0.1",
     "@pancakeswap/mp-uikit": "^1.0.0",
@@ -137,5 +138,9 @@
     "start-server-and-test": "^1.14.0",
     "ts-node": "^9.1.1",
     "typechain": "^6.1.0"
+  },
+  "resolutions": {
+    "@linaria/babel-preset": "3.0.0-beta.18",
+    "@linaria/preeval": "3.0.0-beta.18"
   }
 }

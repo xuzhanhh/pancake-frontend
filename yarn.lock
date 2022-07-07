@@ -162,27 +162,6 @@
     json5 "^2.2.1"
     semver "^6.3.0"
 
-"@babel/core@^7.18.2":
-  version "7.18.6"
-  resolved "https://registry.npmjs.org/@babel/core/-/core-7.18.6.tgz#54a107a3c298aee3fe5e1947a6464b9b6faca03d"
-  integrity sha512-cQbWBpxcbbs/IUredIPkHiAGULLV8iwgNRMFzvbhEXISp4f3rUUXE5+TIw6KwUWUR3DwyI6gmBRnmAtYaWehwQ==
-  dependencies:
-    "@ampproject/remapping" "^2.1.0"
-    "@babel/code-frame" "^7.18.6"
-    "@babel/generator" "^7.18.6"
-    "@babel/helper-compilation-targets" "^7.18.6"
-    "@babel/helper-module-transforms" "^7.18.6"
-    "@babel/helpers" "^7.18.6"
-    "@babel/parser" "^7.18.6"
-    "@babel/template" "^7.18.6"
-    "@babel/traverse" "^7.18.6"
-    "@babel/types" "^7.18.6"
-    convert-source-map "^1.7.0"
-    debug "^4.1.0"
-    gensync "^1.0.0-beta.2"
-    json5 "^2.2.1"
-    semver "^6.3.0"
-
 "@babel/generator@>=7", "@babel/generator@^7.18.6":
   version "7.18.6"
   resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.18.6.tgz#9ab2d46d3cbf631f0e80f72e72874a04c3fc12a9"
@@ -689,15 +668,6 @@
     "@babel/traverse" "^7.18.2"
     "@babel/types" "^7.18.2"
 
-"@babel/helpers@^7.18.6":
-  version "7.18.6"
-  resolved "https://registry.npmjs.org/@babel/helpers/-/helpers-7.18.6.tgz#4c966140eaa1fcaa3d5a8c09d7db61077d4debfd"
-  integrity sha512-vzSiiqbQOghPngUYt/zWGvK3LAsPhz55vc9XNN0xAl2gV4ieShI2OQli5duxWHD+72PZPTKAcfcZDE1Cwc5zsQ==
-  dependencies:
-    "@babel/template" "^7.18.6"
-    "@babel/traverse" "^7.18.6"
-    "@babel/types" "^7.18.6"
-
 "@babel/highlight@^7.10.4", "@babel/highlight@^7.16.7":
   version "7.16.7"
   resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.16.7.tgz#81a01d7d675046f0d96f82450d9d9578bdfd6b0b"
@@ -916,14 +886,6 @@
     "@babel/helper-plugin-utils" "^7.16.7"
     "@babel/plugin-syntax-export-default-from" "^7.16.7"
 
-"@babel/plugin-proposal-export-namespace-from@>=7", "@babel/plugin-proposal-export-namespace-from@^7.18.6":
-  version "7.18.6"
-  resolved "https://registry.npmjs.org/@babel/plugin-proposal-export-namespace-from/-/plugin-proposal-export-namespace-from-7.18.6.tgz#1016f0aa5ab383bbf8b3a85a2dcaedf6c8ee7491"
-  integrity sha512-zr/QcUlUo7GPo6+X1wC98NJADqmy5QTFWWhqeQWiki4XHafJtLl/YMGkmRB2szDD2IYJCCdBTd4ElwhId9T7Xw==
-  dependencies:
-    "@babel/helper-plugin-utils" "^7.18.6"
-    "@babel/plugin-syntax-export-namespace-from" "^7.8.3"
-
 "@babel/plugin-proposal-export-namespace-from@^7.16.7":
   version "7.16.7"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-export-namespace-from/-/plugin-proposal-export-namespace-from-7.16.7.tgz#09de09df18445a5786a305681423ae63507a6163"
@@ -938,6 +900,14 @@
   integrity sha512-j7Ye5EWdwoXOpRmo5QmRyHPsDIe6+u70ZYZrd7uz+ebPYFKfRcLcNu3Ro0vOlJ5zuv8rU7xa+GttNiRzX56snQ==
   dependencies:
     "@babel/helper-plugin-utils" "^7.17.12"
+    "@babel/plugin-syntax-export-namespace-from" "^7.8.3"
+
+"@babel/plugin-proposal-export-namespace-from@^7.18.6":
+  version "7.18.6"
+  resolved "https://registry.npmjs.org/@babel/plugin-proposal-export-namespace-from/-/plugin-proposal-export-namespace-from-7.18.6.tgz#1016f0aa5ab383bbf8b3a85a2dcaedf6c8ee7491"
+  integrity sha512-zr/QcUlUo7GPo6+X1wC98NJADqmy5QTFWWhqeQWiki4XHafJtLl/YMGkmRB2szDD2IYJCCdBTd4ElwhId9T7Xw==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.18.6"
     "@babel/plugin-syntax-export-namespace-from" "^7.8.3"
 
 "@babel/plugin-proposal-json-strings@^7.16.7":
@@ -2555,22 +2525,6 @@
     "@babel/parser" "^7.16.7"
     "@babel/types" "^7.16.7"
 
-"@babel/traverse@>=7", "@babel/traverse@^7.18.6":
-  version "7.18.6"
-  resolved "https://registry.npmjs.org/@babel/traverse/-/traverse-7.18.6.tgz#a228562d2f46e89258efa4ddd0416942e2fd671d"
-  integrity sha512-zS/OKyqmD7lslOtFqbscH6gMLFYOfG1YPqCKfAW5KrTeolKqvB8UelR49Fpr6y93kYkW2Ik00mT1LOGiAGvizw==
-  dependencies:
-    "@babel/code-frame" "^7.18.6"
-    "@babel/generator" "^7.18.6"
-    "@babel/helper-environment-visitor" "^7.18.6"
-    "@babel/helper-function-name" "^7.18.6"
-    "@babel/helper-hoist-variables" "^7.18.6"
-    "@babel/helper-split-export-declaration" "^7.18.6"
-    "@babel/parser" "^7.18.6"
-    "@babel/types" "^7.18.6"
-    debug "^4.1.0"
-    globals "^11.1.0"
-
 "@babel/traverse@^7.0.0", "@babel/traverse@^7.18.0", "@babel/traverse@^7.18.2", "@babel/traverse@^7.18.5":
   version "7.18.5"
   resolved "https://mirrors.tencent.com/npm/@babel%2ftraverse/-/traverse-7.18.5.tgz#94a8195ad9642801837988ab77f36e992d9a20cd"
@@ -2616,6 +2570,22 @@
     "@babel/helper-split-export-declaration" "^7.16.7"
     "@babel/parser" "^7.16.10"
     "@babel/types" "^7.16.8"
+    debug "^4.1.0"
+    globals "^11.1.0"
+
+"@babel/traverse@^7.18.6":
+  version "7.18.6"
+  resolved "https://registry.npmjs.org/@babel/traverse/-/traverse-7.18.6.tgz#a228562d2f46e89258efa4ddd0416942e2fd671d"
+  integrity sha512-zS/OKyqmD7lslOtFqbscH6gMLFYOfG1YPqCKfAW5KrTeolKqvB8UelR49Fpr6y93kYkW2Ik00mT1LOGiAGvizw==
+  dependencies:
+    "@babel/code-frame" "^7.18.6"
+    "@babel/generator" "^7.18.6"
+    "@babel/helper-environment-visitor" "^7.18.6"
+    "@babel/helper-function-name" "^7.18.6"
+    "@babel/helper-hoist-variables" "^7.18.6"
+    "@babel/helper-split-export-declaration" "^7.18.6"
+    "@babel/parser" "^7.18.6"
+    "@babel/types" "^7.18.6"
     debug "^4.1.0"
     globals "^11.1.0"
 
@@ -2675,18 +2645,18 @@
 
 "@binance/mp-components@^1.0.1":
   version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@binance/mp-components/-/mp-components-1.0.3.tgz#1983a8898ba4861843bc92d8e4ca277567760be4"
+  resolved "https://npm-registry.toolsfdg.net/@binance%2fmp-components/-/mp-components-1.0.3.tgz#1983a8898ba4861843bc92d8e4ca277567760be4"
   integrity sha512-/s5QR0Iqutx6ahhYehcppSV4nm3RaZRnmPU8VzJ+U0T1OsGd+ZJzc8zYeuy3gOhptcqHc2OXDPWH76sqU5Td3g==
 
 "@binance/mp-service@^1.0.4":
   version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@binance/mp-service/-/mp-service-1.0.11.tgz#69d24e5d19f02a08ca319be14f88d5133ad53c5a"
+  resolved "https://npm-registry.toolsfdg.net/@binance%2fmp-service/-/mp-service-1.0.11.tgz#69d24e5d19f02a08ca319be14f88d5133ad53c5a"
   integrity sha512-kbq3vfmu55QEVKpq3W+asz2CZLlKOX8/QS6f2flrneY7syYOrbVrs99S3dEfGzqp067LAsk87fYUGeGGT8uH0A==
 
 "@binance/sentry-miniapp@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@binance/sentry-miniapp/-/sentry-miniapp-0.2.0.tgz#f63e59e24729a7636dd7e6b38cbefb946261a6cd"
-  integrity sha512-bmVd1yhOnqiLX5vrKd8meCpXOBiHF9H/u1V9fy8OUcqE+6//mgc8DWrUxwpo5/KZ7rDjAP3WkxY9WsA08pMyhw==
+  version "0.2.1"
+  resolved "https://npm-registry.toolsfdg.net/@binance%2fsentry-miniapp/-/sentry-miniapp-0.2.1.tgz#7d3e6bd860916b65ad18fcc832c8c1369105e2b5"
+  integrity sha512-9E+angeBBVUh/KFFB9FUc9YHylp6GPSUoffVPbFdauM55YDEhOlLRb6m2Ax1qh22QYooFh6a++XipBsb1ofGDg==
   dependencies:
     "@sentry/core" "^6.17.9"
     "@sentry/types" "^6.17.9"
@@ -3769,7 +3739,7 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-5.50.0.tgz#29c6419e8379d496ab6d0426eadf3c4d100cd186"
   integrity sha512-swKHYCOZUGyVt4ge0u8a7AwNcA//h4nx5wIi0sruGye1IJ5Cva0GyK9L2/WdX+kWVTKp92ZiEo1df31lrWGPgA==
 
-"@linaria/babel-preset@3.0.0-beta.18":
+"@linaria/babel-preset@3.0.0-beta.18", "@linaria/babel-preset@^3.0.0-beta.18", "@linaria/babel-preset@^3.0.0-beta.22":
   version "3.0.0-beta.18"
   resolved "https://registry.npmjs.org/@linaria/babel-preset/-/babel-preset-3.0.0-beta.18.tgz#69c74974f8e0fcd39f75b8260f036114efc1b9a6"
   integrity sha512-RLFf0ecXVbovxHJOFakDbpoH8v5jjKAh25Okg8WLphtyUYDLNc0BlAAHgocjgIce55o8aBAiAw3hEsgfn5VATg==
@@ -3784,26 +3754,6 @@
     source-map "^0.7.3"
     stylis "^3.5.4"
 
-"@linaria/babel-preset@^3.0.0-beta.18", "@linaria/babel-preset@^3.0.0-beta.22":
-  version "3.0.0-beta.22"
-  resolved "https://registry.npmjs.org/@linaria/babel-preset/-/babel-preset-3.0.0-beta.22.tgz#21d9760cf9487d742951b5d2ecaf09ce0fe4538c"
-  integrity sha512-0Igie3stlsKT+XKYdhW7Yy8MNg2gZ5ShOosgTkpz3Agwtz+Osgb/4JNMnqGlAUaVULtMpKLc7mF/NbbhAEEF3Q==
-  dependencies:
-    "@babel/core" "^7.18.2"
-    "@babel/generator" ">=7"
-    "@babel/plugin-proposal-export-namespace-from" ">=7"
-    "@babel/plugin-syntax-dynamic-import" ">=7"
-    "@babel/plugin-transform-modules-commonjs" "^7.18.2"
-    "@babel/template" ">=7"
-    "@babel/traverse" ">=7"
-    "@linaria/core" "^3.0.0-beta.22"
-    "@linaria/logger" "^3.0.0-beta.20"
-    "@linaria/utils" "^3.0.0-beta.20"
-    cosmiconfig "^5.1.0"
-    find-up "^5.0.0"
-    source-map "^0.7.3"
-    stylis "^3.5.4"
-
 "@linaria/core@3.0.0-beta.18":
   version "3.0.0-beta.18"
   resolved "https://registry.npmjs.org/@linaria/core/-/core-3.0.0-beta.18.tgz#f54133ed306a881459e72eecd42f2ce0e9da2ed2"
@@ -3811,7 +3761,7 @@
   dependencies:
     "@linaria/utils" "^3.0.0-beta.18"
 
-"@linaria/core@^3.0.0-beta.18", "@linaria/core@^3.0.0-beta.22":
+"@linaria/core@^3.0.0-beta.18":
   version "3.0.0-beta.22"
   resolved "https://registry.npmjs.org/@linaria/core/-/core-3.0.0-beta.22.tgz#170dbeaf7bf7f7b5607d8e68d0d616d739b673b8"
   integrity sha512-BPSecW8QmhQ0y+5cWXEja+MTmLsuo0T1PjqRlSWsmDgjJFFObqCnPEgbR1KNtQb3Msmx1/9q3dYKpA5Zk3g8KQ==
@@ -3827,12 +3777,12 @@
     debug "^4.1.1"
     picocolors "^1.0.0"
 
-"@linaria/preeval@^3.0.0-beta.18":
-  version "3.0.0-beta.22"
-  resolved "https://registry.npmjs.org/@linaria/preeval/-/preeval-3.0.0-beta.22.tgz#ade822a77640ed0a5b8c2311f8f6d6d7a17e42a3"
-  integrity sha512-/PS86ljXBu3HVLTRd2sn/5wxD4ywnlTUGZPMMFlZDGuBCHlMZehD7xE6VbX6t/JZtOAylU8vDi2RYum96evHAw==
+"@linaria/preeval@3.0.0-beta.18", "@linaria/preeval@^3.0.0-beta.18":
+  version "3.0.0-beta.18"
+  resolved "https://npm-registry.toolsfdg.net/@linaria%2fpreeval/-/preeval-3.0.0-beta.18.tgz#83e5eba78399019ac6aaa797bbec5ecc5e32806d"
+  integrity sha512-GTqi0MhOFNh52o0sQ0DkdQPRTwKznavDjkKW0pSpA34r6/iDZLWIJpZwAYsyRcAG2bHPV8Xu/cFNxpSesJw13A==
   dependencies:
-    "@linaria/babel-preset" "^3.0.0-beta.22"
+    "@linaria/babel-preset" "^3.0.0-beta.18"
 
 "@linaria/react@3.0.0-beta.18":
   version "3.0.0-beta.18"
