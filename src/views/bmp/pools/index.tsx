@@ -35,6 +35,6 @@ const PoolsHome = () => {
     }
   }
 
-  return <WalletWebView onMessage={handleMessage} src="http://192.168.31.93:3000/_mp/pools" />
+  return <WalletWebView onMessage={handleMessage} src="https://web-git-mp-farms-webview.pancake.run/_mp/pools" />
 }
 export default PoolsHome
