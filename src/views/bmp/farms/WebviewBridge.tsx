@@ -3,17 +3,16 @@ import React from 'react'
 import { WebView } from '@binance/mp-components'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 
-let webviewContext: Record<string, unknown>
-
+const webviewContextMap: Record<string, Record<string, unknown>> = {}
 const provider = bn.getWeb3Provider()
-const setWebviewContext = (): Promise<void> => {
+const setWebviewContext = (src: string): Promise<void> => {
   return new Promise((resolve) => {
     mpService
       .createSelectorQuery()
       .select('.web-view')
       .context((result) => {
         // post message
-        webviewContext = result.context
+        webviewContextMap[src] = result.context
         resolve()
       })
       .exec()
@@ -29,18 +28,18 @@ interface BridgeEvent {
     data: BridgeEventData
   }
 }
-const on = ({ payload, id }: BridgeEventData) => {
+const on = (context, { payload, id }: BridgeEventData) => {
   const { event } = payload
   provider.on(event, (params: any) => {
-    webviewContext?.postMessage({ id, payload: params ?? JSON.stringify(params) })
+    context?.postMessage({ id, payload: params ?? JSON.stringify(params) })
   })
 }
-const request = async (data: BridgeEventData) => {
+const request = async (context, data: BridgeEventData) => {
   try {
     const res = await provider.request(data.payload)
-    webviewContext.postMessage({ id: data.id, payload: JSON.stringify(res) })
+    context.postMessage({ id: data.id, payload: JSON.stringify(res) })
   } catch (e) {
-    webviewContext.postMessage({ id: data.id, payload: JSON.stringify({ error: true, message: e.message }) })
+    context.postMessage({ id: data.id, payload: JSON.stringify({ error: true, message: e.message }) })
   }
 }
 interface Props {
@@ -50,27 +49,30 @@ interface Props {
 const systemInfo = getSystemInfoSync()
 const WalletWebView = ({ src, onMessage }: Props) => {
   const handleMessage = async (e: BridgeEvent) => {
+    let context = webviewContextMap[src]
+    console.log('~ context: ', context)
     const { data } = e.detail
-    if (!webviewContext) {
-      await setWebviewContext()
+    if (!context) {
+      await setWebviewContext(src)
+      context = webviewContextMap[src]
     }
     switch (data.action) {
       case 'request': {
-        await request(data)
+        await request(context, data)
         break
       }
       case 'on':
-        on(data)
+        on(context, data)
         break
       default:
         if (onMessage) {
           const res = onMessage(data)
           if (typeof res?.then === 'function') {
             res.then((response) => {
-              webviewContext.postMessage({ id: data.id, payload: response })
+              context.postMessage({ id: data.id, payload: response })
             })
           } else {
-            webviewContext.postMessage({ id: data.id, payload: res })
+            context.postMessage({ id: data.id, payload: res })
           }
         }
     }
