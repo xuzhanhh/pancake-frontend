@@ -24,14 +24,15 @@ export const usePollFarmsWithUserData = (includeArchive = false) => {
   const { account } = useWeb3React()
 
   useSlowRefreshEffect(() => {
-    const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
-    const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
+    setTimeout(() => {
+      const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
+      const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
+      dispatch(fetchFarmsPublicDataAsync(pids))
 
-    dispatch(fetchFarmsPublicDataAsync(pids))
-
-    if (account) {
-      dispatch(fetchFarmUserDataAsync({ account, pids }))
-    }
+      if (account) {
+        dispatch(fetchFarmUserDataAsync({ account, pids }))
+      }
+    })
   }, [includeArchive, dispatch, account])
 }
 
