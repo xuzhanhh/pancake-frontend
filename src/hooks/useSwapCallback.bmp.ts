@@ -107,11 +107,7 @@ function useGetBestBUSDPrice(trade?: Trade) {
       bestCurrencyAmount = outputAmount
     }
   }
-  console.log(
-    '🚀 ~ file: useSwapCallback.bmp.ts ~ line 108 ~ useGetBestBUSDPrice ~ bestCurrency, +bestCurrencyAmount',
-    bestCurrency,
-    +bestCurrencyAmount,
-  )
+
   const value = useBUSDCurrencyAmount(bestCurrency, +bestCurrencyAmount)
   return value
 }
