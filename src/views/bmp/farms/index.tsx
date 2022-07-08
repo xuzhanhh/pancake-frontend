@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import mpService from '@binance/mp-service'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import Farms from 'pages/farms/index.bmp'
+import { WebviewContext } from '@pancakeswap/uikit'
 import WalletWebView, { BridgeEventData } from './WebviewBridge'
 import { jumpToLiquidity } from 'utils/bmp/jump'
 import { FarmsPage, useFarms } from './farmsContext'
@@ -38,6 +39,13 @@ const toWallet = () => {
   })
 }
 const FarmsHome = () => {
+  const { webviewFilePath, setUrl } = useContext(WebviewContext)
+  const toExternal = (payload: { url }) => {
+    setUrl(payload.url)
+    setTimeout(() => {
+      mpService.navigateTo({ url: webviewFilePath })
+    }, 500)
+  }
   const handleMessage = (data: BridgeEventData) => {
     switch (data.action) {
       case 'jump':
@@ -47,6 +55,8 @@ const FarmsHome = () => {
         return getSystemInfoSync()
       case 'toWallet':
         return toWallet()
+      case 'toExternal':
+        return toExternal(data.payload)
     }
   }
   return <WalletWebView onMessage={handleMessage} src="https://web-git-mp-farms-webview.pancake.run/_mp/farms" />
