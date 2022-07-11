@@ -19,6 +19,7 @@ import {
   makePoolWithUserDataLoadingSelector,
   makeVaultPoolByKey,
   poolsWithVaultSelector,
+  makeVaultPoolWithKeySelector,
 } from './selectors'
 import { livePools } from 'config/constants/pools'
 
@@ -75,6 +76,12 @@ export const usePool = (sousId: number): { pool: DeserializedPool; userDataLoade
 
 export const usePoolsWithVault = () => {
   return useSelector(poolsWithVaultSelector)
+}
+
+export const useDeserializedPoolByVaultKey = (vaultKey) => {
+  const vaultPoolWithKeySelector = useMemo(() => makeVaultPoolWithKeySelector(vaultKey), [vaultKey])
+
+  return useSelector(vaultPoolWithKeySelector)
 }
 
 export const usePoolsPageFetch = () => {
