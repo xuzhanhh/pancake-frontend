@@ -221,10 +221,14 @@ export default function PoolPage() {
     setVisible(false)
   })
   useDidShow(() => {
-    setVisible(true)
+    setTimeout(() => {
+      setVisible(true)
+    }, 0)
   })
   useEffect(() => {
-    setVisible(true)
+    setTimeout(() => {
+      setVisible(true)
+    })
     return () => {
       setVisible(false)
     }

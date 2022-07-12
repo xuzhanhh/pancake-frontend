@@ -42,3 +42,6 @@ export const poolsWithVaultSelector = createSelector(
     return { pools: [cakeAutoVaultWithApr, ...withoutCakePool], userDataLoaded }
   },
 )
+
+export const makeVaultPoolWithKeySelector = (vaultKey) =>
+  createSelector(poolsWithVaultSelector, ({ pools }) => pools.find((p) => p.vaultKey === vaultKey))

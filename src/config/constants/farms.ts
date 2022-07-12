@@ -35,7 +35,7 @@ const farms: SerializedFarmConfig[] = [
     v1pid: 252,
     lpSymbol: 'BUSD-BNB LP',
     lpAddresses: {
-      97: '',
+      97: '0xa35062141Fa33BCA92Ce69FeD37D0E8908868AAe',
       56: '0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16',
     },
     token: serializedTokens.busd,
@@ -43,29 +43,127 @@ const farms: SerializedFarmConfig[] = [
   },
   //    * V3 by order of release (some may be out of PID order due to multiplier boost)
   {
+    pid: 108,
+    lpSymbol: 'OLE-BUSD LP',
+    lpAddresses: {
+      56: '0xe9F369298565B60a0DC19A6fA93cEE934Fd1A58c',
+      97: '',
+    },
+    token: serializedTokens.ole,
+    quoteToken: serializedTokens.busd,
+  },
+  {
+    pid: 107,
+    lpSymbol: 'TRIVIA-BNB LP',
+    lpAddresses: {
+      56: '0xEF642c40EebBc964881dD7Bd1A0b50e90441E73A',
+      97: '',
+    },
+    token: serializedTokens.trivia,
+    quoteToken: serializedTokens.wbnb,
+  },
+  {
     pid: 38,
     v1pid: 386,
     lpSymbol: 'HOTCROSS-BNB LP',
     lpAddresses: {
-      97: '',
       56: '0xf23bad605e94de0e3b60c9718a43a94a5af43915',
+      97: '',
     },
     token: serializedTokens.hotcross,
     quoteToken: serializedTokens.wbnb,
-    auctionHostingStartSeconds: 1653649200,
+    auctionHostingStartSeconds: 1657184400,
   },
   {
     pid: 94,
     v1pid: 525,
     lpSymbol: 'WZRD-BUSD LP',
     lpAddresses: {
-      97: '',
       56: '0xee456d906a38e10680c9d157FFf143390e9681bA',
+      97: '',
     },
     token: serializedTokens.wzrd,
     quoteToken: serializedTokens.busd,
     isCommunity: true,
-    auctionHostingStartSeconds: 1653649200,
+    auctionHostingStartSeconds: 1657184400,
+  },
+  {
+    pid: 106,
+    lpSymbol: 'MHUNT-BNB LP',
+    lpAddresses: {
+      56: '0x58aED290F42963A502626774Bd8fa03f33c9B71f',
+      97: '',
+    },
+    token: serializedTokens.mhunt,
+    quoteToken: serializedTokens.wbnb,
+    isCommunity: true,
+    auctionHostingStartSeconds: 1657184400,
+  },
+  {
+    pid: 105,
+    lpSymbol: 'SDAO-BUSD LP',
+    lpAddresses: {
+      56: '0x3d12E4381901a6b94438758B90881cB03F10b01E',
+      97: '',
+    },
+    token: serializedTokens.sdao,
+    quoteToken: serializedTokens.busd,
+  },
+  {
+    pid: 104,
+    lpSymbol: 'NBT-USDT LP',
+    lpAddresses: {
+      97: '',
+      56: '0x401AbD5327542c25baD057614935BfD98186a8a1',
+    },
+    token: serializedTokens.nbt,
+    quoteToken: serializedTokens.usdt,
+    isCommunity: true,
+  },
+  {
+    pid: 103,
+    lpSymbol: 'BBT-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x3D5A3E3824da092851026fCda3D8a0B7438c4573',
+    },
+    token: serializedTokens.bbt,
+    quoteToken: serializedTokens.wbnb,
+    isCommunity: true,
+  },
+  {
+    pid: 102,
+    lpSymbol: 'PEAK-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x41140a1650372Fb8cb2f71e335448ab8cfc1c4f3',
+    },
+    token: serializedTokens.peak,
+    quoteToken: serializedTokens.wbnb,
+    isCommunity: true,
+  },
+  {
+    pid: 93,
+    v1pid: 524,
+    lpSymbol: 'HAPPY-BNB',
+    lpAddresses: {
+      97: '',
+      56: '0x008604A38cD589680F7B8f085DC2D5B4F81151dB',
+    },
+    token: serializedTokens.happy,
+    quoteToken: serializedTokens.wbnb,
+    isCommunity: true,
+  },
+  {
+    pid: 40,
+    v1pid: 390,
+    lpSymbol: 'CHR-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x6045931e511ef7e53a4a817f971e0ca28c758809',
+    },
+    token: serializedTokens.chr,
+    quoteToken: serializedTokens.busd,
   },
   {
     pid: 96,
@@ -77,7 +175,6 @@ const farms: SerializedFarmConfig[] = [
     token: serializedTokens['8pay'],
     quoteToken: serializedTokens.busd,
     isCommunity: true,
-    auctionHostingStartSeconds: 1653649200,
   },
   {
     pid: 101,
@@ -129,18 +226,6 @@ const farms: SerializedFarmConfig[] = [
     },
     token: serializedTokens.rpg,
     quoteToken: serializedTokens.busd,
-  },
-  {
-    pid: 93,
-    v1pid: 524,
-    lpSymbol: 'HAPPY-BNB',
-    lpAddresses: {
-      97: '',
-      56: '0x008604A38cD589680F7B8f085DC2D5B4F81151dB',
-    },
-    token: serializedTokens.happy,
-    quoteToken: serializedTokens.wbnb,
-    isCommunity: true,
   },
   {
     pid: 95,
@@ -722,17 +807,6 @@ const farms: SerializedFarmConfig[] = [
       56: '0x2e28b9b74d6d99d4697e913b82b41ef1cac51c6c',
     },
     token: serializedTokens.tusd,
-    quoteToken: serializedTokens.busd,
-  },
-  {
-    pid: 40,
-    v1pid: 390,
-    lpSymbol: 'CHR-BUSD LP',
-    lpAddresses: {
-      97: '',
-      56: '0x6045931e511ef7e53a4a817f971e0ca28c758809',
-    },
-    token: serializedTokens.chr,
     quoteToken: serializedTokens.busd,
   },
   {
