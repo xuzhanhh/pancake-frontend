@@ -11,12 +11,17 @@ export const jumpToSwap = (outputCurrency?: string) => {
     globalThis.currency2 = outputCurrency
   }
 }
-export const jumpToLiquidity = (currency1: string, currency2: string) => {
+export interface LiquidityParams {
+  currency1?: string
+  currency2?: string
+  page?: LiquidityPage
+}
+export const jumpToLiquidity = ({ currency1, currency2, page = LiquidityPage.Add }: LiquidityParams) => {
   mpService.switchTab({
     url: '/views/bmp/liquidity/index',
   })
   globalThis.tabbarSelected = 1
-  globalThis.liquidityPage = LiquidityPage.Add
+  globalThis.liquidityPage = page ?? LiquidityPage.Add
   globalThis.currency1 = currency1
   globalThis.currency2 = currency2
 }

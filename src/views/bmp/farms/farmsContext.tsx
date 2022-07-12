@@ -1,5 +1,5 @@
 import React, { createContext } from 'react'
-import { jumpToLiquidity } from 'utils/bmp/jump'
+import { jumpToLiquidity, LiquidityParams } from 'utils/bmp/jump'
 
 export enum FarmsPage {
   Farms,
@@ -13,7 +13,7 @@ interface State {
 type FarmsProviderProps = { children: React.ReactNode }
 
 const FarmsContext = createContext<
-  { state: State; dispatch: Dispatch; jumpToLiquidity: (currency1: string, currency2: string) => void } | undefined
+  { state: State; dispatch: Dispatch; jumpToLiquidity: (params: LiquidityParams) => void } | undefined
 >(undefined)
 
 function FarmsReducer(state: State, action: Action) {

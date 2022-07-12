@@ -20,7 +20,7 @@ import VaultCardActions from './VaultCardActions'
 import LockedStakingApy from '../LockedPool/LockedStakingApy'
 import { getVaultPosition } from 'utils/cakePool'
 
-const StyledCardBody = styled(CardBody)<{ isLoading: boolean }>`
+const StyledCardBody = styled(CardBody) <{ isLoading: boolean }>`
   min-height: ${({ isLoading }) => (isLoading ? '0' : '254px')};
 `
 
