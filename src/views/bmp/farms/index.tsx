@@ -1,11 +1,14 @@
 import React, { useContext } from 'react'
+import semver from 'semver'
+import BmpPage from '../BmpPage'
+import { ActiveId } from '../BmpPage/constants'
 import mpService from '@binance/mp-service'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import Farms from 'pages/farms/index.bmp'
 import { WebviewContext } from '@pancakeswap/uikit'
 import WalletWebView, { BridgeEventData } from './WebviewBridge'
 import { jumpToLiquidity } from 'utils/bmp/jump'
-import { FarmsPage, useFarms } from './farmsContext'
+import { FarmsPage, FarmsProvider, useFarms } from './farmsContext'
 import { LiquidityPage } from '../liquidity/liquidityContext'
 
 export const FarmsWrapper = () => {
@@ -38,7 +41,24 @@ const toWallet = () => {
     appId: 'hhL98uho2A4sGYSHCEdCCo',
   })
 }
+const systemInfo = getSystemInfoSync()
 const FarmsHome = () => {
+  const isNewVersion = semver.gte(systemInfo.version, '2.48.0')
+  if (isNewVersion) {
+    return <WalletFarmsHome />
+  }
+  return <MiniFarmHome />
+}
+const MiniFarmHome = () => {
+  return (
+    <BmpPage activeId={ActiveId.FARMS}>
+      <FarmsProvider>
+        <FarmsWrapper />
+      </FarmsProvider>
+    </BmpPage>
+  )
+}
+const WalletFarmsHome = () => {
   const { webviewFilePath, setUrl } = useContext(WebviewContext)
   const toExternal = (payload: { url }) => {
     setUrl(payload.url)

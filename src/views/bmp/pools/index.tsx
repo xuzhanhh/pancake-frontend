@@ -1,8 +1,12 @@
+import semver from 'semver'
+import Pools from 'views/Pools/index.bmp'
 import React, { useContext } from 'react'
 import mpService from '@binance/mp-service'
 import { WebviewContext } from '@pancakeswap/uikit'
 import { jumpToLiquidity } from 'utils/bmp/jump'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
+import { ActiveId } from '../BmpPage/constants'
+import BmpPage from '../BmpPage'
 import WalletWebView, { BridgeEventData } from '../farms/WebviewBridge'
 import { LiquidityPage } from '../liquidity/liquidityContext'
 
@@ -22,8 +26,22 @@ const toWallet = () => {
     appId: 'hhL98uho2A4sGYSHCEdCCo',
   })
 }
-
+const systemInfo = getSystemInfoSync()
 const PoolsHome = () => {
+  const isNewVersion = semver.gte(systemInfo.version, '2.48.0')
+  if (isNewVersion) {
+    return <WalletPoolsHome />
+  }
+  return <MiniPoolsHome />
+}
+const MiniPoolsHome = () => {
+  return (
+    <BmpPage activeId={ActiveId.Pools}>
+      <Pools />
+    </BmpPage>
+  )
+}
+const WalletPoolsHome = () => {
   const { webviewFilePath, setUrl } = useContext(WebviewContext)
   const toExternal = (payload: { url }) => {
     setUrl(payload.url)
