@@ -2653,7 +2653,7 @@
   resolved "https://npm-registry.toolsfdg.net/@binance%2fmp-service/-/mp-service-1.0.11.tgz#69d24e5d19f02a08ca319be14f88d5133ad53c5a"
   integrity sha512-kbq3vfmu55QEVKpq3W+asz2CZLlKOX8/QS6f2flrneY7syYOrbVrs99S3dEfGzqp067LAsk87fYUGeGGT8uH0A==
 
-"@binance/sentry-miniapp@^0.2.0":
+"@binance/sentry-miniapp@^0.2.1":
   version "0.2.1"
   resolved "https://npm-registry.toolsfdg.net/@binance%2fsentry-miniapp/-/sentry-miniapp-0.2.1.tgz#7d3e6bd860916b65ad18fcc832c8c1369105e2b5"
   integrity sha512-9E+angeBBVUh/KFFB9FUc9YHylp6GPSUoffVPbFdauM55YDEhOlLRb6m2Ax1qh22QYooFh6a++XipBsb1ofGDg==
@@ -23716,8 +23716,10 @@ watchpack@^1.7.4:
   resolved "https://registry.yarnpkg.com/watchpack/-/watchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha512-9P3MWk6SrKjHsGkLT2KHXdQ/9SNkyoJbabxnKOoJepsvJjJG8uYTR3yTPxPQvNDI3w4Nz1xnE0TLHK4RIVe/MQ==
   dependencies:
+    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"

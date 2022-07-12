@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { ThemeProvider } from '@pancakeswap/mp-styled-2'
-import { ThemeProvider as NewThemeProvider } from '@pancakeswap/mp-styled-2'
 import { light, dark, WebviewProvider } from '@pancakeswap/uikit'
 import { Web3ReactProvider } from '@web3-react/core'
 import { SWRConfig } from 'swr'
@@ -21,10 +20,6 @@ const ThemeProviderWrapper = (props) => {
   return <ThemeProvider theme={isDark ? dark : light} {...props} />
 }
 
-const NewThemeProviderWrapper = (props) => {
-  const [isDark] = useThemeManager()
-  return <NewThemeProvider theme={isDark ? dark : light} {...props} />
-}
 const Hooks2 = () => {
   usePollBlockNumber()
   useEagerConnect()
@@ -32,10 +27,10 @@ const Hooks2 = () => {
 }
 export const PathContext = React.createContext({
   redirectAddress: '',
-  setRedirectAddress: (redirectAddress) => { },
+  setRedirectAddress: (redirectAddress) => {},
 })
 
-export const PathProvider = function({ children }) {
+export const PathProvider = function ({ children }) {
   const [redirectAddress, setRedirectAddress] = useState('')
   return <PathContext.Provider value={{ redirectAddress, setRedirectAddress }}>{children}</PathContext.Provider>
 }
@@ -46,20 +41,18 @@ const Providers: React.FC = ({ children }) => {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <ThemeProviderWrapper>
-            <NewThemeProviderWrapper>
-              <LanguageProvider>
-                <SWRConfig
-                  value={{
-                    use: [fetchStatusMiddleware],
-                  }}
-                >
-                  <PathProvider>
-                    <WebviewProvider webviewFilePath="views/webview">{children}</WebviewProvider>
-                    <Hooks2 />
-                  </PathProvider>
-                </SWRConfig>
-              </LanguageProvider>
-            </NewThemeProviderWrapper>
+            <LanguageProvider>
+              <SWRConfig
+                value={{
+                  use: [fetchStatusMiddleware],
+                }}
+              >
+                <PathProvider>
+                  <WebviewProvider webviewFilePath="views/webview">{children}</WebviewProvider>
+                  <Hooks2 />
+                </PathProvider>
+              </SWRConfig>
+            </LanguageProvider>
           </ThemeProviderWrapper>
         </PersistGate>
       </Provider>

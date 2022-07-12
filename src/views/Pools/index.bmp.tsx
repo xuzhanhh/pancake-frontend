@@ -470,28 +470,26 @@ const Fetcher = ({ pools: oldPools, setPools, userDataLoaded: oldUserDataLoaded,
 }
 
 const PoolsWrapper = () => {
-  const [fetchingData, setFetchingData] = useState(true)
+  // const [fetchingData, setFetchingData] = useState(true)
   const [pools, setPools] = useState([])
   const [userDataLoaded, setUserDataLoaded] = useState(false)
 
-  useDidShow(() => {
-    setFetchingData(true)
-  })
-  useDidHide(() => {
-    setFetchingData(false)
-  })
+  // useDidShow(() => {
+  //   setFetchingData(true)
+  // })
+  // useDidHide(() => {
+  //   setFetchingData(false)
+  // })
 
   return (
     <view>
       <Pools pools={pools} userDataLoaded={userDataLoaded} />
-      {fetchingData && (
-        <Fetcher
-          pools={pools}
-          setPools={setPools}
-          userDataLoaded={userDataLoaded}
-          setUserDataLoaded={setUserDataLoaded}
-        />
-      )}
+      <Fetcher
+        pools={pools}
+        setPools={setPools}
+        userDataLoaded={userDataLoaded}
+        setUserDataLoaded={setUserDataLoaded}
+      />
     </view>
   )
 }

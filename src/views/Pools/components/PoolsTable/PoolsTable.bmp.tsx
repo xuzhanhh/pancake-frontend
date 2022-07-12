@@ -6,6 +6,7 @@ import { DeserializedPool } from 'state/types'
 import PoolRow from './PoolRow'
 import { VariableSizeList } from 'views/bmp/BmpPage/components/VirtualList'
 import remove from 'lodash/remove'
+import { VaultPoolRow } from './PoolRow.bmp'
 
 interface PoolsTableProps {
   pools: DeserializedPool[]
@@ -40,15 +41,27 @@ const ScrollButtonContainer = styled.div`
 
 const VirtualListRow = React.memo(({ data, index, style }) => {
   const { pool, userDataLoaded, account, expanded, toggleExpand, setHeight } = data[index]
-  console.log('aaa VirtualListRow')
+  if (pool.vaultKey) {
+    return (
+      <VaultPoolRow
+        account={account}
+        vaultKey={pool.vaultKey}
+        expanded={expanded}
+        toggleExpand={toggleExpand}
+        setHeight={setHeight}
+        userDataLoaded={userDataLoaded}
+      />
+    )
+  }
   return (
     <PoolRow
-      pool={pool}
+      // pool={pool}
       account={account}
       userDataLoaded={userDataLoaded}
       expanded={expanded}
       toggleExpand={toggleExpand}
       setHeight={setHeight}
+      sousId={pool.sousId}
     />
   )
 })
@@ -61,7 +74,6 @@ const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account,
   useEffect(() => {
     virtualListRef.current?.resetAfterIndex(0)
   }, [height])
-  console.log('aaa PoolsTable', pools)
   const virtualListRef = useRef()
   const toggleExpand = useCallback(
     (index) => () => {
