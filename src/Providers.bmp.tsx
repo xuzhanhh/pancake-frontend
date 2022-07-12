@@ -14,6 +14,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 
 import { usePollBlockNumber } from 'state/block/hooks'
 import useEagerConnect from 'hooks/useEagerConnect'
+import useBmpInit from 'hooks/bmp/useBmpInit'
 
 const ThemeProviderWrapper = (props) => {
   const [isDark] = useThemeManager()
@@ -22,6 +23,7 @@ const ThemeProviderWrapper = (props) => {
 
 const Hooks2 = () => {
   usePollBlockNumber()
+  useBmpInit()
   useEagerConnect()
   return null
 }
