@@ -45,6 +45,6 @@ const PoolsHome = () => {
     }
   }
 
-  return <WalletWebView onMessage={handleMessage} src="https://web-git-mp-farms-webview.pancake.run/_mp/pools" />
+  return <WalletWebView onMessage={handleMessage} src="https://pancakeswap.finance/_mp/pools" />
 }
 export default PoolsHome

@@ -59,6 +59,6 @@ const FarmsHome = () => {
         return toExternal(data.payload)
     }
   }
-  return <WalletWebView onMessage={handleMessage} src="https://web-git-mp-farms-webview.pancake.run/_mp/farms" />
+  return <WalletWebView onMessage={handleMessage} src="https://pancakeswap.finance/_mp/farms" />
 }
 export default FarmsHome
