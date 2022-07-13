@@ -6,6 +6,7 @@ import { useModal, Button, Modal, Flex, Text, Checkbox } from '@pancakeswap/uiki
 import { useTranslation } from 'contexts/Localization'
 import debounce from 'lodash.debounce'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
+import './useDisclaimer.css'
 
 const { platform } = getSystemInfoSync()
 const TextWrap = styled.div`
@@ -77,8 +78,9 @@ function DisclaimerModal(props) {
       hideCloseButton
       title="PancakeSwap Mini-Program User Service Agreement"
       headerBackground="gradients.cardHeader"
+      className="disclaimer-modal"
     >
-      <view style={{ position: 'relative' }}>
+      <view style={{ position: 'relative', marginRight: '-14px' }}>
         <ScrollView
           id="scrollview"
           className="scroll-area"
@@ -98,7 +100,7 @@ function DisclaimerModal(props) {
             }
           }}
         >
-          <view className="disclaimer-container" pl="4px">
+          <view className="disclaimer-container" pl="4px" style={{ paddingRight: '14px' }}>
             <TextWrap>
               {Array.from({ length: 14 }, (_, index) => index).map((item) => (
                 <Text key={item}>{t(`user-service-agreement-${item + 1}`)}</Text>
