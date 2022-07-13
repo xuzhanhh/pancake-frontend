@@ -153,9 +153,9 @@ const useDisclaimer = () => {
   }
   const [handleClick] = useModal(<MemoModal onClick={handleModalClick} />, false)
   useEffect(() => {
-    // if (!isShowDisclaimerBefore) {
-    handleClick()
-    // }
+    if (!isShowDisclaimerBefore) {
+      handleClick()
+    }
   }, [])
 }
 
