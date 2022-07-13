@@ -16,6 +16,7 @@ import TransactionSettings from './TransactionSettings'
 import ExpertModal from './ExpertModal'
 import GasSettings from './GasSettings'
 import { ScrollView } from '@tarojs/components'
+import { FloatLayout } from 'components/FloatLayout/index.bmp'
 
 // const ScrollableContainer = styled(Flex)`
 //   flex-direction: column;
@@ -64,55 +65,62 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
   }
 
   return (
-    <Modal
+    <FloatLayout
       title={t('Settings')}
       headerBackground="gradients.cardHeader"
       onDismiss={onDismiss}
       style={{ maxWidth: '420px' }}
     >
-      <ScrollView scrollY style={{ maxHeight: '58vh' }}>
-        <Flex pb="24px" flexDirection="column">
-          <Text bold textTransform="uppercase" fontSize="12px" color="secondary" mb="24px">
-            {t('Global')}
-          </Text>
-          {/* <Flex justifyContent="space-between"> */}
-          {/*   <Text mb="24px">{t('Dark mode')}</Text> */}
-          {/*   <ThemeSwitcher isDark={isDark} toggleTheme={toggleTheme} /> */}
-          {/* </Flex> */}
-          <GasSettings />
-        </Flex>
-        <Flex pt="24px" flexDirection="column" borderTop={`1px ${theme.colors.cardBorder} solid`}>
-          <Text bold textTransform="uppercase" fontSize="12px" color="secondary" mb="24px">
-            {t('Swaps & Liquidity')}
-          </Text>
-          <TransactionSettings />
-        </Flex>
-        <Flex justifyContent="space-between" alignItems="center" mb="24px">
-          <Flex alignItems="center">
-            <Text>{t('Expert Mode')}</Text>
-            <QuestionHelper
-              text={t('Bypasses confirmation modals and allows high slippage trades. Use at your own risk.')}
-              placement="top-start"
-              ml="4px"
-            />
-          </Flex>
-          <Toggle id="toggle-expert-mode-button" scale="md" checked={expertMode} onChange={handleExpertModeToggle} />
-        </Flex>
-        <Flex justifyContent="space-between" alignItems="center" mb="24px">
-          <Flex alignItems="center">
-            <Text>{t('Disable Multihops')}</Text>
-            <QuestionHelper text={t('Restricts swaps to direct pairs only.')} placement="top-start" ml="4px" />
-          </Flex>
-          <Toggle
-            id="toggle-disable-multihop-button"
-            checked={singleHopOnly}
-            scale="md"
-            onChange={() => {
-              setSingleHopOnly(!singleHopOnly)
-            }}
-          />
-        </Flex>
-        {/* <Flex justifyContent="space-between" alignItems="center" mb="24px">
+      <view style={{ display: 'flex', flexDirection: 'column' }}>
+        <ScrollView scrollY style={{ maxHeight: '58vh' }}>
+          <view style={{ padding: '24px' }}>
+            <Flex pb="24px" flexDirection="column">
+              <Text bold textTransform="uppercase" fontSize="12px" color="secondary" mb="24px">
+                {t('Global')}
+              </Text>
+              {/* <Flex justifyContent="space-between"> */}
+              {/*   <Text mb="24px">{t('Dark mode')}</Text> */}
+              {/*   <ThemeSwitcher isDark={isDark} toggleTheme={toggleTheme} /> */}
+              {/* </Flex> */}
+              <GasSettings />
+            </Flex>
+            <Flex pt="24px" flexDirection="column" borderTop={`1px ${theme.colors.cardBorder} solid`}>
+              <Text bold textTransform="uppercase" fontSize="12px" color="secondary" mb="24px">
+                {t('Swaps & Liquidity')}
+              </Text>
+              <TransactionSettings />
+            </Flex>
+            <Flex justifyContent="space-between" alignItems="center" mb="24px">
+              <Flex alignItems="center">
+                <Text>{t('Expert Mode')}</Text>
+                <QuestionHelper
+                  text={t('Bypasses confirmation modals and allows high slippage trades. Use at your own risk.')}
+                  placement="top-start"
+                  ml="4px"
+                />
+              </Flex>
+              <Toggle
+                id="toggle-expert-mode-button"
+                scale="md"
+                checked={expertMode}
+                onChange={handleExpertModeToggle}
+              />
+            </Flex>
+            <Flex justifyContent="space-between" alignItems="center" mb="24px">
+              <Flex alignItems="center">
+                <Text>{t('Disable Multihops')}</Text>
+                <QuestionHelper text={t('Restricts swaps to direct pairs only.')} placement="top-start" ml="4px" />
+              </Flex>
+              <Toggle
+                id="toggle-disable-multihop-button"
+                checked={singleHopOnly}
+                scale="md"
+                onChange={() => {
+                  setSingleHopOnly(!singleHopOnly)
+                }}
+              />
+            </Flex>
+            {/* <Flex justifyContent="space-between" alignItems="center" mb="24px">
           <Flex alignItems="center">
             <Text>{t('Subgraph Health Indicator')}</Text>
             <QuestionHelper
@@ -132,19 +140,21 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
             }}
           />
         </Flex> */}
-        {/* <Flex justifyContent="space-between" alignItems="center"> */}
-        {/*   <Flex alignItems="center"> */}
-        {/*     <Text>{t('Flippy sounds')}</Text> */}
-        {/*     <QuestionHelper */}
-        {/*       text={t('Fun sounds to make a truly immersive pancake-flipping trading experience')} */}
-        {/*       placement="top-start" */}
-        {/*       ml="4px" */}
-        {/*     /> */}
-        {/*   </Flex> */}
-        {/*   <PancakeToggle checked={audioPlay} onChange={toggleSetAudioMode} scale="md" /> */}
-        {/* </Flex> */}
-      </ScrollView>
-    </Modal>
+            {/* <Flex justifyContent="space-between" alignItems="center"> */}
+            {/*   <Flex alignItems="center"> */}
+            {/*     <Text>{t('Flippy sounds')}</Text> */}
+            {/*     <QuestionHelper */}
+            {/*       text={t('Fun sounds to make a truly immersive pancake-flipping trading experience')} */}
+            {/*       placement="top-start" */}
+            {/*       ml="4px" */}
+            {/*     /> */}
+            {/*   </Flex> */}
+            {/*   <PancakeToggle checked={audioPlay} onChange={toggleSetAudioMode} scale="md" /> */}
+            {/* </Flex> */}
+          </view>
+        </ScrollView>
+      </view>
+    </FloatLayout>
   )
 }
 
