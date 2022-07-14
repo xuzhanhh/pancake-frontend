@@ -7,7 +7,7 @@ import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import Farms from 'pages/farms/index.bmp'
 import { WebviewContext } from '@pancakeswap/uikit'
 import WalletWebView, { BridgeEventData } from './WebviewBridge'
-import { jumpToLiquidity } from 'utils/bmp/jump'
+import { jumpToLiquidity, jumpToSwap } from 'utils/bmp/jump'
 import { FarmsPage, FarmsProvider, useFarms } from './farmsContext'
 import { LiquidityPage } from '../liquidity/liquidityContext'
 
@@ -34,6 +34,8 @@ const jump = (payload: { path: string; query?: Record<string, string> }) => {
         currency2: payload.query.currency2,
       })
       break
+    case 'swap':
+      return jumpToSwap(payload?.query?.outputCurrency || '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82')
   }
 }
 const toWallet = () => {

@@ -3,7 +3,7 @@ import Pools from 'views/Pools/index.bmp'
 import React, { useContext } from 'react'
 import mpService from '@binance/mp-service'
 import { WebviewContext } from '@pancakeswap/uikit'
-import { jumpToLiquidity } from 'utils/bmp/jump'
+import { jumpToLiquidity, jumpToSwap } from 'utils/bmp/jump'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import { ActiveId } from '../BmpPage/constants'
 import BmpPage from '../BmpPage'
@@ -19,6 +19,8 @@ const jump = (payload: { path: string; query?: Record<string, string> }) => {
         currency2: payload.query.currency2,
       })
       break
+    case 'swap':
+      return jumpToSwap(payload?.query?.outputCurrency || '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82')
   }
 }
 const toWallet = () => {
