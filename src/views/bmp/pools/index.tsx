@@ -21,7 +21,6 @@ const jump = (payload: { path: string; query?: Record<string, string> }) => {
       break
     case 'swap':
       return jumpToSwap(payload?.query?.outputCurrency || '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82')
-      
   }
 }
 const toWallet = () => {
