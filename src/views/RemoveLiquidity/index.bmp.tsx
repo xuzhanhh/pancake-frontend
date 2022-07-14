@@ -42,6 +42,8 @@ import ErrorBoundary from 'components/ErrorBoundary'
 import { useTracker } from 'contexts/AnalyticsContext'
 import { CHAIN_ID } from 'config/constants/networks'
 import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
+import { EVENT_IDS, track } from 'utils/bmp/report'
+import { captureException } from '@binance/sentry-miniapp'
 
 const BorderCard = styled.div`
   border: solid 1px ${({ theme }) => theme.colors.cardBorder};
@@ -314,6 +316,14 @@ export default function RemoveLiquidity() {
             } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(3)} ${currencyB?.symbol}`,
           })
           trackLiquidityRemove(response.hash)
+          track.click(EVENT_IDS.INVOKE_CONTRACT_METHODS, {
+            df_8: account,
+            df_9: 'withdraw-lp_success',
+            df_11: JSON.stringify({
+              txHash: response.hash,
+              args,
+            }),
+          })
           setTxHash(response.hash)
         })
         .catch((err: Error) => {
@@ -321,6 +331,15 @@ export default function RemoveLiquidity() {
           setLiquidityErrorMessage(err && err?.code !== 4001 ? `Remove Liquidity failed: ${err.message}` : undefined)
           // we only care if the error is something _other_ than the user rejected the tx
           console.error(err)
+          captureException(err)
+          track.click(EVENT_IDS.INVOKE_CONTRACT_METHODS, {
+            df_8: account,
+            df_9: 'withdraw-lp_fail',
+            df_11: JSON.stringify({
+              args,
+            }),
+            df_12: err.toString(),
+          })
         })
     }
   }

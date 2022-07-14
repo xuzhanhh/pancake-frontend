@@ -15,6 +15,7 @@ import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './ENS/useENS'
 import { useBUSDCurrencyAmount } from './useBUSDPrice'
 import { useHandleTrack } from './bmp/useHandleTrack'
+import { EVENT_IDS, track } from 'utils/bmp/report'
 
 export enum SwapCallbackState {
   INVALID,
@@ -230,17 +231,40 @@ export function useSwapCallback(
               summary: withRecipient,
             })
 
-            const track = {
+            const trackData = {
               account,
               txHash: response.hash,
               from: `${inputAmount} ${inputSymbol}`,
               to: `${outputAmount} ${outputSymbol}`,
               value: tradeVolume.toFixed(3),
             }
-            trackSwapSubmitted(JSON.stringify(track), Math.ceil(tradeVolume))
+            trackSwapSubmitted(JSON.stringify(trackData), Math.ceil(tradeVolume))
+            track.click(EVENT_IDS.INVOKE_CONTRACT_METHODS, {
+              df_8: account,
+              df_9: 'swap_success',
+              df_11: JSON.stringify(trackData),
+              price1: Math.ceil(tradeVolume),
+            })
             return response.hash
           })
           .catch((error: any) => {
+            const inputSymbol = trade.inputAmount.currency.symbol
+            const outputSymbol = trade.outputAmount.currency.symbol
+            const inputAmount = trade.inputAmount.toSignificant(3)
+            const outputAmount = trade.outputAmount.toSignificant(3)
+            const trackData = {
+              account,
+              from: `${inputAmount} ${inputSymbol}`,
+              to: `${outputAmount} ${outputSymbol}`,
+              value: tradeVolume.toFixed(3),
+            }
+            track.click(EVENT_IDS.INVOKE_CONTRACT_METHODS, {
+              df_8: account,
+              df_9: 'swap_fail',
+              df_11: JSON.stringify(trackData),
+              df_12: error.toString(),
+              price1: Math.ceil(tradeVolume),
+            })
             // if the user rejected the tx, pass this along
             if (error?.code === 4001) {
               throw new Error('Transaction rejected.')
