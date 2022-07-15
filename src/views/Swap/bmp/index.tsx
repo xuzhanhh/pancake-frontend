@@ -63,6 +63,7 @@ import CurrencyInputHeader from '../components/CurrencyInputHeader'
 import { useDidShow } from '@binance/mp-service'
 import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 import { HitBuilders } from 'utils/ga'
+import { EVENT_IDS, track } from 'utils/bmp/report'
 
 const Label = styled(Text)`
   font-size: 12px;
@@ -521,6 +522,7 @@ function Swap() {
                       variant={isValid && priceImpactSeverity > 2 ? 'danger' : 'primary'}
                       onClick={() => {
                         trackSwapClickSwap()
+                        track.click(EVENT_IDS.SWAP_CLICK)
                         if (isExpertMode) {
                           handleSwap()
                         } else {
@@ -551,6 +553,7 @@ function Swap() {
                     variant={isValid && priceImpactSeverity > 2 && !swapCallbackError ? 'danger' : 'primary'}
                     onClick={() => {
                       trackSwapClickSwap()
+                      track.click(EVENT_IDS.SWAP_CLICK)
                       if (isExpertMode) {
                         handleSwap()
                       } else {
