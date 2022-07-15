@@ -231,6 +231,7 @@ function Swap() {
   const [singleHopOnly] = useUserSingleHopOnly()
 
   const handleSwap = useCallback(() => {
+    track.click(EVENT_IDS.CONFIRM_SWAP_CLICK)
     if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)) {
       return
     }
