@@ -5,7 +5,7 @@ import { init, bindRequest } from '@binance/sentry-miniapp'
 import { getEnv } from 'utils/bmp/getEnv'
 import './polyfill.bmp'
 import 'utils/apr.bmp'
-import { initMiniTrack } from '@binance/mini-track'
+import { initMiniTrack } from 'utils/bmp/sensors'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 
 declare const COMMIT_ID: string

@@ -1903,13 +1903,6 @@
     "@tarojs/react" "3.4.4"
     babel-preset-taro "3.4.4"
 
-"@binance/mini-track@^0.0.7":
-  version "0.0.7"
-  resolved "https://npm-registry.toolsfdg.net/@binance%2fmini-track/-/mini-track-0.0.7.tgz#ece8b700e2a99a593a120dcabc012ea6110e6cab"
-  integrity sha512-/9k+PJjrk+1nOUQy0XDcUDNB32ZFk51coWU/KZaVPWpzHZ+0UPcljEdl/oOwxXxplxJq3ODlMciHXrKBFq7zbQ==
-  dependencies:
-    tslib "^2.3.1"
-
 "@binance/mp-components@^1.0.1":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@binance/mp-components/-/mp-components-1.0.3.tgz#1983a8898ba4861843bc92d8e4ca277567760be4"
@@ -21911,11 +21904,6 @@ tslib@^2, tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@~2.3.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.1.tgz#e8a335add5ceae51aa261d32a490158ef042ef01"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
-
-tslib@^2.3.1:
-  version "2.4.0"
-  resolved "https://npm-registry.toolsfdg.net/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
-  integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
 tsort@0.0.1:
   version "0.0.1"
