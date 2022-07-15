@@ -1,4 +1,4 @@
-import { miniTrack } from '@binance/mini-track'
+import { miniTrack } from './sensors'
 
 function report(type, params) {
   try {
