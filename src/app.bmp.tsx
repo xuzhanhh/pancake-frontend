@@ -5,9 +5,13 @@ import { init, bindRequest } from '@binance/sentry-miniapp'
 import { getEnv } from 'utils/bmp/getEnv'
 import './polyfill.bmp'
 import 'utils/apr.bmp'
+import { initMiniTrack } from '@binance/mini-track'
+import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 
 declare const COMMIT_ID: string
 declare const env: any
+
+const systemInfo = getSystemInfoSync()
 
 init({
   dsn: 'https://c4641904bb124a01adcbf53b19b94f3d@o529943.ingest.sentry.io/6227528',
@@ -24,6 +28,12 @@ init({
 })
 bn.request = bindRequest(bn.request)
 __mp_private_api__.request = bindRequest(__mp_private_api__.request)
+
+initMiniTrack({
+  appId: systemInfo?.host?.appId,
+  server_url: 'https://sensors.binance.cloud/sa?project=binance',
+  data_report_type: 'request',
+})
 
 class App extends Component {
   componentDidMount() {

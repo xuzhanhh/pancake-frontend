@@ -37,6 +37,7 @@
   "dependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
     "@binance/babel-preset-bmp": "^1.0.9",
+    "@binance/mini-track": "^0.0.7",
     "@binance/mp-components": "^1.0.1",
     "@binance/mp-service": "^1.0.4",
     "@binance/sentry-miniapp": "^0.2.1",

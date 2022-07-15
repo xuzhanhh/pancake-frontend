@@ -45,6 +45,8 @@ import Dots from '../../../components/Loader/Dots'
 import ConfirmAddModalBottom from '../ConfirmAddModalBottom'
 import { currencyId } from '../../../utils/currencyId'
 import PoolPriceBar from '../PoolPriceBar'
+import { EVENT_IDS, track } from 'utils/bmp/report'
+import { captureException } from '@binance/sentry-miniapp'
 function AddLiquidity() {
   // const router = useRouter()
   // const [currencyIdA, currencyIdB] = router.query.currency || []
@@ -204,16 +206,35 @@ function AddLiquidity() {
           })
 
           trackLiquidityAdd(response.hash)
+          track.click(EVENT_IDS.INVOKE_CONTRACT_METHODS, {
+            df_8: account,
+            df_9: 'supply-lp_success',
+            df_11: JSON.stringify({
+              txHash: response.hash,
+              args,
+            }),
+          })
           setTxHash(response.hash)
         }),
       )
       .catch((err) => {
+        console.log('error caught')
+        console.error(err)
         setAttemptingTxn(false)
         setLiquidityErrorMessage(err && err.code !== 4001 ? `Add Liquidity failed: ${err.message}` : undefined)
         // we only care if the error is something _other_ than the user rejected the tx
         if (err?.code !== 4001) {
           console.error(err)
         }
+        captureException(err)
+        track.click(EVENT_IDS.INVOKE_CONTRACT_METHODS, {
+          df_8: account,
+          df_9: 'supply-lp_fail',
+          df_11: JSON.stringify({
+            args,
+          }),
+          df_12: err.toString(),
+        })
       })
   }
 
