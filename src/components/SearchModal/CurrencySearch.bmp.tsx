@@ -5,6 +5,8 @@ import { useTranslation } from 'contexts/Localization'
 import { FixedSizeList } from 'react-window'
 import { useAudioModeManager } from 'state/user/hooks'
 import useDebounce from 'hooks/useDebounce'
+import { useAllLists, useInactiveListUrls } from 'state/lists/hooks'
+import { TagInfo, WrappedTokenInfo } from 'state/types'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } from '../../hooks/Tokens'
 import { isAddress } from '../../utils'
@@ -12,7 +14,7 @@ import Column, { AutoColumn } from '../Layout/Column'
 import Row from '../Layout/Row'
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
-import { filterTokens, useSortedTokensByQuery } from './filtering'
+import { filterTokens, useSortedTokensByQuery, createFilterToken } from './filtering'
 import useTokenComparator from './sorting'
 import { getSwapSound } from './swapSound'
 
@@ -25,6 +27,43 @@ interface CurrencySearchProps {
   showCommonBases?: boolean
   showImportView: () => void
   setImportToken: (token: Token) => void
+}
+
+export function useSearchInactiveTokenLists(search: string | undefined, minResults = 10): WrappedTokenInfo[] {
+  const lists = useAllLists()
+  const inactiveUrls = useInactiveListUrls()
+  const { chainId } = useActiveWeb3React()
+  const activeTokens = useAllTokens()
+  return useMemo(() => {
+    if (!search || search.trim().length === 0) return []
+    const filterToken = createFilterToken(search)
+    const result: WrappedTokenInfo[] = []
+    const addressSet: { [address: string]: true } = {}
+    for (const url of inactiveUrls) {
+      const list = lists[url].current
+      // eslint-disable-next-line no-continue
+      if (!list) continue
+      for (const tokenInfo of list.tokens) {
+        const tags: TagInfo[] =
+          tokenInfo.tags
+            ?.map((tagId) => {
+              if (!list.tags?.[tagId]) return undefined
+              return { ...list.tags[tagId], id: tagId }
+            })
+            ?.filter((x): x is TagInfo => Boolean(x)) ?? []
+
+        if (tokenInfo.chainId === chainId && filterToken(tokenInfo)) {
+          const wrapped: WrappedTokenInfo = new WrappedTokenInfo(tokenInfo, tags)
+          if (!(wrapped.address in activeTokens) && !addressSet[wrapped.address]) {
+            addressSet[wrapped.address] = true
+            result.push(wrapped)
+            if (result.length >= minResults) return result
+          }
+        }
+      }
+    }
+    return result
+  }, [activeTokens, chainId, inactiveUrls, lists, minResults, search])
 }
 
 function CurrencySearch({
@@ -62,14 +101,14 @@ function CurrencySearch({
   const tokenComparator = useTokenComparator(invertSearchOrder)
 
   const filteredTokens: Token[] = useMemo(() => {
-    return filterTokens(Object.values(allTokens), debouncedQuery)
+    const filterToken = createFilterToken(debouncedQuery)
+    return Object.values(allTokens).filter(filterToken)
   }, [allTokens, debouncedQuery])
 
-  const sortedTokens: Token[] = useMemo(() => {
-    return filteredTokens.sort(tokenComparator)
-  }, [filteredTokens, tokenComparator])
-
-  const filteredSortedTokens = useSortedTokensByQuery(sortedTokens, debouncedQuery)
+  const filteredQueryTokens = useSortedTokensByQuery(filteredTokens, debouncedQuery)
+  const filteredSortedTokens: Token[] = useMemo(() => {
+    return [...filteredQueryTokens].sort(tokenComparator)
+  }, [filteredQueryTokens, tokenComparator])
 
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
@@ -115,8 +154,7 @@ function CurrencySearch({
   )
 
   // if no results on main list, show option to expand into inactive
-  const inactiveTokens = useFoundOnInactiveList(debouncedQuery)
-  const filteredInactiveTokens: Token[] = useSortedTokensByQuery(inactiveTokens, debouncedQuery)
+  const filteredInactiveTokens = useSearchInactiveTokenLists(debouncedQuery)
 
   return (
     <>
@@ -151,7 +189,7 @@ function CurrencySearch({
               currencies={
                 filteredInactiveTokens ? filteredSortedTokens.concat(filteredInactiveTokens) : filteredSortedTokens
               }
-              breakIndex={inactiveTokens && filteredSortedTokens ? filteredSortedTokens.length : undefined}
+              breakIndex={filteredSortedTokens ? filteredSortedTokens.length : undefined}
               onCurrencySelect={handleCurrencySelect}
               otherCurrency={otherSelectedCurrency}
               selectedCurrency={selectedCurrency}

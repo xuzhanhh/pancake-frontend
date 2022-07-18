@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Image as MpImage, ImageProps } from '@binance/mp-components'
 import { HelpIcon } from '@pancakeswap/uikit'
 
-const BAD_SRCS: { [tokenAddress: string]: true } = {}
+export const BAD_SRCS: { [tokenAddress: string]: true } = {}
 
 export interface LogoProps extends ImageProps {
   srcs: string[]

@@ -1,6 +1,7 @@
 // Set of helper functions to facilitate wallet setup
 
 import { BASE_BSC_SCAN_URL, BASE_URL } from 'config'
+import { BAD_SRCS } from 'components/Logo/Logo'
 import { nodes } from './getRpcUrl'
 
 /**
@@ -46,7 +47,15 @@ export const setupNetwork = async () => {
  * @param tokenDecimals
  * @returns {boolean} true if the token has been added, false otherwise
  */
-export const registerToken = async (tokenAddress: string, tokenSymbol: string, tokenDecimals: number) => {
+export const registerToken = async (
+  tokenAddress: string,
+  tokenSymbol: string,
+  tokenDecimals: number,
+  tokenLogo?: string,
+) => {
+  // better leave this undefined for default image instead of broken image url
+  const image = tokenLogo ? (BAD_SRCS[tokenLogo] ? undefined : tokenLogo) : undefined
+
   const tokenAdded = await window.ethereum.request({
     method: 'wallet_watchAsset',
     params: {
@@ -55,7 +64,7 @@ export const registerToken = async (tokenAddress: string, tokenSymbol: string, t
         address: tokenAddress,
         symbol: tokenSymbol,
         decimals: tokenDecimals,
-        image: `${BASE_URL}/images/tokens/${tokenAddress}.png`,
+        image,
       },
     },
   })

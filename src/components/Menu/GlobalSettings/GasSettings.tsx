@@ -2,7 +2,7 @@ import React from 'react'
 import { Flex, Button, Text } from '@pancakeswap/uikit'
 import QuestionHelper from 'components/QuestionHelper'
 import { useTranslation } from 'contexts/Localization'
-import { GAS_PRICE_GWEI, GAS_PRICE } from 'state/user/hooks/helpers'
+import { GAS_PRICE_GWEI, GAS_PRICE } from 'state/types'
 import { useGasPriceManager } from 'state/user/hooks'
 
 const GasSettings = () => {
