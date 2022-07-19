@@ -30,4 +30,6 @@ export enum EVENT_IDS {
   CONNECT_WALLET = 'app_click_pcs_connect_wallet',
   SWAP_CLICK = 'app_click_pcs_swap_click',
   CONFIRM_SWAP_CLICK = 'app_click_pcs_confirm_swap_click',
+  // view
+  ACCOUNT_DETAIL = 'app_view_pcs_account_detail',
 }
