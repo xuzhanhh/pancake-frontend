@@ -87,8 +87,6 @@ const calculatePadding = (activeId) => {
 const StyledPage = styled.div`
   background: ${({ theme }) => theme.colors.gradients.bubblegum};
   min-height: calc(100vh - 64px);
-  max-height: 100vh;
-  overflow-y: scroll;
   padding: ${({ activeId }) => calculatePadding(activeId)};
 `
 const { statusBarHeight } = getSystemInfoSync()
