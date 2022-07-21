@@ -11,6 +11,7 @@ import { captureException } from '@binance/sentry-miniapp'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import { useTranslation } from 'contexts/Localization'
 import useToast from './useToast'
+import sensors from 'utils/bmp/sensors/mp'
 
 const __DEV__ = process.env.NODE_ENV !== 'production'
 
@@ -63,7 +64,6 @@ class BnInjectedConnector extends AbstractConnector {
     if (!this.bnEthereum) {
       throw new NoEthereumProviderError()
     }
-
     this.bnEthereum.on('accountsChanged', this.handleAccountsChanged)
     this.bnEthereum.on('networkChanged', this.handleNetworkChanged)
     // try to activate + get account via eth_requestAccounts
@@ -173,7 +173,9 @@ export const useEagerConnect = () => {
       const address = await injected.getAccount()
       if (address) {
         handleActive()
+        sensors.login(address)
       }
+      sensors.init()
     }
     main()
   }, [])

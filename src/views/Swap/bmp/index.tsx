@@ -64,6 +64,10 @@ import { useDidShow } from '@binance/mp-service'
 import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 import { HitBuilders } from 'utils/ga'
 import { EVENT_IDS, track } from 'utils/bmp/report'
+import { useGetBnbBalance } from 'hooks/useTokenBalance'
+import { FetchStatus } from 'config/constants/types'
+import { LOW_BNB_BALANCE } from 'components/Menu/UserMenu/WalletModal'
+import { ethers } from 'ethers'
 
 const Label = styled(Text)`
   font-size: 12px;
@@ -128,6 +132,18 @@ function Swap() {
 
   const { account } = useActiveWeb3React()
 
+  const { balance, fetchStatus } = useGetBnbBalance()
+  useEffect(() => {
+    if (fetchStatus === FetchStatus.Fetched || fetchStatus === FetchStatus.Failed) {
+      const etherString = ethers.utils.formatEther(balance)
+      const hasLowBnbBalance = fetchStatus === FetchStatus.Fetched && balance.lte(LOW_BNB_BALANCE)
+      track.view(EVENT_IDS.ACCOUNT_DETAIL, {
+        df_8: account || '',
+        df_9: Number(hasLowBnbBalance),
+        price1: Number(etherString),
+      })
+    }
+  }, [balance, fetchStatus, account])
   // for expert mode
   const [isExpertMode] = useExpertModeManager()
 
