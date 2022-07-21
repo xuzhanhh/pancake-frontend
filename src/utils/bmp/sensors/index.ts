@@ -46,17 +46,17 @@ export const initMiniTrack = async (params: Params) => {
     datasend_timeout,
   })
 
-  try {
-    if (__mp_private_api__?.getUserProfile) {
-      const res = await __mp_private_api__.getUserProfile()
-      if (res?.uid) sensors.login(res.uid)
-      sensors.init()
-    } else {
-      sensors.init()
-    }
-  } catch (e) {
-    sensors.init()
-  }
+  // try {
+  //   if (__mp_private_api__?.getUserProfile) {
+  //     const res = await __mp_private_api__.getUserProfile()
+  //     if (res?.uid) sensors.login(res.uid)
+  //     sensors.init()
+  //   } else {
+  //     sensors.init()
+  //   }
+  // } catch (e) {
+  //   sensors.init()
+  // }
 }
 
 export const miniTrack = (eventType, params) => {
