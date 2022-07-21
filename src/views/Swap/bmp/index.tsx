@@ -285,6 +285,7 @@ function Swap() {
     !(priceImpactSeverity > 3 && !isExpertMode)
 
   const handleConfirmDismiss = useCallback(() => {
+    track.click(EVENT_IDS.SWAP_MODAL_CANCEL)
     setSwapState({ tradeToConfirm, attemptingTxn, swapErrorMessage, txHash })
     // if there was a tx hash, we want to clear the input
     if (txHash) {
@@ -293,6 +294,7 @@ function Swap() {
   }, [attemptingTxn, onUserInput, swapErrorMessage, tradeToConfirm, txHash])
 
   const handleAcceptChanges = useCallback(() => {
+    track.click(EVENT_IDS.SWAP_MODAL_ACCEPT_CHANGES)
     setSwapState({ tradeToConfirm: trade, swapErrorMessage, txHash, attemptingTxn })
   }, [attemptingTxn, swapErrorMessage, trade, txHash])
 
