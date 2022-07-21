@@ -250,11 +250,13 @@ function Swap() {
   const handleSwap = useCallback(() => {
     track.click(EVENT_IDS.CONFIRM_SWAP_CLICK)
     if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)) {
-      captureMessage('priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)', { inSwap: 1 })
+      captureException(new Error('priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)'), {
+        tags: { inSwap: 1 },
+      })
       return
     }
     if (!swapCallback) {
-      captureMessage('!swapCallback', { inSwap: 1 })
+      captureException(new Error('!swapCallback'), { tags: { inSwap: 1 } })
       return
     }
     setSwapState({ attemptingTxn: true, tradeToConfirm, swapErrorMessage: undefined, txHash: undefined })
@@ -263,7 +265,7 @@ function Swap() {
         setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: hash })
       })
       .catch((error) => {
-        captureException(error, { inSwap: 1 })
+        captureException(error, { tags: { inSwap: 1 } })
         setSwapState({
           attemptingTxn: false,
           tradeToConfirm,

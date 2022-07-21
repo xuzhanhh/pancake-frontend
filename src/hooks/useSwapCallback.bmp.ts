@@ -166,7 +166,7 @@ export function useSwapCallback(
               .catch((gasError) => {
                 console.error('Gas estimate failed, trying eth_call to extract error', call)
 
-                captureException(gasError, { inSwap: 1 })
+                captureException(gasError, { tags: { inSwap: 1 } })
                 return contract.callStatic[methodName](...args, options)
                   .then((result) => {
                     console.error('Unexpected successful call after failed estimate gas', call, gasError, result)
@@ -180,7 +180,7 @@ export function useSwapCallback(
                     // }.`
 
                     // return { call, error: new Error(errorMessage) }
-                    captureException(callError, { inSwap: 1 })
+                    captureException(callError, { tags: { inSwap: 1 } })
                     return { call, error: new Error(swapErrorToUserReadableMessage(callError, t)) }
                   })
               })
@@ -273,7 +273,7 @@ export function useSwapCallback(
               // otherwise, the error was unexpected and we need to convey that
               console.error(`Swap failed`, error, methodName, args, value)
               // throw new Error(`Swap failed: ${error.message}`)
-              captureException(error, { inSwap: 1 })
+              captureException(error, { tags: { inSwap: 1 } })
               throw new Error(t('Swap failed: %message%', { message: swapErrorToUserReadableMessage(error, t) }))
             }
           })
