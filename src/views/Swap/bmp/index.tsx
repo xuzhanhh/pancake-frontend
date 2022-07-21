@@ -68,6 +68,7 @@ import { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { FetchStatus } from 'config/constants/types'
 import { LOW_BNB_BALANCE } from 'components/Menu/UserMenu/WalletModal'
 import { ethers } from 'ethers'
+import { captureException, captureMessage } from '@binance/sentry-miniapp'
 
 const Label = styled(Text)`
   font-size: 12px;
@@ -249,9 +250,11 @@ function Swap() {
   const handleSwap = useCallback(() => {
     track.click(EVENT_IDS.CONFIRM_SWAP_CLICK)
     if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)) {
+      captureMessage('priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)', { inSwap: 1 })
       return
     }
     if (!swapCallback) {
+      captureMessage('!swapCallback', { inSwap: 1 })
       return
     }
     setSwapState({ attemptingTxn: true, tradeToConfirm, swapErrorMessage: undefined, txHash: undefined })
@@ -260,6 +263,7 @@ function Swap() {
         setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: hash })
       })
       .catch((error) => {
+        captureException(error, { inSwap: 1 })
         setSwapState({
           attemptingTxn: false,
           tradeToConfirm,
