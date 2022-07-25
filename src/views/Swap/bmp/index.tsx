@@ -247,9 +247,10 @@ function Swap() {
 
   const [singleHopOnly] = useUserSingleHopOnly()
 
-  const handleSwap = useCallback(() => {
+  const handleSwap = useCallback(async () => {
     track.click(EVENT_IDS.CONFIRM_SWAP_CLICK)
-    if (priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)) {
+    const result = await confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)
+    if (priceImpactWithoutFee && !result) {
       captureException(new Error('priceImpactWithoutFee && !confirmPriceImpactWithoutFee(priceImpactWithoutFee, t)'), {
         tags: { inSwap: 1 },
       })
