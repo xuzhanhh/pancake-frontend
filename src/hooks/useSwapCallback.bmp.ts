@@ -309,6 +309,8 @@ function swapErrorToUserReadableMessage(error: any, t: TranslateFunction) {
       return t('The input token cannot be transferred. There may be an issue with the input token.')
     case 'Pancake: TRANSFER_FAILED':
       return t('The output token cannot be transferred. There may be an issue with the output token.')
+    case 'Request failed':
+      return 'Request failed. ' + t('network-failed-error')
     default:
       if (reason?.indexOf('undefined is not an object') !== -1) {
         console.error(error, reason)
