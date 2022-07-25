@@ -265,7 +265,7 @@ function Swap() {
         setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: hash })
       })
       .catch((error) => {
-        captureException(error, { tags: { inSwap: 1 } })
+        captureException(error, { tags: { inSwap: 1, allowedSlippage } })
         setSwapState({
           attemptingTxn: false,
           tradeToConfirm,
@@ -273,7 +273,7 @@ function Swap() {
           txHash: undefined,
         })
       })
-  }, [priceImpactWithoutFee, swapCallback, tradeToConfirm, t, tracker, account])
+  }, [priceImpactWithoutFee, swapCallback, tradeToConfirm, t, tracker, account, allowedSlippage])
 
   // errors
   const [showInverted, setShowInverted] = useState<boolean>(false)
