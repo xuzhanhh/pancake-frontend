@@ -7,7 +7,7 @@ import { useWeb3React } from '@web3-react/core'
 import { AbstractConnectorArguments, ConnectorUpdate } from '@web3-react/types'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import warning from 'tiny-warning'
-import { captureException } from '@binance/sentry-miniapp'
+import { captureException, setUser } from '@binance/sentry-miniapp'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import { useTranslation } from 'contexts/Localization'
 import useToast from './useToast'
@@ -174,6 +174,7 @@ export const useEagerConnect = () => {
       if (address) {
         handleActive()
         sensors.login(address)
+        setUser({ id: address })
       }
       sensors.init()
     }
