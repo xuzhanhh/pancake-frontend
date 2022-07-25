@@ -287,7 +287,7 @@ export function useSwapCallback(
 function swapErrorToUserReadableMessage(error: any, t: TranslateFunction) {
   let reason: string | undefined
   while (error) {
-    reason = error.reason ?? error.message ?? reason
+    reason = error.reason ?? error.data?.message ?? error.message ?? reason
     // eslint-disable-next-line no-param-reassign
     error = error.error ?? error.data?.originalError
   }
@@ -301,6 +301,8 @@ function swapErrorToUserReadableMessage(error: any, t: TranslateFunction) {
       )
     case 'PancakeRouter: INSUFFICIENT_OUTPUT_AMOUNT':
     case 'PancakeRouter: EXCESSIVE_INPUT_AMOUNT':
+    case 'PancakeRouter: INSUFFICIENT_A_AMOUNT':
+    case 'PancakeRouter: INSUFFICIENT_B_AMOUNT':
       return t(
         'This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.',
       )
@@ -314,7 +316,7 @@ function swapErrorToUserReadableMessage(error: any, t: TranslateFunction) {
       if (reason?.indexOf('undefined is not an object') !== -1) {
         console.error(error, reason)
         return t(
-          'An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading.',
+          'An error occurred when trying to execute this operation. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading.',
         )
       }
       return t('Unknown error%reason%. Try increasing your slippage tolerance.', {
