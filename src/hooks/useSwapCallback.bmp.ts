@@ -16,6 +16,8 @@ import useENS from './ENS/useENS'
 import { useBUSDCurrencyAmount } from './useBUSDPrice'
 import { useHandleTrack } from './bmp/useHandleTrack'
 import { EVENT_IDS, track } from 'utils/bmp/report'
+import { useAllLists } from 'state/lists/hooks'
+import DEFAULT_TOKEN_LIST from '../config/constants/tokenLists/pancake-default.tokenlist.json'
 
 export enum SwapCallbackState {
   INVALID,
@@ -112,6 +114,14 @@ function useGetBestBUSDPrice(trade?: Trade) {
   const value = useBUSDCurrencyAmount(bestCurrency, +bestCurrencyAmount)
   return value
 }
+
+function checkPairShouldSuccess(call: SwapCall, tokens: Set<string>) {
+  const addressArg = call.parameters.args.find((arg) => Array.isArray(arg))
+  const first = addressArg[0]
+  const last = addressArg[addressArg.length - 1]
+  return tokens.has(first) && tokens.has(last)
+}
+
 // returns a function that will execute a swap, if the parameters are all valid
 // and the user has approved the slippage adjusted input amount for the trade
 export function useSwapCallback(
@@ -124,6 +134,14 @@ export function useSwapCallback(
 
   const gasPrice = useGasPrice()
 
+  const list = useAllLists()
+  const moreTokens = list['https://tokens.pancakeswap.finance/pancakeswap-mini-extended.json']?.current?.tokens || []
+  const shouldSuccessTokens = useMemo(() => {
+    return new Set([
+      ...DEFAULT_TOKEN_LIST.tokens.map((item) => item.address),
+      ...moreTokens.map((item) => item.address),
+    ])
+  }, [moreTokens])
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName)
 
   const { t } = useTranslation()
@@ -166,7 +184,18 @@ export function useSwapCallback(
               .catch((gasError) => {
                 console.error('Gas estimate failed, trying eth_call to extract error', call)
 
-                captureException(gasError, { tags: { inSwap: 1 }, extra: { call: call.parameters, allowedSlippage } })
+                captureException(gasError, {
+                  tags: {
+                    inSwap: 1,
+                    step: 1,
+                    shouldSuccessPair: checkPairShouldSuccess(call, shouldSuccessTokens),
+                  },
+                  extra: {
+                    call: call.parameters,
+                    allowedSlippage,
+                    shouldSuccessPair: checkPairShouldSuccess(call, shouldSuccessTokens),
+                  },
+                })
                 return contract.callStatic[methodName](...args, options)
                   .then((result) => {
                     console.error('Unexpected successful call after failed estimate gas', call, gasError, result)
@@ -182,8 +211,16 @@ export function useSwapCallback(
                     // return { call, error: new Error(errorMessage) }
 
                     captureException(callError, {
-                      tags: { inSwap: 1 },
-                      extra: { call: call.parameters, allowedSlippage },
+                      tags: {
+                        inSwap: 1,
+                        step: 2,
+                        shouldSuccessPair: checkPairShouldSuccess(call, shouldSuccessTokens),
+                      },
+                      extra: {
+                        call: call.parameters,
+                        allowedSlippage,
+                        shouldSuccessPair: checkPairShouldSuccess(call, shouldSuccessTokens),
+                      },
                     })
                     return { call, error: new Error(swapErrorToUserReadableMessage(callError, t)) }
                   })
@@ -248,6 +285,7 @@ export function useSwapCallback(
               df_8: account,
               df_9: 'swap_success',
               df_11: JSON.stringify(trackData),
+              df_13: Number(checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens)),
               price1: Math.ceil(tradeVolume),
             })
             return response.hash
@@ -268,6 +306,7 @@ export function useSwapCallback(
               df_9: 'swap_fail',
               df_11: JSON.stringify(trackData),
               df_12: error.toString(),
+              df_13: Number(checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens)),
               price1: Math.ceil(tradeVolume),
             })
             // if the user rejected the tx, pass this along
@@ -278,8 +317,16 @@ export function useSwapCallback(
               console.error(`Swap failed`, error, methodName, args, value)
               // throw new Error(`Swap failed: ${error.message}`)
               captureException(error, {
-                tags: { inSwap: 1 },
-                extra: { call: successfulEstimation.call.parameters, allowedSlippage },
+                tags: {
+                  inSwap: 1,
+                  step: 3,
+                  shouldSuccessPair: checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens),
+                },
+                extra: {
+                  call: successfulEstimation.call.parameters,
+                  allowedSlippage,
+                  shouldSuccessPair: checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens),
+                },
               })
               throw new Error(t('Swap failed: %message%', { message: swapErrorToUserReadableMessage(error, t) }))
             }
@@ -299,7 +346,7 @@ function swapErrorToUserReadableMessage(error: any, t: TranslateFunction) {
   }
 
   if (reason?.indexOf('execution reverted: ') === 0) reason = reason.substring('execution reverted: '.length)
-
+  track.click(EVENT_IDS.SWAP_READABLE_ERROR, { df_12: reason })
   switch (reason) {
     case 'PancakeRouter: EXPIRED':
       return t(

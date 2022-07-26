@@ -266,7 +266,7 @@ function Swap() {
         setSwapState({ attemptingTxn: false, tradeToConfirm, swapErrorMessage: undefined, txHash: hash })
       })
       .catch((error) => {
-        captureException(error, { tags: { inSwap: 1, allowedSlippage } })
+        captureException(error, { tags: { inSwap: 1, allowedSlippage, step: 4 } })
         setSwapState({
           attemptingTxn: false,
           tradeToConfirm,
