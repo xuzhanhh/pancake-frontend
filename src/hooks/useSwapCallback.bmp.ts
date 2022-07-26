@@ -222,7 +222,8 @@ export function useSwapCallback(
                         shouldSuccessPair: checkPairShouldSuccess(call, shouldSuccessTokens),
                       },
                     })
-                    return { call, error: new Error(swapErrorToUserReadableMessage(callError, t)) }
+                    const { readableMessage, reason } = swapErrorToUserReadableMessage(callError, t)
+                    return { call, error: new Error(readableMessage), reason }
                   })
               })
           }),
@@ -236,7 +237,11 @@ export function useSwapCallback(
 
         if (!successfulEstimation) {
           const errorCalls = estimatedCalls.filter((call): call is FailedCall => 'error' in call)
-          if (errorCalls.length > 0) throw errorCalls[errorCalls.length - 1].error
+          if (errorCalls.length > 0) {
+            // @ts-ignore
+            track.click(EVENT_IDS.SWAP_READABLE_ERROR, { df_12: errorCalls[errorCalls.length - 1].reason })
+            throw errorCalls[errorCalls.length - 1].error
+          }
           throw new Error('Unexpected error. Please contact support: none of the calls threw an error')
         }
 
@@ -328,7 +333,9 @@ export function useSwapCallback(
                   shouldSuccessPair: checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens),
                 },
               })
-              throw new Error(t('Swap failed: %message%', { message: swapErrorToUserReadableMessage(error, t) }))
+              const { readableMessage, reason } = swapErrorToUserReadableMessage(error, t)
+              track.click(EVENT_IDS.SWAP_READABLE_ERROR, { df_12: reason })
+              throw new Error(t('Swap failed: %message%', { message: readableMessage }))
             }
           })
       },
@@ -339,6 +346,7 @@ export function useSwapCallback(
 
 function swapErrorToUserReadableMessage(error: any, t: TranslateFunction) {
   let reason: string | undefined
+  let readableMessage: string | undefined
   while (error) {
     reason = error.reason ?? error.data?.message ?? error.message ?? reason
     // eslint-disable-next-line no-param-reassign
@@ -346,34 +354,41 @@ function swapErrorToUserReadableMessage(error: any, t: TranslateFunction) {
   }
 
   if (reason?.indexOf('execution reverted: ') === 0) reason = reason.substring('execution reverted: '.length)
-  track.click(EVENT_IDS.SWAP_READABLE_ERROR, { df_12: reason })
   switch (reason) {
     case 'PancakeRouter: EXPIRED':
-      return t(
+      readableMessage = t(
         'The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low.',
       )
+      break
     case 'PancakeRouter: INSUFFICIENT_OUTPUT_AMOUNT':
     case 'PancakeRouter: EXCESSIVE_INPUT_AMOUNT':
     case 'PancakeRouter: INSUFFICIENT_A_AMOUNT':
     case 'PancakeRouter: INSUFFICIENT_B_AMOUNT':
-      return t(
+      readableMessage = t(
         'This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance.',
       )
+      break
     case 'TransferHelper: TRANSFER_FROM_FAILED':
-      return t('The input token cannot be transferred. There may be an issue with the input token.')
+      readableMessage = t('The input token cannot be transferred. There may be an issue with the input token.')
+      break
     case 'Pancake: TRANSFER_FAILED':
-      return t('The output token cannot be transferred. There may be an issue with the output token.')
+      readableMessage = t('The output token cannot be transferred. There may be an issue with the output token.')
+      break
     case 'Request failed':
-      return 'Request failed. ' + t('network-failed-error')
+      readableMessage = 'Request failed. ' + t('network-failed-error')
+      break
     default:
       if (reason?.indexOf('undefined is not an object') !== -1) {
         console.error(error, reason)
-        return t(
+        readableMessage = t(
           'An error occurred when trying to execute this operation. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading.',
         )
+        break
       }
-      return t('Unknown error%reason%. Try increasing your slippage tolerance.', {
+      readableMessage = t('Unknown error%reason%. Try increasing your slippage tolerance.', {
         reason: reason ? `: "${reason}"` : '',
       })
+      break
   }
+  return { reason, readableMessage }
 }
