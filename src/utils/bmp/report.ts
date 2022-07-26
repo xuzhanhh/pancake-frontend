@@ -32,6 +32,7 @@ export enum EVENT_IDS {
   CONFIRM_SWAP_CLICK = 'app_click_pcs_confirm_swap_click',
   SWAP_MODAL_CANCEL = 'app_click_pcs_swap_modal_cancel',
   SWAP_MODAL_ACCEPT_CHANGES = 'app_click_pcs_swap_modal_accept_changes',
+  SWAP_READABLE_ERROR = 'app_click_pcs_swap_readable_error',
   // view
   ACCOUNT_DETAIL = 'app_view_pcs_account_detail',
 }

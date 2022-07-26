@@ -346,7 +346,7 @@ function swapErrorToUserReadableMessage(error: any, t: TranslateFunction) {
   }
 
   if (reason?.indexOf('execution reverted: ') === 0) reason = reason.substring('execution reverted: '.length)
-
+  track.click(EVENT_IDS.SWAP_READABLE_ERROR, { df_12: reason })
   switch (reason) {
     case 'PancakeRouter: EXPIRED':
       return t(
