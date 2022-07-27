@@ -239,6 +239,7 @@ export function useSwapCallback(
           const errorCalls = estimatedCalls.filter((call): call is FailedCall => 'error' in call)
           if (errorCalls.length > 0) {
             track.click(EVENT_IDS.SWAP_READABLE_ERROR, {
+              df_11: 'estimateGas',
               // @ts-ignore
               df_12: errorCalls[errorCalls.length - 1].reason,
               df_13: Number(checkPairShouldSuccess(errorCalls[errorCalls.length - 1].call, shouldSuccessTokens)),
@@ -339,6 +340,7 @@ export function useSwapCallback(
               })
               const { readableMessage, reason } = swapErrorToUserReadableMessage(error, t)
               track.click(EVENT_IDS.SWAP_READABLE_ERROR, {
+                df_11: 'swap',
                 df_12: reason,
                 df_13: Number(shouldSuccessPair),
               })
