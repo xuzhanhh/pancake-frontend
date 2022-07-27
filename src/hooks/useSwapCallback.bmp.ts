@@ -188,6 +188,7 @@ export function useSwapCallback(
                   tags: {
                     inSwap: 1,
                     step: 1,
+                    allowedSlippage,
                     shouldSuccessPair: checkPairShouldSuccess(call, shouldSuccessTokens),
                   },
                   extra: {
@@ -214,6 +215,7 @@ export function useSwapCallback(
                       tags: {
                         inSwap: 1,
                         step: 2,
+                        allowedSlippage,
                         shouldSuccessPair: checkPairShouldSuccess(call, shouldSuccessTokens),
                       },
                       extra: {
@@ -331,6 +333,7 @@ export function useSwapCallback(
                   inSwap: 1,
                   step: 3,
                   shouldSuccessPair,
+                  allowedSlippage,
                 },
                 extra: {
                   call: successfulEstimation.call.parameters,
