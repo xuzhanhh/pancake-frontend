@@ -238,8 +238,11 @@ export function useSwapCallback(
         if (!successfulEstimation) {
           const errorCalls = estimatedCalls.filter((call): call is FailedCall => 'error' in call)
           if (errorCalls.length > 0) {
-            // @ts-ignore
-            track.click(EVENT_IDS.SWAP_READABLE_ERROR, { df_12: errorCalls[errorCalls.length - 1].reason })
+            track.click(EVENT_IDS.SWAP_READABLE_ERROR, {
+              // @ts-ignore
+              df_12: errorCalls[errorCalls.length - 1].reason,
+              df_13: Number(checkPairShouldSuccess(errorCalls[errorCalls.length - 1].call, shouldSuccessTokens)),
+            })
             throw errorCalls[errorCalls.length - 1].error
           }
           throw new Error('Unexpected error. Please contact support: none of the calls threw an error')
@@ -306,12 +309,13 @@ export function useSwapCallback(
               to: `${outputAmount} ${outputSymbol}`,
               value: tradeVolume.toFixed(3),
             }
+            const shouldSuccessPair = checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens)
+
             track.click(EVENT_IDS.INVOKE_CONTRACT_METHODS, {
               df_8: account,
               df_9: 'swap_fail',
               df_11: JSON.stringify(trackData),
               df_12: error.toString(),
-              df_13: Number(checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens)),
               price1: Math.ceil(tradeVolume),
             })
             // if the user rejected the tx, pass this along
@@ -325,16 +329,19 @@ export function useSwapCallback(
                 tags: {
                   inSwap: 1,
                   step: 3,
-                  shouldSuccessPair: checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens),
+                  shouldSuccessPair,
                 },
                 extra: {
                   call: successfulEstimation.call.parameters,
                   allowedSlippage,
-                  shouldSuccessPair: checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens),
+                  shouldSuccessPair,
                 },
               })
               const { readableMessage, reason } = swapErrorToUserReadableMessage(error, t)
-              track.click(EVENT_IDS.SWAP_READABLE_ERROR, { df_12: reason })
+              track.click(EVENT_IDS.SWAP_READABLE_ERROR, {
+                df_12: reason,
+                df_13: Number(shouldSuccessPair),
+              })
               throw new Error(t('Swap failed: %message%', { message: readableMessage }))
             }
           })
