@@ -60,7 +60,7 @@ import SwapWarningModal from '../components/SwapWarningModal'
 import PriceChartContainer from '../components/Chart/PriceChartContainer'
 import { StyledInputCurrencyWrapper, StyledSwapContainer } from '../styles'
 import CurrencyInputHeader from '../components/CurrencyInputHeader'
-import { useDidShow } from '@binance/mp-service'
+import { useDidShow, getWeb3Provider, showToast } from '@binance/mp-service'
 import { useHandleTrack } from 'hooks/bmp/useHandleTrack'
 import { HitBuilders } from 'utils/ga'
 import { EVENT_IDS, track } from 'utils/bmp/report'
@@ -411,6 +411,37 @@ function Swap() {
               setIsChartDisplayed={setIsChartDisplayed}
               isChartDisplayed={isChartDisplayed}
             />
+            <button
+              onClick={() => {
+                getWeb3Provider()
+                  .request({
+                    method: 'wallet_watchAsset',
+                    params: {
+                      type: 'ERC20',
+                      options: {
+                        address: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+                      },
+                    },
+                  })
+                  .then(() => {
+                    showToast({
+                      title: 'added assets successfully',
+                      icon: 'success',
+                      duration: 2000,
+                    })
+                  })
+                  .catch((e) => {
+                    showToast({
+                      title: 'add assets failure',
+                      icon: 'error',
+                      duration: 2000,
+                    })
+                    console.error('add assets failure', e)
+                  })
+              }}
+            >
+              test
+            </button>
             <Wrapper id="swap-page" style={{ minHeight: '412px' }}>
               <AutoColumn gap="sm">
                 <CurrencyInputPanel

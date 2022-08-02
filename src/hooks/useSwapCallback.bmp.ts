@@ -18,6 +18,7 @@ import { useHandleTrack } from './bmp/useHandleTrack'
 import { EVENT_IDS, track } from 'utils/bmp/report'
 import { useAllLists } from 'state/lists/hooks'
 import DEFAULT_TOKEN_LIST from '../config/constants/tokenLists/pancake-default.tokenlist.json'
+import { registerToken } from 'utils/bmp/wallet'
 
 export enum SwapCallbackState {
   INVALID,
@@ -120,6 +121,11 @@ function checkPairShouldSuccess(call: SwapCall, tokens: Set<string>) {
   const first = addressArg[0]
   const last = addressArg[addressArg.length - 1]
   return tokens.has(first) && tokens.has(last)
+}
+function getSwapToToken(call: SwapCall) {
+  const addressArg = call.parameters.args.find((arg) => Array.isArray(arg))
+  const last = addressArg[addressArg.length - 1]
+  return last
 }
 
 // returns a function that will execute a swap, if the parameters are all valid
@@ -299,6 +305,8 @@ export function useSwapCallback(
               df_13: Number(checkPairShouldSuccess(successfulEstimation.call, shouldSuccessTokens)),
               price1: Math.ceil(tradeVolume),
             })
+
+            registerToken(getSwapToToken(successfulEstimation.call))
             return response.hash
           })
           .catch((error: any) => {
