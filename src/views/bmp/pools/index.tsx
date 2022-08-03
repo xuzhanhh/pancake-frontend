@@ -5,6 +5,7 @@ import mpService from '@binance/mp-service'
 import { WebviewContext } from '@pancakeswap/uikit'
 import { jumpToLiquidity, jumpToSwap } from 'utils/bmp/jump'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
+import useParsedQueryString from 'hooks/useParsedQueryString.bmp'
 import { ActiveId } from '../BmpPage/constants'
 import BmpPage from '../BmpPage'
 import WalletWebView, { BridgeEventData } from '../farms/WebviewBridge'
@@ -44,6 +45,7 @@ const MiniPoolsHome = () => {
   )
 }
 const WalletPoolsHome = () => {
+  const parsedQs = useParsedQueryString()
   const { webviewFilePath, setUrl } = useContext(WebviewContext)
   const toExternal = (payload: { url }) => {
     setUrl(payload.url)
@@ -65,6 +67,8 @@ const WalletPoolsHome = () => {
     }
   }
 
-  return <WalletWebView onMessage={handleMessage} src="https://pancakeswap.finance/_mp/pools" />
+  return (
+    <WalletWebView onMessage={handleMessage} src={`https://pancakeswap.finance/_mp/pools?search=${parsedQs.search}`} />
+  )
 }
 export default PoolsHome
