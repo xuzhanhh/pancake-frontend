@@ -68,7 +68,10 @@ const WalletPoolsHome = () => {
   }
 
   return (
-    <WalletWebView onMessage={handleMessage} src={`https://pancakeswap.finance/_mp/pools?search=${parsedQs.search}`} />
+    <WalletWebView
+      onMessage={handleMessage}
+      src={`https://pancakeswap.finance/_mp/pools${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
+    />
   )
 }
 export default PoolsHome

@@ -84,7 +84,10 @@ const WalletFarmsHome = () => {
     }
   }
   return (
-    <WalletWebView onMessage={handleMessage} src={`https://pancakeswap.finance/_mp/farms?search=${parsedQs?.search}`} />
+    <WalletWebView
+      onMessage={handleMessage}
+      src={`https://pancakeswap.finance/_mp/farms${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
+    />
   )
 }
 export default FarmsHome
