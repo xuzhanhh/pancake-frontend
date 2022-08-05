@@ -1,4 +1,4 @@
-import mpService from '@binance/mp-service'
+import mpService, { useDidShow } from '@binance/mp-service'
 import React from 'react'
 import { WebView } from '@binance/mp-components'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
@@ -129,6 +129,9 @@ const WalletWebView = ({ src, onMessage }: Props) => {
         }
     }
   }
+  useDidShow(() => {
+    setWebviewContext(src)
+  })
   return <WebView className="web-view" src={src} onMessage={handleMessage} />
 }
 
