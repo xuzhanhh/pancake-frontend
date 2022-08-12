@@ -39,15 +39,18 @@ const jump = (payload: { path: string; query?: Record<string, string> }) => {
       return jumpToSwap(payload?.query?.outputCurrency || '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82')
   }
 }
+
 const toWallet = () => {
   mpService.navigateToMiniProgram({
     appId: 'hhL98uho2A4sGYSHCEdCCo',
   })
 }
 const systemInfo = getSystemInfoSync()
+declare const env
+const isMainland = () => !env.API_HOST?.includes('binance')
 const FarmsHome = () => {
   const isNewVersion = semver.gte(systemInfo.version, '2.48.0')
-  if (isNewVersion) {
+  if (isNewVersion && !isMainland()) {
     return <WalletFarmsHome />
   }
   return <MiniFarmHome />
