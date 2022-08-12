@@ -30,9 +30,11 @@ const toWallet = () => {
   })
 }
 const systemInfo = getSystemInfoSync()
+declare const env
+const isMainland = () => !env.API_HOST?.includes('binance')
 const PoolsHome = () => {
   const isNewVersion = semver.gte(systemInfo.version, '2.48.0')
-  if (isNewVersion) {
+  if (isNewVersion && !isMainland()) {
     return <WalletPoolsHome />
   }
   return <MiniPoolsHome />
