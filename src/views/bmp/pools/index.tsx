@@ -34,7 +34,7 @@ declare const env
 const isMainland = () => !env.API_HOST?.includes('binance')
 const PoolsHome = () => {
   const isNewVersion = semver.gte(systemInfo.version, '2.48.0')
-  if (isNewVersion && !isMainland()) {
+  if (isNewVersion) {
     return <WalletPoolsHome />
   }
   return <MiniPoolsHome />
@@ -72,7 +72,8 @@ const WalletPoolsHome = () => {
   return (
     <WalletWebView
       onMessage={handleMessage}
-      src={`https://pancakeswap.finance/_mp/pools${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
+      // src={`https://pancakeswap.finance/_mp/pools${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
+      src={`https://web.pancake.run/_mp/pools${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
     />
   )
 }
