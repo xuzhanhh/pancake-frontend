@@ -8,7 +8,7 @@ import Farms from 'pages/farms/index.bmp'
 import { WebviewContext } from '@pancakeswap/uikit'
 import useParsedQueryString from 'hooks/useParsedQueryString.bmp'
 import WalletWebView, { BridgeEventData } from './WebviewBridge'
-import { jumpToLiquidity, jumpToSwap } from 'utils/bmp/jump'
+import { jumpToLiquidity, jumpToPools, jumpToSwap } from 'utils/bmp/jump'
 import { FarmsPage, FarmsProvider, useFarms } from './farmsContext'
 import { LiquidityPage } from '../liquidity/liquidityContext'
 
@@ -37,6 +37,10 @@ const jump = (payload: { path: string; query?: Record<string, string> }) => {
       break
     case 'swap':
       return jumpToSwap(payload?.query?.outputCurrency || '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82')
+    case 'pools':
+      return jumpToPools()
+    default:
+      console.log('~ does not match any path')
   }
 }
 
