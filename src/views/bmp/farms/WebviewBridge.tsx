@@ -77,7 +77,7 @@ const reportData = (payload, type: 'success' | 'fail', extraData = {}) => {
 const on = (context, { payload, id }: BridgeEventData) => {
   const { event } = payload
   provider.on(event, (params: any) => {
-    context?.postMessage({ id, payload: params ?? JSON.stringify(params) })
+    context?.postMessage({ id, payload: params ?? JSON.stringify(params), on: event })
   })
 }
 const request = async (context, data: BridgeEventData) => {
