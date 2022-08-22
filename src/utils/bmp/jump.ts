@@ -11,6 +11,12 @@ export const jumpToSwap = (outputCurrency?: string) => {
     globalThis.currency2 = outputCurrency
   }
 }
+export const jumpToPools = () => {
+  mpService.switchTab({
+    url: '/views/bmp/pools/index',
+  })
+  globalThis.tabbarSelected = 3
+}
 export interface LiquidityParams {
   currency1?: string
   currency2?: string
@@ -24,4 +30,10 @@ export const jumpToLiquidity = ({ currency1, currency2, page = LiquidityPage.Add
   globalThis.liquidityPage = page ?? LiquidityPage.Add
   globalThis.currency1 = currency1
   globalThis.currency2 = currency2
+}
+export const jumpToFarms = () => {
+  mpService.switchTab({
+    url: '/views/bmp/farms/index',
+  })
+  globalThis.tabbarSelected = 2
 }
