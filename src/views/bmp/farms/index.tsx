@@ -51,10 +51,10 @@ const toWallet = () => {
 }
 const systemInfo = getSystemInfoSync()
 declare const env
-const isMainland = () => !env.API_HOST?.includes('binance')
+// const isMainland = () => !env.API_HOST?.includes('binance')
 const FarmsHome = () => {
   const isNewVersion = semver.gte(systemInfo.version, '2.48.0')
-  if (isNewVersion && !isMainland()) {
+  if (isNewVersion) {
     return <WalletFarmsHome />
   }
   return <MiniFarmHome />
@@ -93,7 +93,8 @@ const WalletFarmsHome = () => {
   return (
     <WalletWebView
       onMessage={handleMessage}
-      src={`https://pancakeswap.finance/_mp/farms${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
+      // src={`https://pancakeswap.finance/_mp/farms${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
+      src={`https://web.pancake.run/_mp/farms${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
     />
   )
 }
