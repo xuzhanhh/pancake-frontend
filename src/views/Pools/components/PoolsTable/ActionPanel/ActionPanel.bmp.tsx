@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import styled, { keyframes, css } from 'styled-components'
+import { styled, keyframes, css } from '@pancakeswap/mp-styled-2'
 import { Box, Flex, HelpIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { getVaultPosition, VaultPosition } from 'utils/cakePool'
@@ -20,31 +20,35 @@ import PoolStatsInfo from '../../PoolStatsInfo'
 import { useTooltip } from 'contexts/bmp/TooltipContext'
 
 const expandAnimation = keyframes`
-  from {
-    max-height: 0px;
-  }
-  to {
-    max-height: 1000px;
-  }
 `
 
 const collapseAnimation = keyframes`
-  from {
-    max-height: 1000px;
-  }
-  to {
-    max-height: 0px;
-  }
 `
 
 const StyledActionPanel = styled.div<{ expanded: boolean }>`
+  @keyframes expandAnimation {
+    from {
+      max-height: 0px;
+    }
+    to {
+      max-height: 1000px;
+    }
+  }
+  @keyframes collapseAnimation {
+    from {
+      max-height: 1000px;
+    }
+    to {
+      max-height: 0px;
+    }
+  }
   animation: ${({ expanded }) =>
     expanded
-      ? css`
-          ${expandAnimation} 300ms linear forwards
+      ? `
+          expandAnimation 300ms linear forwards
         `
-      : css`
-          ${collapseAnimation} 300ms linear forwards
+      : `
+          collapseAnimation 300ms linear forwards
         `};
   overflow: hidden;
   background: ${({ theme }) => theme.colors.dropdown};
@@ -52,11 +56,6 @@ const StyledActionPanel = styled.div<{ expanded: boolean }>`
   flex-direction: column-reverse;
   justify-content: center;
   padding: 12px;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    flex-direction: row;
-    padding: 16px 32px;
-  }
 `
 
 const ActionContainer = styled.div<{ isAutoVault?: boolean; hasBalance?: boolean }>`
@@ -64,15 +63,6 @@ const ActionContainer = styled.div<{ isAutoVault?: boolean; hasBalance?: boolean
   flex-direction: column;
   flex: 1;
   flex-wrap: wrap;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex-direction: row;
-  }
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex-direction: ${({ isAutoVault }) => (isAutoVault ? 'row' : null)};
-    align-items: ${({ isAutoVault, hasBalance }) => (isAutoVault ? (hasBalance ? 'flex-start' : 'stretch') : 'center')};
-  }
 `
 
 type MediaBreakpoints = {
@@ -98,13 +88,6 @@ const InfoSection = styled(Box)`
   flex-basis: auto;
 
   padding: 8px 8px;
-  ${({ theme }) => theme.mediaQueries.lg} {
-    padding: 0;
-    flex-basis: 230px;
-    /* ${Text} { */
-    /*   font-size: 14px; */
-    /* } */
-  }
 `
 
 const YieldBoostDurationRow = ({ lockEndTime, lockStartTime }) => {

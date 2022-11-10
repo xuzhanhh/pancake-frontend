@@ -6,7 +6,7 @@ import { useTranslation } from 'contexts/Localization'
 import React, { memo } from 'react'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { DeserializedPool } from 'state/types'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getVaultPosition, VaultPosition, VaultPositionParams } from 'utils/cakePool'
 import BaseCell, { CellContent } from './BaseCell'
@@ -15,14 +15,10 @@ interface NameCellProps {
   pool: DeserializedPool
 }
 
-const StyledCell = styled(BaseCell)`
+const StyledCell2 = styled(BaseCell)`
   flex: 5;
   flex-direction: row;
   padding-left: 12px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1 0 150px;
-    padding-left: 32px;
-  }
 `
 
 const NameCell: React.FC<NameCellProps> = ({ pool }) => {
@@ -52,7 +48,7 @@ const NameCell: React.FC<NameCellProps> = ({ pool }) => {
   }
 
   return (
-    <StyledCell role="cell">
+    <StyledCell2 role="cell" style={{flex: '5', flexDirection: 'row', paddingLeft: '12px'}}>
       {vaultKey ? (
         <UITokenPairImage
           secondarySrc={'https://pancakeswap.finance' + vaultPoolConfig[pool.vaultKey].tokenImage.secondarySrc}
@@ -82,7 +78,7 @@ const NameCell: React.FC<NameCellProps> = ({ pool }) => {
           </Text>
         )}
       </CellContent>
-    </StyledCell>
+    </StyledCell2>
   )
 }
 

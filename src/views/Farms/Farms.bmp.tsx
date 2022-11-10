@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import { Image, Heading, RowType, Toggle, Text, Button, ArrowForwardIcon, Flex, Input } from '@pancakeswap/uikit'
 import { ChainId } from '@pancakeswap/sdk'
 // import { NextLinkFromReactRouter } from 'components/NextLink'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import FlexLayout from 'components/Layout/Flex'
 import Page from 'components/Layout/Page'
 import { useFarms, usePollFarmsWithUserData, usePriceCakeBusd } from 'state/farms/hooks'
@@ -64,7 +64,7 @@ const ToggleWrapperText = styled(Text)`
 const LabelWrapper = styled.div``
 
 const LabelWrapperText = styled(Text)`
-  font-size: 12px;
+  font-size: 12px !important;
 `
 
 const FilterContainer = styled.div`
@@ -344,7 +344,7 @@ const Farms: React.FC<{ farmsData: any; cakePrice: any }> = ({ children, farmsDa
         .selectAll('.farms-control')
         .boundingClientRect(function (rect) {
           const { safeArea } = getSystemInfoSync()
-          setRemainHeight(safeArea.height - rect[0].height - 16 - 8 - 39 - 44 - 49)
+          // setRemainHeight(safeArea.height - rect[0].height - 16 - 8 - 39 - 44 - 49)
         })
         .exec()
     }, 0)

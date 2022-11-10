@@ -30,9 +30,8 @@ module.exports = {
     keccak: path.resolve(__dirname, '../node_modules/keccak/js.js'),
     secp256k1: path.resolve(__dirname, '../node_modules/secp256k1/elliptic.js'),
     'typo-js': path.resolve(__dirname, './adaptor/typo-js.js'),
-    '@pancakeswap/uikit': '@pancakeswap/mp-uikit',
-    'styled-components': '@pancakeswap/mp-styled',
-    '@binance/mp-styled': '@pancakeswap/mp-styled',
+    '@pancakeswap/uikit': '@pancakeswap/mp-uikit-2',
+    // 'styled-components': '@pancakeswap/mp-styled',
     'next/router': path.resolve(__dirname, './adaptor/next-router'),
     '@ethersproject/web': path.resolve(__dirname, './adaptor/ethers-web'),
     'redux-localstorage-simple': path.resolve(__dirname, './adaptor/redux-localstorage-simple'),
@@ -45,8 +44,9 @@ module.exports = {
     app: ['src/app.bmp'],
   },
   env: envs,
-  debugReact: !(envs['NODE_ENV'] === 'production'),
-
+  // debugReact: !(envs['NODE_ENV'] === 'production'),
+  debugReact: true,
+  // terser: { enable: false },
   defineConstants: {
     COMMIT_ID: JSON.stringify(commitHash),
   },
@@ -64,5 +64,26 @@ module.exports = {
         },
       },
     })
+
+    chain.module
+      .rule('script')
+      .test(/(\.js|\.ts|\.jsx|\.tsx)$/)
+      .exclude.add(/node_modules/)
+      .end()
+      .use('linariaLoader')
+      .loader('@linaria/webpack-loader')
+      .options({
+        sourceMap: !process.env.NODE_ENV === 'production',
+      })
+    // .end()
+    // .use('babel-loader')
+    // .loader('babel-loader')
+    // .options({
+    //   configFile:false,
+    //   presets: ["@babel/preset-react", "@babel/preset-typescript"],
+    //   // plugins: [require("../static-css.js"), require("../keyframes-plugin.js")]
+    //   plugins: [require("@pancakeswap/mp-styled-2/babel/static-css.js"),require("@pancakeswap/mp-styled-2/babel/keyframes.js")]
+    // })
+    // .end()
   },
 }

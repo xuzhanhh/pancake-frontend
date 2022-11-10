@@ -1,6 +1,6 @@
 import React from 'react'
 import { HelpIcon, Box, BoxProps, Placement, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTooltip } from 'contexts/bmp/TooltipContext'
 
 interface Props extends BoxProps {

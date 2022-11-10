@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import {
   Modal,
   Text,

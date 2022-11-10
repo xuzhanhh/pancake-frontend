@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme } from 'styled-components'
+import { useTheme } from '@pancakeswap/mp-styled-2'
 import { Svg, SvgProps } from '@pancakeswap/uikit'
 
 interface MultiplierProps extends SvgProps {

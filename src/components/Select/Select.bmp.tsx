@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import styled, { css, useTheme } from 'styled-components'
+import { styled,  css, useTheme } from '@pancakeswap/mp-styled-2'
 import { ArrowDropDownIcon, Box, BoxProps, Text } from '@pancakeswap/uikit'
 import { AtActionSheet, AtActionSheetItem } from 'taro-ui'
 import 'taro-ui/dist/style/components/action-sheet.scss'

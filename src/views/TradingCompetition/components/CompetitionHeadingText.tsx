@@ -1,5 +1,5 @@
 import { Heading } from '@pancakeswap/uikit'
-import styled, { DefaultTheme } from 'styled-components'
+import { styled, DefaultTheme } from '@pancakeswap/mp-styled-2'
 
 const H1SizeStyles = (theme: DefaultTheme) => `
   font-size: 48px;

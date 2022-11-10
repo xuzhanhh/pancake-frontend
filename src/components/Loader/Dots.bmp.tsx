@@ -1,8 +1,11 @@
 import React from 'react'
 import { Box } from '@pancakeswap/uikit'
-import styled, { keyframes } from 'styled-components'
+import { styled, keyframes } from '@pancakeswap/mp-styled-2'
 
 const ellipsis = keyframes`
+`
+const DotsAfter = styled.div`
+  @keyframes ellipsis {
   0% {
     width: 2px;
   }
@@ -12,14 +15,13 @@ const ellipsis = keyframes`
   66% {
     width: 10px;
   }
-`
-const DotsAfter = styled.div`
+  }
   width: 16px;
   display: inline-block;
   text-align: left;
   &::after {
     display: inline-block;
-    animation: ${ellipsis} 1.25s infinite;
+    animation: ellipsis 1.25s infinite;
     content: '...';
     width: 2px;
     text-align: left;

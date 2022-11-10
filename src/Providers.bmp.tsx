@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from '@pancakeswap/mp-styled-2'
 import { light, dark, WebviewProvider } from '@pancakeswap/uikit'
 import { Web3ReactProvider } from '@web3-react/core'
 import { SWRConfig } from 'swr'

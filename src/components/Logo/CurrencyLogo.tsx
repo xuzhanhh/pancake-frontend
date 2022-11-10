@@ -1,7 +1,7 @@
 import { Currency, ETHER, Token } from '@pancakeswap/sdk'
 import { BinanceIcon } from '@pancakeswap/uikit'
 import React, { useMemo } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { WrappedTokenInfo } from 'state/types'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import getTokenLogoURL from '../../utils/getTokenLogoURL'

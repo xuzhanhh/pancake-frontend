@@ -12,7 +12,7 @@ import {
   WaitIcon,
 } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useAppDispatch } from 'state'
 import { Bet, PredictionStatus } from 'state/types'
 import { REWARD_RATE } from 'state/predictions/config'

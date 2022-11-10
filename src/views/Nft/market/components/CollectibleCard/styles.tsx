@@ -15,7 +15,7 @@ import {
 import { Price } from '@pancakeswap/sdk'
 import { useTranslation } from 'contexts/Localization'
 import { multiplyPriceByAmount } from 'utils/prices'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 export const Footer: React.FC<BoxProps> = ({ children, ...props }) => (
   <Box borderTop={[null, null, null, '1px solid']} borderColor="cardBorder" pt="8px" {...props}>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Currency, Pair } from '@pancakeswap/sdk'
 import { Button, ChevronDownIcon, Text, useModal, Flex, Box } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
@@ -18,8 +18,10 @@ const InputRow = styled.div<{ selected: boolean }>`
   justify-content: flex-end;
   padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '0.75rem 0.75rem 0.75rem 1rem')};
 `
-const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm' })`
-  padding: 0 0.5rem;
+
+const WrappedButton = (props) => <Button variant="text" scale="sm" {...props} />
+const CurrencySelectButton = styled(WrappedButton)`
+  padding: 0 0.5rem !important;
 `
 const LabelRow = styled.div`
   display: flex;

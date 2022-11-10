@@ -5,7 +5,7 @@ import { enableList } from '../../state/lists/actions'
 import { useDispatch } from 'react-redux'
 import { AppDispatch, AppState } from '../../state'
 import { CurrencyModalView } from './types'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 interface AcknowledgementProps {
   listUrl: string

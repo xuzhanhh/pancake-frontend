@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, BoxProps } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 export const VotingBox = styled.div`
   align-items: center;

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Box } from '@pancakeswap/uikit'
 
 const Row = styled(Box)<{
@@ -33,7 +33,7 @@ export const AutoRow = styled(Row)<{ gap?: string; justify?: string }>`
   justify-content: ${({ justify }) => justify};
 
   & > * {
-    margin: ${({ gap }) => gap} !important;
+    margin: ${({ gap }) => gap};
   }
 `
 

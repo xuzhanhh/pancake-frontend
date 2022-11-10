@@ -1,5 +1,5 @@
 import { Flex, Image, Button, IconButton } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 export const StyledItemRow = styled(Flex)`
   cursor: pointer;

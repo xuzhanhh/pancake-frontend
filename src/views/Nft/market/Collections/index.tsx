@@ -13,7 +13,7 @@ import {
   Text,
   ArrowForwardIcon,
 } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { NextLinkFromReactRouter } from 'components/NextLink'
 import { useGetCollections } from 'state/nftMarket/hooks'
 import { useTranslation } from 'contexts/Localization'

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Image as MpImage, ImageProps } from '@binance/mp-components'
 import { HelpIcon } from '@pancakeswap/uikit'
 
@@ -9,7 +9,7 @@ export interface LogoProps extends ImageProps {
   srcs: string[]
 }
 
-const Image = styled(MpImage, { isStyled: false })<LogoProps>``
+const Image = styled(MpImage)<LogoProps>``
 
 /**
  * Renders an image by sequentially trying a list of URIs, and then eventually a fallback triangle alert

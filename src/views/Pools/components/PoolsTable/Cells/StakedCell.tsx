@@ -6,7 +6,7 @@ import { useTranslation } from 'contexts/Localization'
 
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { DeserializedPool } from 'state/types'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber } from 'utils/formatBalance'
 import BaseCell, { CellContent } from './BaseCell'

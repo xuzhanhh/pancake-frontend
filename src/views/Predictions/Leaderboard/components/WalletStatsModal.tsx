@@ -17,7 +17,7 @@ import {
 } from '@pancakeswap/uikit'
 import { useGetProfileAvatar } from 'state/profile/hooks'
 import useTheme from 'hooks/useTheme'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { getBscScanLink } from 'utils'
 import truncateHash from 'utils/truncateHash'
 import {

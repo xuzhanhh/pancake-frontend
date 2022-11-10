@@ -3,7 +3,7 @@ import { NextLinkFromReactRouter } from 'components/NextLink'
 import { useTranslation } from 'contexts/Localization'
 import { useRouter } from 'next/router'
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import Search from 'views/Info/components/InfoSearch'
 
 const NavWrapper = styled(Flex)`

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTracker } from 'contexts/AnalyticsContext'
-import styled, { useTheme } from 'styled-components'
+import { styled,  useTheme } from '@pancakeswap/mp-styled-2'
 import { CurrencyAmount, JSBI, Token, Trade } from '@pancakeswap/sdk'
 import {
   Button,

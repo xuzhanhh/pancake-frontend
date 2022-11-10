@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DeserializedPool, VaultKey } from 'state/types'
 import useDelayedUnmount from 'hooks/useDelayedUnmount'

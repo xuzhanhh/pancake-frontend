@@ -10,7 +10,7 @@
  * I'll leave TODO: comment here to check back later if there is update to types
  *
  */
-import styled, { keyframes } from 'styled-components'
+import { styled, keyframes } from '@pancakeswap/mp-styled-2'
 
 interface SliceProps {
   length: number

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document'
-import { ServerStyleSheet } from 'styled-components'
+import { ServerStyleSheet } from '@pancakeswap/mp-styled-2'
 import React from 'react'
 import { nodes } from 'utils/getRpcUrl'
 

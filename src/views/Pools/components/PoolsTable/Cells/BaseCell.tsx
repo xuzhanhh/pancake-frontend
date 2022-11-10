@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const BaseCell = styled(Flex)`
   color: black;

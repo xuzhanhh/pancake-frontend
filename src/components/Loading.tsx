@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const Loading = styled.div`
   border: 8px solid #f3f3f3;

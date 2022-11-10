@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Button, Text, Link, Flex, Checkbox, Message } from '@pancakeswap/uikit'
 import Card from 'components/Card'
 import { AutoColumn } from 'components/Layout/Column'

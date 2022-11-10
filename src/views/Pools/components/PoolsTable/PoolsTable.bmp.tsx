@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Button, ChevronUpIcon } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { DeserializedPool } from 'state/types'
@@ -74,11 +74,9 @@ const PoolsTable: React.FC<PoolsTableProps> = ({ pools, userDataLoaded, account,
   useEffect(() => {
     virtualListRef.current?.resetAfterIndex(0)
   }, [height])
-
   const virtualListRef = useRef()
   const toggleExpand = useCallback(
     (index) => () => {
-      console.log('???', toggleExpand)
       setExpandIndex((expandIndex) => {
         if (expandIndex.includes(index)) {
           const newArray = [...expandIndex]

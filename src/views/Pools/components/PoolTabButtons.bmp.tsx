@@ -3,7 +3,7 @@ import React from 'react'
 import ToggleView from 'components/ToggleView/ToggleView'
 import { ViewMode } from 'state/user/actions'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { ButtonMenu, ButtonMenuItem, Toggle, Text, NotificationDot } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 
@@ -11,10 +11,6 @@ const ToggleWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-left: 10px;
-
-  /* ${Text} { */
-  /*   margin-left: 8px; */
-  /* } */
 `
 // FIXME
 const ViewControls = styled.div`
@@ -23,35 +19,23 @@ const ViewControls = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-
-  /* > div { */
-  /*   padding: 8px 0px; */
-  /* } */
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    justify-content: flex-start;
-    width: auto;
-
-    /* > div { */
-    /*   padding: 0; */
-    /* } */
-  }
 `
+
+/* > div { */
+/*   padding: 8px 0px; */
+/* } */
+
 // FIXME
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* a { */
-  /*   padding-left: 12px; */
-  /*   padding-right: 12px; */
-  /* } */
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 16px;
-  }
 `
+
+/* a { */
+/*   padding-left: 12px; */
+/*   padding-right: 12px; */
+/* } */
 
 const PoolTabButtons = ({
   stakedOnly,

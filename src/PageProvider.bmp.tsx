@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleProvider } from 'styled-components'
+import React, { useState } from 'react'
+// import { StyleProvider } from 'styled-components'
 import { ModalProvider } from '@pancakeswap/uikit'
 import { ToastsProvider, ToastListener } from 'contexts/ToastsContext'
 
@@ -39,7 +39,7 @@ const Providers: React.FC = ({ children }) => {
   })
   return (
     <>
-      <StyleProvider />
+      {/* <StyleProvider /> */}
       <view>
         <AnalyticsProvider>
           <TooltipProvider>
@@ -64,3 +64,5 @@ const Providers: React.FC = ({ children }) => {
 }
 
 export default Providers
+
+

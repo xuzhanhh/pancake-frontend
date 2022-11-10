@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'contexts/Localization'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Text, Flex, LinkExternal, Skeleton } from '@pancakeswap/uikit'
 
 export interface ExpandableSectionProps {

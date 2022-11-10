@@ -2,7 +2,7 @@ import { BalanceInput, Button, Flex, Image, Slider, Text } from '@pancakeswap/ui
 import BigNumber from 'bignumber.js'
 import { useTranslation } from 'contexts/Localization'
 import React, { Dispatch, memo, SetStateAction, useCallback, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { BIG_TEN } from 'utils/bigNumber'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { useUserEnoughCakeValidator } from '../hooks/useUserEnoughCakeValidator'

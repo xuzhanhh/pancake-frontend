@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Box, Flex, Text, Input, CheckmarkIcon, PencilIcon, IconButton } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { CalculatorMode, RoiCalculatorReducerState } from './useRoiCalculatorReducer'
@@ -48,7 +48,10 @@ const RoiDollarAmount = styled(Text)<{ fadeOut: boolean }>`
   &::-webkit-scrollbar {
     height: 0px;
   }
-
+`
+// FIXME static
+/*
+ *
   ${({ fadeOut, theme }) =>
     fadeOut &&
     `
@@ -67,8 +70,9 @@ const RoiDollarAmount = styled(Text)<{ fadeOut: boolean }>`
         width: 40px;
       }
   `}
-`
 
+ *
+ */
 interface RoiCardProps {
   earningTokenSymbol: string
   calculatorState: RoiCalculatorReducerState

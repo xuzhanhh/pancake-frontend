@@ -1,6 +1,6 @@
 import React from 'react'
 import _uniqueId from 'lodash/uniqueId'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Flex } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { CountdownProps } from '../../types'

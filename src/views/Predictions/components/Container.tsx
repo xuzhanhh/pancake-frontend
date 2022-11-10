@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const Container = styled.div`
   background: ${({ theme }) => theme.colors.gradients.violetAlt};

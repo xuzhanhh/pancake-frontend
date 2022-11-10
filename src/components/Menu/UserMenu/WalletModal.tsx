@@ -13,7 +13,7 @@ import {
 } from '@pancakeswap/uikit'
 import { parseUnits } from '@ethersproject/units'
 import { useTranslation } from 'contexts/Localization'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { FetchStatus } from 'config/constants/types'
 import WalletInfo from './WalletInfo'

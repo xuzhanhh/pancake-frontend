@@ -13,7 +13,7 @@ import {
   Box,
 } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 interface RiskDisclaimerProps extends InjectedModalProps {
   onSuccess: () => void

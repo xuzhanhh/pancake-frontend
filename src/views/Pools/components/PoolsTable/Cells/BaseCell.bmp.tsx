@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const BaseCell = styled(Flex)`
   color: black;
@@ -15,9 +15,6 @@ export const CellContent = styled(Flex)`
   flex-direction: column;
   justify-content: center;
   max-height: 40px;
-  /* ${Text} { */
-  /*   line-height: 1; */
-  /* } */
 `
 
 export default BaseCell

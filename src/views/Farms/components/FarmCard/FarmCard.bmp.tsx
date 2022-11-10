@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Card, Flex, Text, Skeleton } from '@pancakeswap/uikit'
 import { DeserializedFarm } from 'state/types'
 import { getBscScanLink } from 'utils'

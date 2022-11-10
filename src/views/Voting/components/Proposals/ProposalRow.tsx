@@ -1,6 +1,6 @@
 import React from 'react'
 import { ArrowForwardIcon, Box, IconButton, Flex, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { NextLinkFromReactRouter } from 'components/NextLink'
 import { Proposal } from 'state/types'
 import { isCoreProposal } from '../../helpers'

@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { ThemeContext as StyledThemeContext } from 'styled-components'
+import { ThemeContext as StyledThemeContext } from '@pancakeswap/mp-styled-2'
 import { useThemeManager } from 'state/user/hooks'
 
 const useTheme = () => {

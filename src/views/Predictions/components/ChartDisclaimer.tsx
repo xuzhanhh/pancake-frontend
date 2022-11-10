@@ -12,7 +12,7 @@ import {
   Checkbox,
   Box,
 } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import { useUserPredictionChartDisclaimerShow } from 'state/user/hooks'
 

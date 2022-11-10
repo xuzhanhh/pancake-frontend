@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'contexts/Localization'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Modal, Text, Button, OpenNewIcon, Link } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 

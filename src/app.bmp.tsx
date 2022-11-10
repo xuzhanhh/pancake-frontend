@@ -7,6 +7,7 @@ import './polyfill.bmp'
 import 'utils/apr.bmp'
 import { initMiniTrack } from 'utils/bmp/sensors'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
+import '@pancakeswap/mp-uikit-2/dist/esm/index.css'
 
 declare const COMMIT_ID: string
 declare const env: any

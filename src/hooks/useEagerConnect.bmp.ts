@@ -118,7 +118,6 @@ class BnInjectedConnector extends AbstractConnector {
     } catch {
       warning(false, 'eth_accounts was unsuccessful')
     }
-
     return account
   }
 

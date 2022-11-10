@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState, memo, ReactNode, useCallback } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 // import useDelayedUnmount from 'hooks/useDelayedUnmount'
 // import { useMatchBreakpointsContext } from '@pancakeswap/uikit'
 
@@ -29,7 +29,7 @@ const ExpandRow: React.FC<{
 
   return (
     <>
-      <StyledRow role="row" onClick={toggleExpand}>
+      <StyledRow onClick={toggleExpand}>
         {children}
         <ExpandActionCell expanded={expanded} isFullLayout={false} />
       </StyledRow>

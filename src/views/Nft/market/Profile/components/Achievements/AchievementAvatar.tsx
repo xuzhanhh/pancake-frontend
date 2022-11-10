@@ -1,5 +1,5 @@
 import React, { ImgHTMLAttributes } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { BunnyPlaceholderIcon } from '@pancakeswap/uikit'
 
 interface AchievementAvatarProps extends ImgHTMLAttributes<HTMLImageElement> {
