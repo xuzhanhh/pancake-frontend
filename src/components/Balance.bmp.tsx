@@ -54,13 +54,13 @@ const appear = keyframes`
 
 export const AnimatedBalance = styled(Balance)`
   @keyframes appear {
-  from {
-    opacity:0;
-  }
-  
-  to {
-    opacity:1;
-  }
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
   animation: appear 0.65s ease-in-out forwards;
 `

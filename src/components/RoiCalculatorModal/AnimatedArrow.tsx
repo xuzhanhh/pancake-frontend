@@ -8,18 +8,18 @@ const rotate = keyframes`
 
 const ArrowContainer = styled(Flex)`
   @keyframes rotate {
-  0% {
-    transform: scale(1);
-    stroke-width: 0;
-  }
-  50% {
-    transform: scale(1.3);
-    stroke-width: 2;
-  }
-  100% {
-    transform: scale(1);
-    stroke-width: 0;
-  }
+    0% {
+      transform: scale(1);
+      stroke-width: 0;
+    }
+    50% {
+      transform: scale(1.3);
+      stroke-width: 2;
+    }
+    100% {
+      transform: scale(1);
+      stroke-width: 0;
+    }
   }
   & > svg {
     animation: 0.2s rotate linear;

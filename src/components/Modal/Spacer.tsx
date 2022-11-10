@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { styled,  ThemeContext } from '@pancakeswap/mp-styled-2'
+import { styled, ThemeContext } from '@pancakeswap/mp-styled-2'
 
 interface SpacerProps {
   size?: 'sm' | 'md' | 'lg'

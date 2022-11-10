@@ -6,15 +6,15 @@ const ellipsis = keyframes`
 `
 const DotsAfter = styled.div`
   @keyframes ellipsis {
-  0% {
-    width: 2px;
-  }
-  33% {
-    width: 6px;
-  }
-  66% {
-    width: 10px;
-  }
+    0% {
+      width: 2px;
+    }
+    33% {
+      width: 6px;
+    }
+    66% {
+      width: 10px;
+    }
   }
   width: 16px;
   display: inline-block;

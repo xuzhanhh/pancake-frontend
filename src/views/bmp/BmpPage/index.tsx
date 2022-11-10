@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled,  useTheme } from '@pancakeswap/mp-styled-2'
+import { styled, useTheme } from '@pancakeswap/mp-styled-2'
 import { Flex, Button, Svg, Image } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'

@@ -1,7 +1,7 @@
 import { Card, CardBody, Flex, Heading, Image, ProfileAvatar } from '@pancakeswap/uikit'
 import React from 'react'
 import { NextLinkFromReactRouter } from 'components/NextLink'
-import { styled,  css } from '@pancakeswap/mp-styled-2'
+import { styled, css } from '@pancakeswap/mp-styled-2'
 
 interface HotCollectionCardProps {
   bgSrc: string

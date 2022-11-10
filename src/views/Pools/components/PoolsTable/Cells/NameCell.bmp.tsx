@@ -48,7 +48,7 @@ const NameCell: React.FC<NameCellProps> = ({ pool }) => {
   }
 
   return (
-    <StyledCell2 role="cell" style={{flex: '5', flexDirection: 'row', paddingLeft: '12px'}}>
+    <StyledCell2 role="cell" style={{ flex: '5', flexDirection: 'row', paddingLeft: '12px' }}>
       {vaultKey ? (
         <UITokenPairImage
           secondarySrc={'https://pancakeswap.finance' + vaultPoolConfig[pool.vaultKey].tokenImage.secondarySrc}

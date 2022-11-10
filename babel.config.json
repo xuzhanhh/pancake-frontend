@@ -7,7 +7,7 @@
         "ts": true
       }
     ],
-      "@linaria",
-  ],
+    "@linaria"
+  ]
   // "plugins": ["@pancakeswap/mp-styled-2/babel/static-css","@pancakeswap/mp-styled-2/babel/keyframes"]
 }

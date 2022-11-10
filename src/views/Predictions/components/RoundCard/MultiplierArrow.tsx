@@ -1,6 +1,6 @@
 import React from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
-import { styled,  CSSProperties } from '@pancakeswap/mp-styled-2'
+import { styled, CSSProperties } from '@pancakeswap/mp-styled-2'
 import { Box, Flex, Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { BetPosition } from 'state/types'

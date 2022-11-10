@@ -1,5 +1,5 @@
 import React from 'react'
-import { styled,  keyframes, css } from '@pancakeswap/mp-styled-2'
+import { styled, keyframes, css } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import { LinkExternal, Text } from '@pancakeswap/uikit'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'

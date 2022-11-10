@@ -1,4 +1,4 @@
-import { styled,  keyframes, css } from '@pancakeswap/mp-styled-2'
+import { styled, keyframes, css } from '@pancakeswap/mp-styled-2'
 import { Box, Flex, HelpIcon, Text, useTooltip, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { getVaultPosition, VaultPosition } from 'utils/cakePool'

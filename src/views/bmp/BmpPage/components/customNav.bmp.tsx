@@ -1,7 +1,7 @@
 import React from 'react'
 import mpService from '@binance/mp-service'
 import { Box, Flex, Image, Text, WalletIcon } from '@pancakeswap/uikit'
-import { styled,  useTheme } from '@pancakeswap/mp-styled-2'
+import { styled, useTheme } from '@pancakeswap/mp-styled-2'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useThemeManager } from 'state/user/hooks'
 import titleLight from '../../../../../public/images/nav-title-light.png'

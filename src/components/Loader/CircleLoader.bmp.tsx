@@ -6,12 +6,12 @@ const rotate = keyframes`
 
 const StyledSVG = styled.svg<{ size: string; stroke?: string }>`
   @keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
   animation: rotate 2s linear infinite;
   height: ${({ size }) => size};

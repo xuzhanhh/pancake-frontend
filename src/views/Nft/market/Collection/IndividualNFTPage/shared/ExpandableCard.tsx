@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { styled,  keyframes, css } from '@pancakeswap/mp-styled-2'
+import { styled, keyframes, css } from '@pancakeswap/mp-styled-2'
 import { Grid, Text, Card, Box, ChevronUpIcon, ChevronDownIcon, IconButton } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 

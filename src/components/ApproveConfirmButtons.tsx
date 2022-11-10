@@ -40,7 +40,7 @@ const Button = styled(UIKitButton)`
 `
 
 // const iconAttrs = { width: '24px', color: 'textDisabled' }
-const WrappedChevronRightIcon = props => <ChevronRightIcon width="24px" color="textDisabled" {...props}/>
+const WrappedChevronRightIcon = (props) => <ChevronRightIcon width="24px" color="textDisabled" {...props} />
 const ChevronRight = styled(WrappedChevronRightIcon)`
   display: none;
 

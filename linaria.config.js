@@ -1,7 +1,7 @@
 module.exports = {
   rules: [
     {
-      action: require("@linaria/shaker").default,
+      action: require('@linaria/shaker').default,
     },
     {
       test: /node_modules[\/\\](?!@binance)/,
@@ -15,5 +15,5 @@ module.exports = {
     //   test: /node_modules[\/\\](?!@binance)/,
     //   action: 'ignore',
     // },
-  ]
+  ],
 }

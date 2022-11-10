@@ -1,7 +1,7 @@
 import { ErrorIcon, Flex, Text } from '@pancakeswap/uikit'
 import { AutoColumn } from 'components/Layout/Column'
 import React from 'react'
-import { styled,  css } from '@pancakeswap/mp-styled-2'
+import { styled, css } from '@pancakeswap/mp-styled-2'
 
 export const Wrapper = styled(Flex)`
   position: relative;
@@ -12,7 +12,6 @@ export const Wrapper = styled(Flex)`
 
 export const ArrowWrapper = styled.div<{ clickable: boolean }>`
   padding: 2px;
-
 `
 /*
  *FIXME static

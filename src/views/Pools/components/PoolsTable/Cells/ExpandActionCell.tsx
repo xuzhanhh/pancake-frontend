@@ -26,7 +26,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 const TotalStakedCell: React.FC<ExpandActionCellProps> = ({ expanded, isFullLayout }) => {
   const { t } = useTranslation()
   return (
-    <StyledCell >
+    <StyledCell>
       {isFullLayout && (
         <Text color="primary" bold>
           {expanded ? t('Hide') : t('Details')}
