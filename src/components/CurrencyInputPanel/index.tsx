@@ -19,9 +19,9 @@ const InputRow = styled.div<{ selected: boolean }>`
   padding: ${({ selected }) => (selected ? '0.75rem 0.5rem 0.75rem 1rem' : '0.75rem 0.75rem 0.75rem 1rem')};
 `
 
-const WrappedButton = props => <Button variant="text" scale="sm" {...props}/>
+const WrappedButton = (props) => <Button variant="text" scale="sm" {...props} />
 const CurrencySelectButton = styled(WrappedButton)`
-  padding: 0 0.5rem;
+  padding: 0 0.5rem !important;
 `
 const LabelRow = styled.div`
   display: flex;
