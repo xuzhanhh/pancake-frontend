@@ -27,8 +27,56 @@ init({
     return breadcrumb
   },
 })
-bn.request = bindRequest(bn.request)
-__mp_private_api__.request = bindRequest(__mp_private_api__.request)
+
+const request = (params) => {
+  console.log('????? fetch')
+  const promise = new Promise((resolve, reject) => {
+    bn.request({
+      ...params,
+      success: (res) => {
+        console.log('???? success', res)
+        const { data, header } = res
+
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          res.ok = true
+        }
+        res.headers = {
+          get: (key) => res.header[key.toLowerCase()],
+        }
+        res.json = () => {
+          return JSON.parse(res.data)
+        }
+        if (header['content-type']?.indexOf('application/json') > -1) {
+          if (typeof data === 'object') {
+            resolve(res)
+            return
+          }
+
+          try {
+            const json = JSON.parse(res.data)
+            res.data = json
+            resolve(res)
+          } catch (e) {
+            if (typeof e === 'string') {
+              reject(new Error(e))
+            } else if (e instanceof Error) {
+              reject(e)
+            }
+          }
+        } else {
+          res(data)
+        }
+      },
+      fail: (response) => reject(new Error(response.errMsg)),
+    })
+  }).catch((reason) => {
+    throw reason
+  })
+
+  return promise
+}
+// bn.request = bindRequest(request)
+// __mp_private_api__.request = bindRequest(__mp_private_api__.request)
 
 initMiniTrack({
   appId: systemInfo?.host?.appId,

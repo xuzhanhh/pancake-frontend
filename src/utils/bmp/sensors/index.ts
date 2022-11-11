@@ -15,6 +15,7 @@ export interface Params {
   show_log?: boolean
   max_string_length?: number
   datasend_timeout?: number
+  public_property?: object
 }
 
 export const initMiniTrack = async (params: Params) => {
@@ -25,6 +26,7 @@ export const initMiniTrack = async (params: Params) => {
     show_log = false,
     max_string_length = 500,
     datasend_timeout = 3000,
+    public_property = {},
   } = params
 
   if (!server_url) throw new Error('server_url are required parameters')
@@ -33,11 +35,13 @@ export const initMiniTrack = async (params: Params) => {
 
   let canNative
   if ((mpService as any).canIUseCustom)
-    canNative = await (mpService as any).canIUseCustom('private-sensors-track-event')
+    canNative = await (mpService as any).canIUseCustom({
+      event: 'private-sensors-track-event',
+    })
   if (platform === 'devtools' || !canNative) data_report_type = 'request'
   if (Array.isArray(server_url)) server_url = server_url[0]
 
-  sensors.registerApp({ df_appId: appId })
+  sensors.registerApp({ df_appId: appId, ...public_property })
   sensors.setPara({
     server_url,
     data_report_type,
@@ -47,16 +51,16 @@ export const initMiniTrack = async (params: Params) => {
   })
 
   // try {
+  //   let res
   //   if (__mp_private_api__?.getUserProfile) {
-  //     const res = await __mp_private_api__.getUserProfile()
-  //     if (res?.uid) sensors.login(res.uid)
-  //     sensors.init()
+  //     res = await __mp_private_api__.getUserProfile()
   //   } else {
-  //     sensors.init()
+  //     res = await (mpService as any).call('private-get-user-profile')
   //   }
-  // } catch (e) {
-  //   sensors.init()
-  // }
+  //   if (res?.uid) sensors.login(res.uid)
+  // } catch (e) {}
+  //
+  // sensors.init()
 }
 
 export const miniTrack = (eventType, params) => {
