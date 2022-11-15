@@ -171,7 +171,9 @@ export const useEagerConnect = () => {
     const main = async () => {
       const address = await injected.getAccount()
       if (address) {
-        handleActive()
+        setTimeout(() => {
+          handleActive()
+        }, 100)
         sensors.login(address)
         setUser({ id: address })
       }

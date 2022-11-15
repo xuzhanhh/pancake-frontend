@@ -4,7 +4,8 @@ import 'taro-ui/dist/style/components/float-layout.scss'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import { styled, useTheme } from '@pancakeswap/mp-styled-2'
 import { Box, ModalHeader, ModalBackButton, ModalTitle, Heading, ModalCloseButton } from '@pancakeswap/uikit'
-
+import { View } from '@binance/mp-components'
+import './FloatLayout.scss'
 const {
   safeArea: { bottom },
   windowHeight,
@@ -27,49 +28,42 @@ interface FloatLayoutProps {
 export const FloatLayout: React.FC<FloatLayoutProps> = ({ children, onBack, onDismiss, title }) => {
   const theme = useTheme()
   return (
-    <AtFloatLayout isOpened={true} onClose={onDismiss}>
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `.layout-body__content{min-height: 100px!important; max-height: ${
-            windowHeight - 110
-          }px!important}.layout-body{padding: 0px!important; min-height:100px!important}.at-float-layout__container{background-color: ${
-            theme.modal.background
-          }; border-top-left-radius: 32px; border-top-right-radius: 32px; min-height: 100px;  }`,
-        }}
-      />
-      <FloatContainer>
-        {title && (
-          <FloatHeader>
-            <ModalTitle>
-              {onBack && <ModalBackButton onBack={onBack} />}
-              <Heading>{title}</Heading>
-            </ModalTitle>
-            <ModalCloseButton onDismiss={onDismiss} />
-          </FloatHeader>
-        )}
-        <scroll-view
-          style={{ maxHeight: windowHeight - 110 - 58 - 34 }}
-          scroll-y="true"
-          upper-threshold="50"
-          lower-threshold="50"
-          scroll-with-animation="false"
-          enable-back-to-top="false"
-          enable-flex="false"
-          scroll-anchoring="false"
-          refresher-enabled="false"
-          refresher-threshold="45"
-          refresher-default-style="black"
-          refresher-background="#FFF"
-          refresher-triggered="false"
-          bounces="true"
-          show-scrollbar="true"
-          paging-enabled="false"
-        >
-          {children}
-        </scroll-view>
-        <Box style={{ paddingBottom: DefaultPaddingBottom }} />
-      </FloatContainer>
-    </AtFloatLayout>
+    <View style={{ '--content-height': windowHeight - 110, '--container-background-color': theme.modal.background }}>
+      <AtFloatLayout isOpened={true} onClose={onDismiss}>
+        <FloatContainer>
+          {title && (
+            <FloatHeader>
+              <ModalTitle>
+                {onBack && <ModalBackButton onBack={onBack} />}
+                <Heading>{title}</Heading>
+              </ModalTitle>
+              <ModalCloseButton onDismiss={onDismiss} />
+            </FloatHeader>
+          )}
+          <scroll-view
+            style={{ maxHeight: windowHeight - 110 - 58 - 34 }}
+            scroll-y="true"
+            upper-threshold="50"
+            lower-threshold="50"
+            scroll-with-animation="false"
+            enable-back-to-top="false"
+            enable-flex="false"
+            scroll-anchoring="false"
+            refresher-enabled="false"
+            refresher-threshold="45"
+            refresher-default-style="black"
+            refresher-background="#FFF"
+            refresher-triggered="false"
+            bounces="true"
+            show-scrollbar="true"
+            paging-enabled="false"
+          >
+            {children}
+          </scroll-view>
+          <Box style={{ paddingBottom: DefaultPaddingBottom }} />
+        </FloatContainer>
+      </AtFloatLayout>
+    </View>
   )
 }
 

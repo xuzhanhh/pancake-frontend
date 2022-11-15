@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { ScrollView } from '@binance/mp-components'
+import { ScrollView, View } from '@binance/mp-components'
 import { Token, Currency } from '@pancakeswap/sdk'
 import { Button, Text, ErrorIcon, Flex, Message, Checkbox, Link, Tag, Grid } from '@pancakeswap/uikit'
 import { AutoColumn } from 'components/Layout/Column'
@@ -40,36 +40,38 @@ function ImportToken({ tokens, handleCurrencySelect }: ImportProps) {
     <AutoColumn gap="lg">
       <Message variant="warning">
         <ScrollView scrollY style={{ maxHeight: '35vh' }}>
-          <Text>
+          <View>
             {isUnknownSource ? (
-              <view>
-                {t('import-token-warning-unknown-source')}
-                <br />
-                <br />
-              </view>
+              <View id="para1" style={{ marginBottom: 20 }}>
+                <Text>{t('import-token-warning-unknown-source')}</Text>
+              </View>
             ) : (
               ''
             )}
             {isUnknownSource ? (
-              t(
-                'Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.',
-              )
+              <View id="para3">
+                <Text>
+                  {t(
+                    'Anyone can create a BEP20 token on BSC with any name, including creating fake versions of existing tokens and tokens that claim to represent projects that do not have a token.',
+                  )}
+                </Text>
+              </View>
             ) : (
-              <view>
-                {t('import-token-warning-extended-list-1')}
-                <br /> <br />
-                {t('import-token-warning-extended-list-2')}
-              </view>
+              <View id="para4">
+                <Text>{t('import-token-warning-extended-list-1')}</Text>
+                <View style={{ marginTop: 20 }}>
+                  <Text>{t('import-token-warning-extended-list-2')}</Text>
+                </View>
+              </View>
             )}
             {isUnknownSource ? (
-              <view>
-                <br />
-                {t('If you purchase an arbitrary token, you may be unable to sell it back.')}
-              </view>
+              <View id="para2" style={{ marginTop: 10 }}>
+                <Text>{t('If you purchase an arbitrary token, you may be unable to sell it back.')}</Text>
+              </View>
             ) : (
               ''
             )}
-          </Text>
+          </View>
         </ScrollView>
       </Message>
 

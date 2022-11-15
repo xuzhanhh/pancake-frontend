@@ -8,6 +8,7 @@ const fetch = (url, options = {}) => {
       method: options.method || 'GET',
       data: options.body,
       header: options.headers,
+      dataType: 'json',
       success: (res) => {
         console.log('???? success', res)
         const { data, header } = res
@@ -43,10 +44,13 @@ const fetch = (url, options = {}) => {
             }
           }
         } else {
-          res(data)
+          resolve(res)
         }
       },
-      fail: (response) => reject(new Error(response.errMsg)),
+      fail: (response) => {
+          console.error('????? fail', response)
+        reject(new Error(response.errMsg))
+      },
     })
   }).catch((reason) => {
     throw reason
