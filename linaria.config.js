@@ -4,13 +4,13 @@ module.exports = {
       action: require('@linaria/shaker').default,
     },
     {
-      test: /node_modules[\/\\](?!@binance)/,
+      test: /node_modules[\/\\](?!@(binance|tarojs))/,
       action: 'ignore',
     },
     // {
     //   test: /node_modules[\/\\](?!@tarojs)/,
-    //   action: "ignore"
-    // }
+    //   action: 'ignore',
+    // },
     //  {
     //   test: /node_modules[\/\\](?!@binance)/,
     //   action: 'ignore',
