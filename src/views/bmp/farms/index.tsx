@@ -1,16 +1,12 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import semver from 'semver'
 import BmpPage from '../BmpPage'
 import { ActiveId } from '../BmpPage/constants'
-import mpService from '@binance/mp-service'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import Farms from 'pages/farms/index.bmp'
-import { WebviewContext } from '@pancakeswap/uikit'
 import useParsedQueryString from 'hooks/useParsedQueryString.bmp'
-import WalletWebView, { BridgeEventData } from './WebviewBridge'
-import { jumpToLiquidity, jumpToPools, jumpToSwap } from 'utils/bmp/jump'
+import WalletWebView from './WebviewBridge'
 import { FarmsPage, FarmsProvider, useFarms } from './farmsContext'
-import { LiquidityPage } from '../liquidity/liquidityContext'
 
 export const FarmsWrapper = () => {
   const {
@@ -25,29 +21,6 @@ export const FarmsWrapper = () => {
     default:
       return null
   }
-}
-const jump = (payload: { path: string; query?: Record<string, string> }) => {
-  switch (payload.path) {
-    case 'add':
-      jumpToLiquidity({
-        page: LiquidityPage.Add,
-        currency1: payload.query.currency1,
-        currency2: payload.query.currency2,
-      })
-      break
-    case 'swap':
-      return jumpToSwap(payload?.query?.outputCurrency || '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82')
-    case 'pools':
-      return jumpToPools()
-    default:
-      console.log('~ does not match any path')
-  }
-}
-
-const toWallet = () => {
-  mpService.navigateToMiniProgram({
-    appId: 'hhL98uho2A4sGYSHCEdCCo',
-  })
 }
 const systemInfo = getSystemInfoSync()
 declare const env
@@ -70,29 +43,9 @@ const MiniFarmHome = () => {
 }
 const WalletFarmsHome = () => {
   const parsedQs = useParsedQueryString()
-  const { webviewFilePath, setUrl } = useContext(WebviewContext)
-  const toExternal = (payload: { url }) => {
-    setUrl(payload.url)
-    setTimeout(() => {
-      mpService.navigateTo({ url: webviewFilePath })
-    }, 500)
-  }
-  const handleMessage = (data: BridgeEventData) => {
-    switch (data.action) {
-      case 'jump':
-        jump(data.payload)
-        break
-      case 'getSystemInfo':
-        return getSystemInfoSync()
-      case 'toWallet':
-        return toWallet()
-      case 'toExternal':
-        return toExternal(data.payload)
-    }
-  }
   return (
     <WalletWebView
-      onMessage={handleMessage}
+      // onMessage={handleMessage}
       // src={`https://pancakeswap.finance/_mp/farms${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
       src={`https://web.pancake.run/_mp/farms${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
     />

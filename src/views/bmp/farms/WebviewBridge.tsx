@@ -1,11 +1,16 @@
 import mpService, { useDidShow } from '@binance/mp-service'
-import React from 'react'
+import React, { useContext } from 'react'
 import { WebView } from '@binance/mp-components'
 import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import { EVENT_IDS, track } from 'utils/bmp/report'
+import { jumpToFarms, jumpToLiquidity, jumpToPools, jumpToSwap } from 'utils/bmp/jump'
+import { LiquidityPage } from '../liquidity/liquidityContext'
 
+import { WebviewContext } from '@pancakeswap/uikit'
 const webviewContextMap: Record<string, Record<string, unknown>> = {}
-const provider = bn.getWeb3Provider()
+const web3Provider = bn.getWeb3Provider()
+const mpcProvider = bn.getMpcProvider()
+let currentProvider = mpcProvider ? null : web3Provider
 const setWebviewContext = (src: string): Promise<void> => {
   return new Promise((resolve) => {
     mpService
@@ -74,20 +79,66 @@ const reportData = (payload, type: 'success' | 'fail', extraData = {}) => {
   track.click(EVENT_IDS.INVOKE_CONTRACT_METHODS, { df_8: from, df_9: `${method}_${type}`, ...extraData })
 }
 
-const on = (context, { payload, id }: BridgeEventData) => {
+const selectProvider = async () => {
+  if (!currentProvider) {
+    const web3Wallets = await web3Provider.request({ method: 'eth_accounts' })
+    const mpcWallets = await mpcProvider.request({ method: 'eth_accounts' })
+    const { tapIndex } = await bn.showActionSheet({
+      alertText: 'Select Wallet',
+      itemList: [
+        web3Wallets.length > 0 ? `Wallet(original): ${web3Wallets[0]}` : null,
+        mpcWallets.length > 0 ? `Wallet: ${mpcWallets[0]}` : `+ Create DeFi Wallet`,
+      ].filter((item) => item),
+    })
+    if (tapIndex === 0 && web3Wallets.length > 0) {
+      currentProvider = web3Provider
+    } else if (tapIndex === 1 || (tapIndex === 0 && web3Wallets.length === 0)) {
+      currentProvider = mpcProvider
+    }
+  }
+  try {
+    await currentProvider.request({ method: 'eth_requestAccounts' })
+  } catch (e) {
+    console.error('??? eth_requestAccounts', e)
+    if (e.code === '604003') {
+      currentProvider = null
+    }
+  }
+}
+
+const toWallet = async () => {
+  if (currentProvider) {
+    const { tapIndex } = await bn.showActionSheet({
+      alertText: 'Wallet',
+      itemList: ['Details', 'Disconnect'],
+    })
+    if (tapIndex === 0) {
+      mpService.navigateToMiniProgram({
+        appId: currentProvider === web3Provider ? 'hhL98uho2A4sGYSHCEdCCo' : 'xoqXxUSMRccLCrZNRebmzj',
+      })
+    } else if (tapIndex === 1) {
+      // reset selected provider
+      currentProvider = mpcProvider ? null : web3Provider
+      return JSON.stringify({ method: 'disconnect' })
+    }
+  }
+}
+const on = async (context, { payload, id }: BridgeEventData) => {
+  console.log('??? on')
   const { event } = payload
-  provider.on(event, (params: any) => {
+  currentProvider.on(event, (params: any) => {
     context?.postMessage({ id, payload: params ?? JSON.stringify(params), on: event })
   })
 }
 const request = async (context, data: BridgeEventData) => {
   try {
-    const res = await provider.request(data.payload)
+    const res = await currentProvider.request(data.payload)
     context.postMessage({ id: data.id, payload: JSON.stringify(res) })
     if (data?.payload?.method === 'eth_sendTransaction') {
       reportData(data?.payload?.params?.[0], 'success')
     }
   } catch (e) {
+    console.log('??? request error', e)
     context.postMessage({ id: data.id, payload: JSON.stringify({ error: true, message: e.message }) })
     if (data?.payload?.method === 'eth_sendTransaction') {
       reportData(data?.payload?.params?.[0], 'fail', { df_12: e.toString() })
@@ -96,36 +147,82 @@ const request = async (context, data: BridgeEventData) => {
 }
 interface Props {
   src: string
-  onMessage?: (data: BridgeEventData) => void
+  // onMessage?: (data: BridgeEventData) => void
+}
+
+const jump = (payload: { path: string; query?: Record<string, string> }) => {
+  switch (payload.path) {
+    case 'add':
+      jumpToLiquidity({
+        page: LiquidityPage.Add,
+        currency1: payload.query.currency1,
+        currency2: payload.query.currency2,
+      })
+      break
+    case 'swap':
+      return jumpToSwap(payload?.query?.outputCurrency || '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82')
+    case 'pools':
+      return jumpToPools()
+    case 'farms':
+      return jumpToFarms()
+    default:
+      console.log('~ does not match any path')
+  }
 }
 const systemInfo = getSystemInfoSync()
-const WalletWebView = ({ src, onMessage }: Props) => {
+const WalletWebView = ({ src }: Props) => {
+  const { webviewFilePath, setUrl } = useContext(WebviewContext)
+  const toExternal = (payload: { url }) => {
+    setUrl(payload.url)
+    setTimeout(() => {
+      mpService.navigateTo({ url: webviewFilePath })
+    }, 500)
+  }
   const handleMessage = async (e: BridgeEvent) => {
     let context = webviewContextMap[src]
     console.log('~ context: ', context)
     const { data } = e.detail
+
     if (!context) {
       await setWebviewContext(src)
       context = webviewContextMap[src]
     }
     switch (data.action) {
       case 'request': {
+        await selectProvider()
         await request(context, data)
         break
       }
       case 'on':
-        on(context, data)
+        await selectProvider()
+        await on(context, data)
         break
       default:
-        if (onMessage) {
-          const res = onMessage(data)
-          if (typeof res?.then === 'function') {
-            res.then((response) => {
-              context.postMessage({ id: data.id, payload: response })
-            })
-          } else {
-            context.postMessage({ id: data.id, payload: res })
-          }
+        let res
+        switch (data.action) {
+          case 'toWallet':
+            res = await toWallet()
+            break
+          case 'jump':
+            res = jump(data.payload)
+            break
+          case 'getSystemInfo':
+            res = getSystemInfoSync()
+            break
+          case 'toExternal':
+            res = toExternal(data.payload)
+            break
+          default:
+            console.error('not match any path')
+        }
+        console.log('??? result', data.id, res)
+        // const res = onMessage(data)
+        if (typeof res?.then === 'function') {
+          res.then((response) => {
+            context.postMessage({ id: data.id, payload: response })
+          })
+        } else {
+          context.postMessage({ id: data.id, payload: res })
         }
     }
   }
