@@ -1,7 +1,8 @@
 export default {
-  entryPagePath: 'views/Swap/bmp/index',
+  entryPagePath: 'views/bmp/swap/index',
   pages: [
-    'views/Swap/bmp/index',
+    // 'views/Swap/bmp/index',
+    'views/bmp/swap/index',
     'views/bmp/liquidity/index',
     'views/bmp/farms/index',
     'views/bmp/pools/index',
@@ -25,7 +26,7 @@ export default {
       {
         iconPath: 'images/trade.png',
         selectedIconPath: 'images/trade-select.png',
-        pagePath: 'views/Swap/bmp/index',
+        pagePath: 'views/bmp/swap/index',
         text: 'Exchange',
       },
       {

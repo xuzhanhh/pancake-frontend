@@ -2,8 +2,9 @@ import mpService from '@binance/mp-service'
 import { LiquidityPage } from 'views/bmp/liquidity/liquidityContext'
 
 export const jumpToSwap = (outputCurrency?: string) => {
+  console.log('??? jumpToSwap', outputCurrency)
   mpService.switchTab({
-    url: '/views/Swap/bmp/index',
+    url: '/views/bmp/swap/index',
   })
   globalThis.jumpToSwap = 1
   globalThis.tabbarSelected = 0

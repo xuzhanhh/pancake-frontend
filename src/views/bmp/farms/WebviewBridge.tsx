@@ -109,7 +109,6 @@ const selectProvider = async () => {
 const toWallet = async () => {
   if (currentProvider) {
     const { tapIndex } = await bn.showActionSheet({
-      alertText: 'Wallet',
       itemList: ['Details', 'Disconnect'],
     })
     if (tapIndex === 0) {

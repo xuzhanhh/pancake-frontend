@@ -8,6 +8,11 @@ import RemoveLiquidity from '../../RemoveLiquidity/index'
 import FindPool from '../../PoolFinder/index'
 import BmpPage from '../BmpPage'
 import { ActiveId } from '../BmpPage/constants'
+import useParsedQueryString from 'hooks/useParsedQueryString.bmp'
+import { gte } from 'lodash'
+import { getSystemInfoSync } from '@binance/mp-service'
+import WalletWebView from '../farms/WebviewBridge'
+import semver from 'semver'
 
 const LiquidityWrapper = () => {
   const {
@@ -27,6 +32,18 @@ const LiquidityWrapper = () => {
   }
 }
 
+const pageEnumToString = (page: LiquidityPage) => {
+  switch (page) {
+    case LiquidityPage.Pool:
+      return 'liquidity'
+    case LiquidityPage.Add:
+      return 'add'
+    case LiquidityPage.Remove:
+      return 'remove'
+    case LiquidityPage.Find:
+      return 'find'
+  }
+}
 const LiquidityHome = () => {
   const tracker = useTracker()
   useEffect(() => {
@@ -41,4 +58,31 @@ const LiquidityHome = () => {
     </BmpPage>
   )
 }
-export default LiquidityHome
+
+const NewLiquidityHome = () => {
+  const isNewVersion = semver.gte(systemInfo.version, '2.48.0')
+  if (isNewVersion) {
+    return (
+      <LiquidityProvider>
+        <WebviewLiquidityHome />
+      </LiquidityProvider>
+    )
+  }
+  return <LiquidityHome />
+}
+
+const systemInfo = getSystemInfoSync()
+const WebviewLiquidityHome = () => {
+  const {
+    state: { page, currency1, currency2 },
+  } = useLiquidity()
+  return (
+    <WalletWebView
+      src={`https://web-git-mp-qa.pancake.run/_mp/liquidity?page=${pageEnumToString(page)}${
+        currency1 ? `&currency1=${currency1}` : ''
+      }
+        ${currency2 ? `&currency1=${currency2}` : ''}`}
+    />
+  )
+}
+export default NewLiquidityHome

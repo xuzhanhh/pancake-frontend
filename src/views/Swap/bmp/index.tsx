@@ -92,7 +92,7 @@ const SwitchIconButton = styled(IconButton)`
     }
   }
 `
-function Swap() {
+export function Swap() {
   const loadedUrlParams = useDefaultsFromURLSearch()
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
@@ -618,12 +618,12 @@ function Swap() {
     </Flex>
   )
 }
-export default function Index() {
-  return (
-    <BmpPage>
-      <ErrorBoundary name="swap">
-        <Swap />
-      </ErrorBoundary>
-    </BmpPage>
-  )
-}
+// export default function Index() {
+//   return (
+//     <BmpPage>
+//       <ErrorBoundary name="swap">
+//         <Swap />
+//       </ErrorBoundary>
+//     </BmpPage>
+//   )
+// }
