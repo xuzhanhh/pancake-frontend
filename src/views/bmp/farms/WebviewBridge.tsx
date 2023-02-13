@@ -92,19 +92,19 @@ export const selectProvider = async (selectedCb, isNeedTrigger) => {
   if (!currentProvider) {
     const web3Wallets = await web3Provider.request({ method: 'eth_accounts' })
     const mpcWallets = await mpcProvider.request({ method: 'eth_accounts' })
-    if (mpcProvider && web3Wallets.length === 0 && mpcWallets.length === 0) {
-      currentProvider = mpcProvider
+    if (web3Provider && web3Wallets.length === 0 && mpcWallets.length === 0) {
+      currentProvider = web3Provider
     } else {
       const { tapIndex } = await bn.showActionSheet({
         alertText: 'Select Wallet',
         itemList: [
-          web3Wallets.length > 0 ? `${shortenAddress(web3Wallets[0])}(DeFi Wallet original)` : null,
-          mpcWallets.length > 0 ? `${shortenAddress(mpcWallets[0])}` : `+ Create DeFi Wallet`,
+          web3Wallets.length > 0 ? `${shortenAddress(web3Wallets[0])}(DeFi Wallet original)` : `+ Create DeFi Wallet`,
+          mpcWallets.length > 0 ? `${shortenAddress(mpcWallets[0])}` : null,
         ].filter((item) => item),
       })
-      if (tapIndex === 0 && web3Wallets.length > 0) {
+      if (tapIndex === 0) {
         currentProvider = web3Provider
-      } else if (tapIndex === 1 || (tapIndex === 0 && web3Wallets.length === 0)) {
+      } else if (tapIndex === 1) {
         currentProvider = mpcProvider
       }
     }
