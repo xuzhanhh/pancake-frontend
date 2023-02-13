@@ -47,7 +47,7 @@ const WalletFarmsHome = () => {
     <WalletWebView
       // onMessage={handleMessage}
       // src={`https://pancakeswap.finance/_mp/farms${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
-      src={`https://web.pancake.run/_mp/farms${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
+      src={`https://pancakeswap.finance/_mp/farms${parsedQs?.search ? `?search=${parsedQs.search}` : ''}`}
     />
   )
 }

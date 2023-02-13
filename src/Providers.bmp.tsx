@@ -24,7 +24,7 @@ const ThemeProviderWrapper = (props) => {
 const Hooks2 = () => {
   usePollBlockNumber()
   useBmpInit()
-  useEagerConnect()
+  // useEagerConnect()
   return null
 }
 export const PathContext = React.createContext({

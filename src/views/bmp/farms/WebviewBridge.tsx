@@ -7,10 +7,12 @@ import { jumpToFarms, jumpToLiquidity, jumpToPools, jumpToSwap } from 'utils/bmp
 import { LiquidityPage } from '../liquidity/liquidityContext'
 
 import { WebviewContext } from '@pancakeswap/uikit'
-const webviewContextMap: Record<string, Record<string, unknown>> = {}
+import { useWeb3React } from '@web3-react/core'
+import { useActiveHandleWithoutToast } from 'hooks/useEagerConnect.bmp'
+export const webviewContextMap: Record<string, Record<string, unknown>> = {}
 const web3Provider = bn.getWeb3Provider()
 const mpcProvider = bn.getMpcProvider()
-let currentProvider = mpcProvider ? null : web3Provider
+export let currentProvider = mpcProvider ? null : web3Provider
 const setWebviewContext = (src: string): Promise<void> => {
   return new Promise((resolve) => {
     mpService
@@ -79,21 +81,32 @@ const reportData = (payload, type: 'success' | 'fail', extraData = {}) => {
   track.click(EVENT_IDS.INVOKE_CONTRACT_METHODS, { df_8: from, df_9: `${method}_${type}`, ...extraData })
 }
 
-const selectProvider = async () => {
+function shortenAddress(address = '') {
+  if (address.length < 11) {
+    return address
+  }
+
+  return `${address.slice(0, 4)}...${address.slice(-4)}`
+}
+export const selectProvider = async (selectedCb, isNeedTrigger) => {
   if (!currentProvider) {
     const web3Wallets = await web3Provider.request({ method: 'eth_accounts' })
     const mpcWallets = await mpcProvider.request({ method: 'eth_accounts' })
-    const { tapIndex } = await bn.showActionSheet({
-      alertText: 'Select Wallet',
-      itemList: [
-        web3Wallets.length > 0 ? `Wallet(original): ${web3Wallets[0]}` : null,
-        mpcWallets.length > 0 ? `Wallet: ${mpcWallets[0]}` : `+ Create DeFi Wallet`,
-      ].filter((item) => item),
-    })
-    if (tapIndex === 0 && web3Wallets.length > 0) {
-      currentProvider = web3Provider
-    } else if (tapIndex === 1 || (tapIndex === 0 && web3Wallets.length === 0)) {
+    if (mpcProvider && web3Wallets.length === 0 && mpcWallets.length === 0) {
       currentProvider = mpcProvider
+    } else {
+      const { tapIndex } = await bn.showActionSheet({
+        alertText: 'Select Wallet',
+        itemList: [
+          web3Wallets.length > 0 ? `${shortenAddress(web3Wallets[0])}(DeFi Wallet original)` : null,
+          mpcWallets.length > 0 ? `${shortenAddress(mpcWallets[0])}` : `+ Create DeFi Wallet`,
+        ].filter((item) => item),
+      })
+      if (tapIndex === 0 && web3Wallets.length > 0) {
+        currentProvider = web3Provider
+      } else if (tapIndex === 1 || (tapIndex === 0 && web3Wallets.length === 0)) {
+        currentProvider = mpcProvider
+      }
     }
   }
   try {
@@ -104,12 +117,14 @@ const selectProvider = async () => {
       currentProvider = null
     }
   }
+  if (currentProvider && selectedCb && typeof selectedCb === 'function' && isNeedTrigger) {
+    selectedCb()
+  }
 }
 
-const toWallet = async () => {
+export const toWallet = async ({ disconnectCb, currentSrc = '' }) => {
   if (currentProvider) {
     const { tapIndex } = await bn.showActionSheet({
-      alertText: 'Wallet',
       itemList: ['Details', 'Disconnect'],
     })
     if (tapIndex === 0) {
@@ -119,6 +134,14 @@ const toWallet = async () => {
     } else if (tapIndex === 1) {
       // reset selected provider
       currentProvider = mpcProvider ? null : web3Provider
+      if (disconnectCb && typeof disconnectCb === 'function') {
+        await disconnectCb()
+      }
+      Object.entries(webviewContextMap).forEach(([src, context]) => {
+        if (src !== currentSrc) {
+          context.postMessage({ id: 'disconnect' })
+        }
+      })
       return JSON.stringify({ method: 'disconnect' })
     }
   }
@@ -171,6 +194,9 @@ const jump = (payload: { path: string; query?: Record<string, string> }) => {
 }
 const systemInfo = getSystemInfoSync()
 const WalletWebView = ({ src }: Props) => {
+  const { deactivate, active } = useWeb3React()
+  const handle = useActiveHandleWithoutToast()
+
   const { webviewFilePath, setUrl } = useContext(WebviewContext)
   const toExternal = (payload: { url }) => {
     setUrl(payload.url)
@@ -189,19 +215,19 @@ const WalletWebView = ({ src }: Props) => {
     }
     switch (data.action) {
       case 'request': {
-        await selectProvider()
+        await selectProvider(handle, !active)
         await request(context, data)
         break
       }
       case 'on':
-        await selectProvider()
+        await selectProvider(handle, !active)
         await on(context, data)
         break
       default:
         let res
         switch (data.action) {
           case 'toWallet':
-            res = await toWallet()
+            res = await toWallet({ disconnectCb: deactivate, currentSrc: src })
             break
           case 'jump':
             res = jump(data.payload)

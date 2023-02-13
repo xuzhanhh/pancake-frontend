@@ -6,6 +6,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useThemeManager } from 'state/user/hooks'
 import titleLight from '../../../../../public/images/nav-title-light.png'
 import titleDark from '../../../../../public/images/nav-title-dark.png'
+import { toWallet } from 'views/bmp/farms/WebviewBridge'
 
 type Tprops = {
   top?: number
@@ -25,12 +26,13 @@ const StyledWallet = styled(Flex)<{ isActive: boolean }>`
   border-radius: 20px;
 `
 const Wallet = () => {
-  const { account } = useActiveWeb3React()
+  const { account, deactivate } = useActiveWeb3React()
   const isActive = !!account
   const handleWalletClick = () => {
-    mpService.navigateToMiniProgram({
-      appId: 'hhL98uho2A4sGYSHCEdCCo',
-    })
+    toWallet({ disconnectCb: deactivate })
+    // mpService.navigateToMiniProgram({
+    //   appId: 'hhL98uho2A4sGYSHCEdCCo',
+    // })
   }
   const accountEllipsis = account ? `${account.substring(0, 2)}...${account.substring(account.length - 2)}` : null
   return (

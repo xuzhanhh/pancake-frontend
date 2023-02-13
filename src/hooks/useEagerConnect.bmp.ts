@@ -12,6 +12,7 @@ import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
 import { useTranslation } from 'contexts/Localization'
 import useToast from './useToast'
 import sensors from 'utils/bmp/sensors/mp'
+import { currentProvider, selectProvider, webviewContextMap } from 'views/bmp/farms/WebviewBridge'
 
 const __DEV__ = process.env.NODE_ENV !== 'production'
 
@@ -32,14 +33,14 @@ class UserRejectedRequestError extends Error {
 }
 
 class BnInjectedConnector extends AbstractConnector {
-  bnEthereum: any
+  // bnEthereum: any
 
   constructor(kwargs: AbstractConnectorArguments) {
     super(kwargs)
 
     this.handleNetworkChanged = this.handleNetworkChanged.bind(this)
     this.handleAccountsChanged = this.handleAccountsChanged.bind(this)
-    this.bnEthereum = bn.getWeb3Provider()
+    // currentProvider = bn.getWeb3Provider()
   }
 
   private handleAccountsChanged(accounts: string[]): void {
@@ -57,19 +58,22 @@ class BnInjectedConnector extends AbstractConnector {
     if (__DEV__) {
       console.log("Handling 'networkChanged' event with payload", networkId)
     }
-    this.emitUpdate({ chainId: networkId, provider: this.bnEthereum })
+    this.emitUpdate({ chainId: networkId, provider: currentProvider })
   }
 
   public async activate(): Promise<ConnectorUpdate> {
-    if (!this.bnEthereum) {
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    if (!currentProvider) {
       throw new NoEthereumProviderError()
     }
-    this.bnEthereum.on('accountsChanged', this.handleAccountsChanged)
-    this.bnEthereum.on('networkChanged', this.handleNetworkChanged)
+    currentProvider.on('accountsChanged', this.handleAccountsChanged)
+    currentProvider.on('networkChanged', this.handleNetworkChanged)
     // try to activate + get account via eth_requestAccounts
     let account
     try {
-      account = await this.bnEthereum
+      account = await currentProvider
         .request({
           method: 'eth_requestAccounts',
         })
@@ -80,21 +84,31 @@ class BnInjectedConnector extends AbstractConnector {
       }
       warning(false, 'eth_requestAccounts was unsuccessful')
     }
-    return { provider: this.bnEthereum, ...(account ? { account } : {}) }
+    Object.values(webviewContextMap).forEach((context) => {
+      context.postMessage({ id: 'connect' })
+    })
+
+    return { provider: currentProvider, ...(account ? { account } : {}) }
   }
 
   public async getProvider(): Promise<any> {
-    return this.bnEthereum
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    return currentProvider
   }
 
   public async getChainId(): Promise<number | string> {
-    if (!this.bnEthereum) {
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    if (!currentProvider) {
       throw new NoEthereumProviderError()
     }
 
     let chainId
     try {
-      chainId = await this.bnEthereum.request({
+      chainId = await currentProvider.request({
         method: 'eth_chainId',
       })
     } catch (error) {
@@ -104,13 +118,16 @@ class BnInjectedConnector extends AbstractConnector {
   }
 
   public async getAccount(): Promise<null | string> {
-    if (!this.bnEthereum) {
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    if (!currentProvider) {
       throw new NoEthereumProviderError()
     }
 
     let account
     try {
-      account = await this.bnEthereum
+      account = await currentProvider
         .request({
           method: 'eth_accounts',
         })
@@ -122,19 +139,22 @@ class BnInjectedConnector extends AbstractConnector {
   }
 
   public deactivate() {
-    if (this.bnEthereum && this.bnEthereum.removeListener) {
-      this.bnEthereum.removeListener('accountsChanged', this.handleAccountsChanged)
-      this.bnEthereum.removeListener('networkChanged', this.handleNetworkChanged)
+    if (currentProvider && currentProvider.removeListener) {
+      currentProvider.removeListener('accountsChanged', this.handleAccountsChanged)
+      currentProvider.removeListener('networkChanged', this.handleNetworkChanged)
     }
   }
 
   public async isAuthorized(): Promise<boolean> {
-    if (!this.bnEthereum) {
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    if (!currentProvider) {
       return false
     }
 
     try {
-      return await this.bnEthereum
+      return await currentProvider
         .request({
           method: 'eth_accounts',
         })
@@ -188,6 +208,43 @@ const isOldVersion = () => {
   return semver.lt(version, '2.43.0')
 }
 
+export const useActiveHandleWithoutToast = () => {
+  const handleActive = useActive()
+  const { t } = useTranslation()
+
+  const main = async () => {
+    /**
+     *  backward
+     */
+    const address = await getAccount()
+    return new Promise((resolve) => {
+      let isLogin = true
+      if (!address && isOldVersion()) {
+        injected.bnEthereum.ready = true
+        injected.bnEthereum
+          .request({
+            method: 'personal_sign',
+            params: ['test'],
+          })
+          .catch((error) => {
+            if (error && error?._code === '600005') {
+              isLogin = false
+              mpService.login().then(() => {
+                handleActive().then(resolve)
+              })
+            }
+          })
+        injected.bnEthereum.ready = false
+      }
+      if (isLogin) {
+        handleActive().then(resolve)
+      }
+    })
+  }
+  return async () => {
+    await main()
+  }
+}
 export const useActiveHandle = () => {
   const handleActive = useActive()
   const { toastSuccess } = useToast()
