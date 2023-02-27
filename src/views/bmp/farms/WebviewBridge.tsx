@@ -10,9 +10,9 @@ import { WebviewContext } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useActiveHandleWithoutToast } from 'hooks/useEagerConnect.bmp'
 export const webviewContextMap: Record<string, Record<string, unknown>> = {}
-const web3Provider = bn.getWeb3Provider()
-const mpcProvider = bn.getMpcProvider()
-export let currentProvider = mpcProvider ? null : web3Provider
+let web3Provider = null
+let mpcProvider = null
+export let currentProvider = null
 const setWebviewContext = (src: string): Promise<void> => {
   return new Promise((resolve) => {
     mpService
@@ -89,9 +89,15 @@ function shortenAddress(address = '') {
   return `${address.slice(0, 4)}...${address.slice(-4)}`
 }
 export const selectProvider = async (selectedCb, isNeedTrigger) => {
+  if (!web3Provider) {
+    web3Provider = mpService.getWeb3Provider?.()
+  }
+  if (!mpcProvider) {
+    mpcProvider = mpService.getMpcProvider?.()
+  }
   if (!currentProvider) {
-    const web3Wallets = await web3Provider.request({ method: 'eth_accounts' })
-    const mpcWallets = await mpcProvider.request({ method: 'eth_accounts' })
+    const web3Wallets = (await web3Provider?.request({ method: 'eth_accounts' })) || []
+    const mpcWallets = (await mpcProvider?.request({ method: 'eth_accounts' })) || []
     if (web3Provider && web3Wallets.length === 0 && mpcWallets.length === 0) {
       currentProvider = web3Provider
     } else {

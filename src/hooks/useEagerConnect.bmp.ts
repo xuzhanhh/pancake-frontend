@@ -243,6 +243,12 @@ export const useActiveHandleWithoutToast = () => {
   }
   return async () => {
     await main()
+    const address = await getAccount()
+    if (address) {
+      sensors.login(address)
+      setUser({ id: address })
+    }
+    sensors.init()
   }
 }
 export const useActiveHandle = () => {
@@ -283,8 +289,11 @@ export const useActiveHandle = () => {
     await main()
     const address = await getAccount()
     if (address) {
+      sensors.login(address)
+      setUser({ id: address })
       toastSuccess(t('Success'), 'Wallet connected')
     }
+    sensors.init()
   }
 }
 export default useEagerConnect
