@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import shuffle from 'lodash/shuffle'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore from 'swiper'
 import { ArrowBackIcon, ArrowForwardIcon, Box, IconButton, Text, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { isAfter, differenceInSeconds } from 'date-fns'
 import { Text, Flex, PocketWatchIcon, Skeleton } from '@pancakeswap/uikit'
 import { Auction, AuctionStatus } from 'config/constants/types'

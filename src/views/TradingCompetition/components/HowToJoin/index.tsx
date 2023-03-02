@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex, Text, Heading } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import Link from 'next/link'
 import HowToCard from './HowToCard'

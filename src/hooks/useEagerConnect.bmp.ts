@@ -1,10 +1,18 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
+import semver from 'semver'
+import mpService from '@binance/mp-service'
 import { useWeb3React } from '@web3-react/core'
 
 /* eslint max-classes-per-file: off -- noop */
 import { AbstractConnectorArguments, ConnectorUpdate } from '@web3-react/types'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import warning from 'tiny-warning'
+import { captureException, setUser } from '@binance/sentry-miniapp'
+import { getSystemInfoSync } from 'utils/getBmpSystemInfo'
+import { useTranslation } from 'contexts/Localization'
+import useToast from './useToast'
+import sensors from 'utils/bmp/sensors/mp'
+import { currentProvider, selectProvider, webviewContextMap } from 'views/bmp/farms/WebviewBridge'
 
 const __DEV__ = process.env.NODE_ENV !== 'production'
 
@@ -25,14 +33,14 @@ class UserRejectedRequestError extends Error {
 }
 
 class BnInjectedConnector extends AbstractConnector {
-  bnEthereum: any
+  // bnEthereum: any
 
   constructor(kwargs: AbstractConnectorArguments) {
     super(kwargs)
 
     this.handleNetworkChanged = this.handleNetworkChanged.bind(this)
     this.handleAccountsChanged = this.handleAccountsChanged.bind(this)
-    this.bnEthereum = bn.getWeb3Provider()
+    // currentProvider = bn.getWeb3Provider()
   }
 
   private handleAccountsChanged(accounts: string[]): void {
@@ -50,20 +58,22 @@ class BnInjectedConnector extends AbstractConnector {
     if (__DEV__) {
       console.log("Handling 'networkChanged' event with payload", networkId)
     }
-    this.emitUpdate({ chainId: networkId, provider: this.bnEthereum })
+    this.emitUpdate({ chainId: networkId, provider: currentProvider })
   }
 
   public async activate(): Promise<ConnectorUpdate> {
-    if (!this.bnEthereum) {
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    if (!currentProvider) {
       throw new NoEthereumProviderError()
     }
-
-    this.bnEthereum.on('accountsChanged', this.handleAccountsChanged)
-    this.bnEthereum.on('networkChanged', this.handleNetworkChanged)
+    currentProvider.on('accountsChanged', this.handleAccountsChanged)
+    currentProvider.on('networkChanged', this.handleNetworkChanged)
     // try to activate + get account via eth_requestAccounts
     let account
     try {
-      account = await this.bnEthereum
+      account = await currentProvider
         .request({
           method: 'eth_requestAccounts',
         })
@@ -74,21 +84,31 @@ class BnInjectedConnector extends AbstractConnector {
       }
       warning(false, 'eth_requestAccounts was unsuccessful')
     }
-    return { provider: this.bnEthereum, ...(account ? { account } : {}) }
+    Object.values(webviewContextMap).forEach((context) => {
+      context.postMessage({ id: 'connect' })
+    })
+
+    return { provider: currentProvider, ...(account ? { account } : {}) }
   }
 
   public async getProvider(): Promise<any> {
-    return this.bnEthereum
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    return currentProvider
   }
 
   public async getChainId(): Promise<number | string> {
-    if (!this.bnEthereum) {
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    if (!currentProvider) {
       throw new NoEthereumProviderError()
     }
 
     let chainId
     try {
-      chainId = await this.bnEthereum.request({
+      chainId = await currentProvider.request({
         method: 'eth_chainId',
       })
     } catch (error) {
@@ -98,13 +118,16 @@ class BnInjectedConnector extends AbstractConnector {
   }
 
   public async getAccount(): Promise<null | string> {
-    if (!this.bnEthereum) {
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    if (!currentProvider) {
       throw new NoEthereumProviderError()
     }
 
     let account
     try {
-      account = await this.bnEthereum
+      account = await currentProvider
         .request({
           method: 'eth_accounts',
         })
@@ -112,24 +135,26 @@ class BnInjectedConnector extends AbstractConnector {
     } catch {
       warning(false, 'eth_accounts was unsuccessful')
     }
-
     return account
   }
 
   public deactivate() {
-    if (this.bnEthereum && this.bnEthereum.removeListener) {
-      this.bnEthereum.removeListener('accountsChanged', this.handleAccountsChanged)
-      this.bnEthereum.removeListener('networkChanged', this.handleNetworkChanged)
+    if (currentProvider && currentProvider.removeListener) {
+      currentProvider.removeListener('accountsChanged', this.handleAccountsChanged)
+      currentProvider.removeListener('networkChanged', this.handleNetworkChanged)
     }
   }
 
   public async isAuthorized(): Promise<boolean> {
-    if (!this.bnEthereum) {
+    if (!currentProvider) {
+      await selectProvider()
+    }
+    if (!currentProvider) {
       return false
     }
 
     try {
-      return await this.bnEthereum
+      return await currentProvider
         .request({
           method: 'eth_accounts',
         })
@@ -146,24 +171,129 @@ class BnInjectedConnector extends AbstractConnector {
 }
 
 const injected = new BnInjectedConnector({ supportedChainIds: [56, 97] })
+const getAccount = () => injected.getAccount()
 
-export const useEagerConnect = () => {
+const useActive = () => {
   const { activate } = useWeb3React()
+  return useCallback(
+    () =>
+      activate(injected, (error) => {
+        console.log('🚀 ~ file: useEagerConnect.ts ~ line 183 ~ activate ~ error', error)
+        captureException(error)
+      }),
+    [activate],
+  )
+}
+export const useEagerConnect = () => {
+  const handleActive = useActive()
 
   useEffect(() => {
-    setTimeout(() => {
-      activate(injected, (error) => {
-        console.log('🚀 ~ file: useEagerConnect.ts ~ line 13 ~ activate ~ error', error)
-      })
-    }, 1000 * 3)
-  }, [activate])
+    const main = async () => {
+      const address = await injected.getAccount()
+      if (address) {
+        setTimeout(() => {
+          handleActive()
+        }, 100)
+        sensors.login(address)
+        setUser({ id: address })
+      }
+      sensors.init()
+    }
+    main()
+  }, [])
+}
+
+const isOldVersion = () => {
+  const { version } = getSystemInfoSync()
+  return semver.lt(version, '2.43.0')
+}
+
+export const useActiveHandleWithoutToast = () => {
+  const handleActive = useActive()
+  const { t } = useTranslation()
+
+  const main = async () => {
+    /**
+     *  backward
+     */
+    const address = await getAccount()
+    return new Promise((resolve) => {
+      let isLogin = true
+      if (!address && isOldVersion()) {
+        injected.bnEthereum.ready = true
+        injected.bnEthereum
+          .request({
+            method: 'personal_sign',
+            params: ['test'],
+          })
+          .catch((error) => {
+            if (error && error?._code === '600005') {
+              isLogin = false
+              mpService.login().then(() => {
+                handleActive().then(resolve)
+              })
+            }
+          })
+        injected.bnEthereum.ready = false
+      }
+      if (isLogin) {
+        handleActive().then(resolve)
+      }
+    })
+  }
+  return async () => {
+    await main()
+    const address = await getAccount()
+    if (address) {
+      sensors.login(address)
+      setUser({ id: address })
+    }
+    sensors.init()
+  }
 }
 export const useActiveHandle = () => {
-  const { activate } = useWeb3React()
-  return () => {
-    activate(injected, (error) => {
-      console.log('🚀 ~ file: useEagerConnect.ts ~ line 13 ~ activate ~ error', error)
+  const handleActive = useActive()
+  const { toastSuccess } = useToast()
+  const { t } = useTranslation()
+
+  const main = async () => {
+    /**
+     *  backward
+     */
+    const address = await getAccount()
+    return new Promise((resolve) => {
+      let isLogin = true
+      if (!address && isOldVersion()) {
+        injected.bnEthereum.ready = true
+        injected.bnEthereum
+          .request({
+            method: 'personal_sign',
+            params: ['test'],
+          })
+          .catch((error) => {
+            if (error && error?._code === '600005') {
+              isLogin = false
+              mpService.login().then(() => {
+                handleActive().then(resolve)
+              })
+            }
+          })
+        injected.bnEthereum.ready = false
+      }
+      if (isLogin) {
+        handleActive().then(resolve)
+      }
     })
+  }
+  return async () => {
+    await main()
+    const address = await getAccount()
+    if (address) {
+      sensors.login(address)
+      setUser({ id: address })
+      toastSuccess(t('Success'), 'Wallet connected')
+    }
+    sensors.init()
   }
 }
 export default useEagerConnect

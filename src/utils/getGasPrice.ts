@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/sdk'
 import store from 'state'
-import { GAS_PRICE_GWEI } from 'state/user/hooks/helpers'
+import { GAS_PRICE_GWEI } from 'state/types'
 
 /**
  * Function to return gasPrice outwith a react component

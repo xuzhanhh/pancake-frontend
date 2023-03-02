@@ -1,4 +1,3 @@
-import React from 'react'
 import { Flex, Text, TooltipText, useTooltip } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { useWeb3React } from '@web3-react/core'
@@ -21,6 +20,7 @@ const UnstakingFeeCountdownRow: React.FC<UnstakingFeeCountdownRowProps> = ({ isT
     userData: { lastDepositedTime, userShares },
     fees: { withdrawalFee, withdrawalFeePeriod },
   } = useVaultPoolByKey(vaultKey)
+
   const feeAsDecimal = withdrawalFee / 100 || '-'
   const withdrawalDayPeriod = withdrawalFeePeriod ? secondsToDay(withdrawalFeePeriod) : '-'
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
@@ -59,7 +59,7 @@ const UnstakingFeeCountdownRow: React.FC<UnstakingFeeCountdownRowProps> = ({ isT
       return t('Unstaking Fee')
     }
     if (shouldShowTimer) {
-      return t('unstaking fee until')
+      return t('unstaking fee before')
     }
     return t('unstaking fee if withdrawn within %num%h', { num: withdrawalFeePeriodHour })
   }

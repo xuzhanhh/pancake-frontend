@@ -1,0 +1,16 @@
+.layout-body__content {
+  min-height: 100px !important;
+  max-height: var(--content-height) !important;
+}
+
+.layout-body {
+  padding: 0px !important;
+  min-height: 100px !important;
+}
+
+.at-float-layout__container {
+  background-color: var(--container-background-color) !important;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  min-height: 100px;
+}

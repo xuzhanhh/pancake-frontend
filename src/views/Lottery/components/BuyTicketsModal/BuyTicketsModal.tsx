@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import BigNumber from 'bignumber.js'
 import { MaxUint256 } from '@ethersproject/constants'
 import {

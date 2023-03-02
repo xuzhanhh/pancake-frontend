@@ -4,8 +4,8 @@ import { Currency, ETHER, Token, currencyEquals } from '@pancakeswap/sdk'
 import { useMemo } from 'react'
 import { arrayify } from '@ethersproject/bytes'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { TokenAddressMap } from 'state/types'
 import {
-  TokenAddressMap,
   useDefaultTokenList,
   useUnsupportedTokenList,
   useCombinedActiveList,

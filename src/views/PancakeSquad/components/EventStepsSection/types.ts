@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { ContextApi } from 'contexts/Localization/types'
-import { DefaultTheme } from 'styled-components'
+import { DefaultTheme } from '@pancakeswap/mp-styled-2'
 import { UserInfos, EventInfos, UserStatusEnum } from 'views/PancakeSquad/types'
 
 export type EventStepsProps = {

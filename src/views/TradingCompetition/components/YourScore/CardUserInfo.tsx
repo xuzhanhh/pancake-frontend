@@ -13,7 +13,7 @@ import {
   Button,
   useModal,
 } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import { LIVE } from 'config/constants/trading-competition/phases'
 import { YourScoreProps } from '../../types'

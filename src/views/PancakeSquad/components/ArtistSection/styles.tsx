@@ -1,5 +1,5 @@
 import { Flex, Link } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 export const StyledArtistSectionContainer = styled(Flex)<{ $isDark: boolean }>`
   position: relative;

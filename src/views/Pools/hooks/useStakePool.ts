@@ -1,14 +1,9 @@
 import { useCallback } from 'react'
-import { useWeb3React } from '@web3-react/core'
-import { useAppDispatch } from 'state'
-import { updateUserStakedBalance, updateUserBalance } from 'state/actions'
-import { stakeFarm } from 'utils/calls'
 import BigNumber from 'bignumber.js'
 import { DEFAULT_TOKEN_DECIMAL, DEFAULT_GAS_LIMIT } from 'config'
 import { BIG_TEN } from 'utils/bigNumber'
-import { useMasterchef, useSousChef } from 'hooks/useContract'
+import { useSousChef } from 'hooks/useContract'
 import getGasPrice from 'utils/getGasPrice'
-import { TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 
 const options = {
   gasLimit: DEFAULT_GAS_LIMIT,
@@ -31,38 +26,16 @@ const sousStakeBnb = async (sousChefContract, amount) => {
 }
 
 const useStakePool = (sousId: number, isUsingBnb = false) => {
-  const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
-  const masterChefContract = useMasterchef()
   const sousChefContract = useSousChef(sousId)
 
   const handleStake = useCallback(
-    async (
-      amount: string,
-      decimals: number,
-      onTransactionSubmitted: (tx: TransactionResponse) => void,
-      onSuccess: (receipt: TransactionReceipt) => void,
-      onError: (receipt: TransactionReceipt) => void,
-    ) => {
-      let tx
-      if (sousId === 0) {
-        tx = await stakeFarm(masterChefContract, 0, amount)
-      } else if (isUsingBnb) {
-        tx = await sousStakeBnb(sousChefContract, amount)
-      } else {
-        tx = await sousStake(sousChefContract, amount, decimals)
+    async (amount: string, decimals: number) => {
+      if (isUsingBnb) {
+        return sousStakeBnb(sousChefContract, amount)
       }
-      onTransactionSubmitted(tx)
-      const receipt = await tx.wait()
-      if (receipt.status) {
-        onSuccess(receipt)
-        dispatch(updateUserStakedBalance(sousId, account))
-        dispatch(updateUserBalance(sousId, account))
-      } else {
-        onError(receipt)
-      }
+      return sousStake(sousChefContract, amount, decimals)
     },
-    [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId],
+    [isUsingBnb, sousChefContract],
   )
 
   return { onStake: handleStake }

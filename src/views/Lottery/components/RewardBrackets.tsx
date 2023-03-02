@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { Flex, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { useTranslation } from 'contexts/Localization'
 import { LotteryRound } from 'state/types'

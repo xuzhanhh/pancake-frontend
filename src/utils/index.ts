@@ -10,8 +10,9 @@ import { IPancakeRouter02 } from 'config/abi/types/IPancakeRouter02'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@pancakeswap/sdk'
 import { ROUTER_ADDRESS } from '../config/constants'
 import { BASE_BSC_SCAN_URLS } from '../config'
-import { TokenAddressMap } from '../state/lists/hooks'
+import { TokenAddressMap } from 'state/types'
 import { simpleRpcProvider } from './providers'
+import { CHAIN_ID } from 'config/constants/networks'
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -95,7 +96,11 @@ export function getContract(address: string, ABI: any, signer?: Signer | Provide
 
 // account is optional
 export function getRouterContract(_: number, library: Web3Provider, account?: string) {
-  return getContract(ROUTER_ADDRESS, IPancakeRouter02ABI, getProviderOrSigner(library, account)) as IPancakeRouter02
+  return getContract(
+    ROUTER_ADDRESS[CHAIN_ID],
+    IPancakeRouter02ABI,
+    getProviderOrSigner(library, account),
+  ) as IPancakeRouter02
 }
 
 export function escapeRegExp(string: string): string {

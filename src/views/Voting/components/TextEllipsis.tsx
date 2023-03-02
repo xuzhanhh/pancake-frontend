@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Text } from '@pancakeswap/uikit'
 
 const TextEllipsis = styled(Text)`

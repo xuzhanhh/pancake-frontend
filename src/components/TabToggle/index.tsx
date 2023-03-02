@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const Wrapper = styled(Flex)`
   overflow-x: scroll;

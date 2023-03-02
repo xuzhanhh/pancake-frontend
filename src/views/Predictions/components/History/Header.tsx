@@ -16,7 +16,7 @@ import { HistoryFilter } from 'state/types'
 import { setHistoryFilter, setHistoryPaneState } from 'state/predictions'
 import { useGetHistoryFilter, useGetIsFetchingHistory } from 'state/predictions/hooks'
 import { useTranslation } from 'contexts/Localization'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const Filter = styled.label`
   align-items: center;

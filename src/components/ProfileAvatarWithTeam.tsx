@@ -1,7 +1,7 @@
 import React from 'react'
 import { NoProfileAvatarIcon } from '@pancakeswap/uikit'
 import { Profile } from 'state/types'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 export interface ProfileAvatarProps {
   profile: Profile

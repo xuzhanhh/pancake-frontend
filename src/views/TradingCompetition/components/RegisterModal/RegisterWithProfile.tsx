@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Button, Heading, Text, Flex, Checkbox, AutoRenewIcon } from '@pancakeswap/uikit'
 import { useTradingCompetitionContractV2 } from 'hooks/useContract'
 import { useTranslation } from 'contexts/Localization'

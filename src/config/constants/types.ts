@@ -21,6 +21,7 @@ export interface SerializedToken {
   symbol?: string
   name?: string
   projectLink?: string
+  logoURI?: string
 }
 
 export enum PoolIds {
@@ -65,6 +66,7 @@ export enum PoolCategory {
 
 interface FarmConfigBaseProps {
   pid: number
+  v1pid?: number
   lpSymbol: string
   lpAddresses: Address
   multiplier?: string
@@ -86,10 +88,6 @@ export interface DeserializedFarmConfig extends FarmConfigBaseProps {
   quoteToken: Token
 }
 
-export interface PoolDeployedBlockNumber {
-  [key: string]: number
-}
-
 interface PoolConfigBaseProps {
   sousId: number
   contractAddress: Address
@@ -99,7 +97,7 @@ interface PoolConfigBaseProps {
   harvest?: boolean
   isFinished?: boolean
   enableEmergencyWithdraw?: boolean
-  deployedBlockNumber?: number
+  version?: number
 }
 
 export interface SerializedPoolConfig extends PoolConfigBaseProps {

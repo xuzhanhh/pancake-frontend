@@ -2,7 +2,7 @@ import { Box, Flex, FlexProps, Link, Text, useMatchBreakpoints } from '@pancakes
 import { useTranslation } from 'contexts/Localization'
 import useScript from 'hooks/useScript'
 import React, { useEffect, useRef } from 'react'
-import { DefaultTheme, useTheme } from 'styled-components'
+import { DefaultTheme, useTheme } from '@pancakeswap/mp-styled-2'
 
 /**
  * When the script tag is injected the TradingView object is not immediately

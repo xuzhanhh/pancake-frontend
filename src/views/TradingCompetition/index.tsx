@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useProfile } from 'state/profile/hooks'
 import { Flex, Box } from '@pancakeswap/uikit'
 import Image from 'next/image'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTradingCompetitionContractV2 } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import {

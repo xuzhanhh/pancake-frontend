@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const StyledDatePickerPortal = styled.div`
   .react-datepicker-wrapper,

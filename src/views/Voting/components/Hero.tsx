@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Button, Flex, Heading, ProposalIcon } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import Container from 'components/Layout/Container'
 import Link from 'next/link'

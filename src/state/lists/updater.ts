@@ -1,6 +1,6 @@
 import { useAllLists } from 'state/lists/hooks'
 import { getVersionUpgrade, VersionUpgrade } from '@uniswap/token-lists'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import { useAllInactiveTokens } from 'hooks/Tokens'
 import { UNSUPPORTED_LIST_URLS } from 'config/constants/lists'
@@ -11,12 +11,15 @@ import useIsWindowVisible from 'hooks/useIsWindowVisible'
 import { AppDispatch } from '../index'
 import { acceptListUpdate } from './actions'
 import { useActiveListUrls } from './hooks'
+import mpService from '@binance/mp-service'
 
 export default function Updater(): null {
   const { library } = useWeb3Provider()
   const dispatch = useDispatch<AppDispatch>()
   const isWindowVisible = useIsWindowVisible()
-
+  const path = mpService.getCurrentInstance().router.path
+  console.log('??? path', path)
+  const includeListUpdater = ['/views/Swap/bmp/index', '/views/bmp/liquidity/index'].includes(path)
   // get all loaded lists, and the active urls
   const lists = useAllLists()
   const activeListUrls = useActiveListUrls()
@@ -33,7 +36,7 @@ export default function Updater(): null {
   }, [fetchList, isWindowVisible, lists])
 
   // fetch all lists every 10 minutes, but only after we initialize library
-  useInterval(fetchAllListsCallback, library ? 1000 * 60 * 10 : null)
+  useInterval(fetchAllListsCallback, library ? 1000 * 60 * 10 : null, true, includeListUpdater)
 
   // whenever a list is not loaded and not loading, try again to load it
   useEffect(() => {

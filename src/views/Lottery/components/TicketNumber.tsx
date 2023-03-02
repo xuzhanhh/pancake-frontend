@@ -2,7 +2,7 @@ import React from 'react'
 import { LotteryTicket } from 'config/constants/types'
 import { Flex, Text } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import _uniqueId from 'lodash/uniqueId'
 import { parseRetrievedNumber } from '../helpers'
 

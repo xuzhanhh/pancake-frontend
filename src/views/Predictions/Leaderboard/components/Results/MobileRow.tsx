@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Text } from '@pancakeswap/uikit'
 import { PredictionUser } from 'state/types'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useTranslation } from 'contexts/Localization'
 import { NetWinningsRow, Row } from './styles'
 import ResultAvatar from './ResultAvatar'

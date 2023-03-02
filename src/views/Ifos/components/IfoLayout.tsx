@@ -1,5 +1,5 @@
 import { Box } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const IfoLayout = styled(Box)`
   > div:not(.sticky-header) {

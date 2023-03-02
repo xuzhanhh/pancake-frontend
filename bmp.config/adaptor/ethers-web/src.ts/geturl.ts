@@ -19,12 +19,28 @@ export async function getUrl(href: string, options?: Options): Promise<GetUrlRes
     requestOptions.body = JSON.parse(Buffer.from(options.body).toString('utf8', 0))
   }
   delete requestOptions.headers['Content-Length']
-  const response = await mpService.request({
-    url: href,
-    method: options.method,
-    data: requestOptions.body || undefined,
-    headers: requestOptions.headers,
+  const response = await new Promise((resolve, reject) => {
+    mpService.request({
+      url: href,
+      method: options.method,
+      data: requestOptions.body || undefined,
+      headers: requestOptions.headers,
+      timeout: 30000,
+      success: (result) => {
+        resolve(result)
+      },
+      fail: (result) => {
+        reject(result)
+      },
+    })
   })
+  // const response = await mpService.request({
+  //   url: href,
+  //   method: options.method,
+  //   data: requestOptions.body || undefined,
+  //   headers: requestOptions.headers,
+  //   timeout: 30000,
+  // })
 
   const result = {
     statusCode: response.status,

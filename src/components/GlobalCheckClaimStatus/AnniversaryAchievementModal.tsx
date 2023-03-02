@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AutoRenewIcon, Box, Button, Flex, InjectedModalProps, Modal, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import confetti from 'canvas-confetti'
 import { useTranslation } from 'contexts/Localization'
 import { useAnniversaryAchievementContract } from 'hooks/useContract'

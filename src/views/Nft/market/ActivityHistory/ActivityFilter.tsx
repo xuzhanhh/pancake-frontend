@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Box, Button, Flex, IconButton, CloseIcon } from '@pancakeswap/uikit'
 import { useAppDispatch } from 'state'
 import { addActivityTypeFilters, removeActivityTypeFilters } from 'state/nftMarket/reducer'

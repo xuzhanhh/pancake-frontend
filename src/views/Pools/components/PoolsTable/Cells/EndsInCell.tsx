@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Flex, Link, Skeleton, Text, TimerIcon } from '@pancakeswap/uikit'
 import { getBscScanLink } from 'utils'
 import { DeserializedPool } from 'state/types'

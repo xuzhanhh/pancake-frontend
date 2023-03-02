@@ -1,26 +1,28 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, ArrowDownIcon, ArrowUpIcon } from '@pancakeswap/uikit'
-import styled, { keyframes } from 'styled-components'
+import { styled, keyframes } from '@pancakeswap/mp-styled-2'
 import { CalculatorMode, RoiCalculatorReducerState } from './useRoiCalculatorReducer'
 
 const rotate = keyframes`
-  0% {
-    transform: scale(1);
-    stroke-width: 0;
-  }
-  50% {
-    transform: scale(1.3);
-    stroke-width: 2;
-  }
-  100% {
-    transform: scale(1);
-    stroke-width: 0;
-  }
 `
 
 const ArrowContainer = styled(Flex)`
+  @keyframes rotate {
+    0% {
+      transform: scale(1);
+      stroke-width: 0;
+    }
+    50% {
+      transform: scale(1.3);
+      stroke-width: 2;
+    }
+    100% {
+      transform: scale(1);
+      stroke-width: 0;
+    }
+  }
   & > svg {
-    animation: 0.2s ${rotate} linear;
+    animation: 0.2s rotate linear;
     stroke: ${({ theme }) => `${theme.colors.primary}3D`};
     stroke-width: 0;
   }

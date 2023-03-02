@@ -5,7 +5,7 @@ import { useAchievementsForAddress, useProfileForAddress } from 'state/profile/h
 import { Box, Flex, Text } from '@pancakeswap/uikit'
 import Page from 'components/Layout/Page'
 import { useTranslation } from 'contexts/Localization'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import MarketPageHeader from '../components/MarketPageHeader'
 import ProfileHeader from './components/ProfileHeader'
 import NoNftsImage from '../components/Activity/NoNftsImage'

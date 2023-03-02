@@ -1,5 +1,5 @@
 import { Box, Flex, lightColors, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 export const StyledSquadHeaderContainer = styled(Flex)`
   position: relative;

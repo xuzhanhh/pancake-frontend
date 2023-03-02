@@ -1,6 +1,6 @@
 import React from 'react'
 import { ArrowBackIcon, ArrowForwardIcon, BunnyCardsIcon, Flex, IconButton } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { useGetCurrentEpoch, useGetSortedRounds } from 'state/predictions/hooks'
 import useSwiper from '../hooks/useSwiper'
 

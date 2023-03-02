@@ -6,7 +6,7 @@ import { usePriceCakeBusd } from 'state/farms/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import Balance from 'components/Balance'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const BurnedText = styled(Text)`
   font-size: 52px;

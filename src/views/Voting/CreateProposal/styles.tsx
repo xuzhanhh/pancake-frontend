@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Text } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const BaseLabel = styled.label`
   color: ${({ theme }) => theme.colors.text};

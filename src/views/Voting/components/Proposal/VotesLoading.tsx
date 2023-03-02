@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Flex, Skeleton } from '@pancakeswap/uikit'
 import times from 'lodash/times'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const Row = styled(Flex)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};

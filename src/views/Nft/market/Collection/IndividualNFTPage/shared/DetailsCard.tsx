@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { Box, Flex, Text, SearchIcon, Link } from '@pancakeswap/uikit'
 import { getBscScanLink } from 'utils'
 import { formatNumber } from 'utils/formatBalance'

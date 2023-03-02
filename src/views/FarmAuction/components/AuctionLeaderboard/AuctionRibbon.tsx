@@ -2,7 +2,7 @@ import { Text } from '@pancakeswap/uikit'
 import { Auction, AuctionStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 const StyledRibbon = styled.div<{ color: string }>`
   display: flex;

@@ -5,7 +5,8 @@
   "scripts": {
     "analyze": "ANALYZE=true yarn build",
     "bmp:dev": "NODE_ENV=development bmp dev",
-    "bmp:build": "bmp build",
+    "bmp:build:qa": "API_HOST=qa bmp build",
+    "bmp:build:prod": "API_HOST=prod bmp build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -15,10 +16,10 @@
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "format:check:staged": "pretty-quick --staged --check",
-    "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
+    "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json}\"",
     "updateLPsAPR": "NODE_PATH=./src ts-node --compiler-options '{\"module\":\"commonjs\"}' scripts/updateLPsAPR.ts",
     "prepare": "husky install",
-    "postinstall": "yarn run typechain",
+    "postinstall": "yarn run typechain && cp -r lib node_modules/@linaria/babel-preset/ ",
     "typechain": "typechain --out-dir src/config/abi/types --target=ethers-v5 \"src/config/abi/*.json\""
   },
   "browserslist": {
@@ -35,10 +36,10 @@
   },
   "dependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
-    "@binance/babel-preset-bmp": "^1.0.1",
+    "@binance/babel-preset-bmp": "^1.0.9",
     "@binance/mp-components": "^1.0.1",
     "@binance/mp-service": "^1.0.4",
-    "@binance/sentry-miniapp": "^0.0.6",
+    "@binance/sentry-miniapp": "^0.2.1",
     "@ethersproject/abi": "^5.5.0",
     "@ethersproject/address": "^5.5.0",
     "@ethersproject/bignumber": "^5.5.0",
@@ -49,7 +50,17 @@
     "@ethersproject/providers": "^5.5.2",
     "@ethersproject/strings": "^5.5.0",
     "@ethersproject/units": "^5.5.0",
+    "@linaria/babel-preset": "3.0.0-beta.18",
+    "@linaria/core": "3.0.0-beta.18",
+    "@linaria/preeval": "3.0.0-beta.18",
+    "@linaria/react": "3.0.0-beta.18",
+    "@linaria/shaker": "3.0.0-beta.18",
+    "@linaria/webpack-loader": "3.0.0-beta.18",
     "@next/bundle-analyzer": "^12.0.7",
+    "@pancakeswap/mp-styled": "1.0.1",
+    "@pancakeswap/mp-styled-2": "^1.0.1",
+    "@pancakeswap/mp-uikit": "^1.0.0",
+    "@pancakeswap/mp-uikit-2": "^1.0.1",
     "@pancakeswap/sdk": "^2.4.0",
     "@pancakeswap/uikit": "^0.63.1",
     "@reduxjs/toolkit": "^1.5.0",
@@ -85,11 +96,13 @@
     "recharts": "2.0.6",
     "redux-persist": "^6.0.0",
     "remark-gfm": "^1.0.0",
+    "semver": "^7.3.5",
     "split-grid": "^1.0.11",
     "styled-components": "^5.3.0",
     "styled-system": "^5.1.5",
     "swiper": "^6.8.4",
     "swr": "^1.1.2",
+    "taro-ui": "^3.1.0-beta.2",
     "typescript": "^4.5.4"
   },
   "devDependencies": {
@@ -114,6 +127,7 @@
     "@types/react-window": "^1.8.3",
     "@types/simplemde": "^1.11.7",
     "@types/styled-components": "^5.1.7",
+    "babel-loader": "^8.2.5",
     "cypress": "^8.3.1",
     "eslint": "^7.26.0",
     "eslint-plugin-cypress": "^2.11.3",
@@ -126,5 +140,9 @@
     "start-server-and-test": "^1.14.0",
     "ts-node": "^9.1.1",
     "typechain": "^6.1.0"
+  },
+  "resolutions": {
+    "@linaria/babel-preset": "3.0.0-beta.18",
+    "@linaria/preeval": "3.0.0-beta.18"
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import Link from 'next/link'
 import { Flex, HelpIcon, Button, PrizeIcon } from '@pancakeswap/uikit'
 import FlexRow from './FlexRow'

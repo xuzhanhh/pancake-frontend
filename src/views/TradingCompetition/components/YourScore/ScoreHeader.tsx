@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { NoProfileAvatarIcon, LaurelLeftIcon, LaurelRightIcon, Skeleton } from '@pancakeswap/uikit'
 import ProfileAvatarWithTeam from 'components/ProfileAvatarWithTeam'
 import { YourScoreProps } from '../../types'

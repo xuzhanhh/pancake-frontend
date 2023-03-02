@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 
 export const ActionContainer = styled.div`
   padding: 16px;

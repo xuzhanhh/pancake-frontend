@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { getBalanceNumber, formatLocalisedCompactNumber } from 'utils/formatBalance'
 import { multicallv2 } from 'utils/multicall'
 import { usePriceCakeBusd } from 'state/farms/hooks'

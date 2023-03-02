@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, Flex, Box } from '@pancakeswap/uikit'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import truncateHash from 'utils/truncateHash'
 import { LeaderboardDataItem } from '../../../types'
 import { localiseTradingVolume } from '../../../helpers'

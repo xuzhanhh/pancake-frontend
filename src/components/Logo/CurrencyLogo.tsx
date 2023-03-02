@@ -1,15 +1,17 @@
 import { Currency, ETHER, Token } from '@pancakeswap/sdk'
 import { BinanceIcon } from '@pancakeswap/uikit'
 import React, { useMemo } from 'react'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
+import { WrappedTokenInfo } from 'state/types'
 import useHttpLocations from '../../hooks/useHttpLocations'
-import { WrappedTokenInfo } from '../../state/lists/hooks'
 import getTokenLogoURL from '../../utils/getTokenLogoURL'
 import Logo from './Logo'
+import { useAllLists } from 'state/lists/hooks'
 
 const StyledLogo = styled(Logo)<{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
+  border-radius: 50%;
 `
 
 export default function CurrencyLogo({
@@ -22,18 +24,31 @@ export default function CurrencyLogo({
   style?: React.CSSProperties
 }) {
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
+  const list = useAllLists()
+  const listMapAddress = useMemo(() => {
+    const values = Object.values(list)
+    const result = {}
+    values.forEach((item) => {
+      if (Array.isArray(item?.current?.tokens)) {
+        item.current.tokens.forEach((token) => {
+          result[token.address] = token
+        })
+      }
+    })
+    return result
+  }, [list])
 
   const srcs: string[] = useMemo(() => {
     if (currency === ETHER) return []
 
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, getTokenLogoURL(currency.address)]
+        return [...uriLocations, listMapAddress[currency.address]?.logoURI, getTokenLogoURL(currency.address)]
       }
-      return [getTokenLogoURL(currency.address)]
+      return [listMapAddress[currency.address]?.logoURI, getTokenLogoURL(currency.address)]
     }
     return []
-  }, [currency, uriLocations])
+  }, [currency, uriLocations, listMapAddress])
 
   if (currency === ETHER) {
     return <BinanceIcon width={size} style={style} />

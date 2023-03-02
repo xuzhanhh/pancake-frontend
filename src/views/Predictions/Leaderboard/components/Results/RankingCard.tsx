@@ -16,7 +16,7 @@ import {
 } from '@pancakeswap/uikit'
 import { PredictionUser } from 'state/types'
 import { useGetProfileAvatar } from 'state/profile/hooks'
-import styled from 'styled-components'
+import { styled } from '@pancakeswap/mp-styled-2'
 import { getBscScanLink } from 'utils'
 import truncateHash from 'utils/truncateHash'
 import { useTranslation } from 'contexts/Localization'

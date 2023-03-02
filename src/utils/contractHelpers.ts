@@ -15,12 +15,13 @@ import {
   getBunnySpecialAddress,
   getLotteryV2Address,
   getMasterChefAddress,
+  getMasterChefV1Address,
   getPointCenterIfoAddress,
   getClaimRefundAddress,
   getTradingCompetitionAddress,
   getEasterNftAddress,
   getCakeVaultAddress,
-  getIfoPoolAddress,
+  getIfoPoolAddress, // TODO delete
   getPredictionsAddress,
   getChainlinkOracleAddress,
   getMulticallAddress,
@@ -50,6 +51,7 @@ import ifoV2Abi from 'config/abi/ifoV2.json'
 import pointCenterIfo from 'config/abi/pointCenterIfo.json'
 import lotteryV2Abi from 'config/abi/lotteryV2.json'
 import masterChef from 'config/abi/masterchef.json'
+import masterChefV1 from 'config/abi/masterchefV1.json'
 import sousChef from 'config/abi/sousChef.json'
 import sousChefV2 from 'config/abi/sousChefV2.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
@@ -57,8 +59,9 @@ import claimRefundAbi from 'config/abi/claimRefund.json'
 import tradingCompetitionAbi from 'config/abi/tradingCompetition.json'
 import tradingCompetitionV2Abi from 'config/abi/tradingCompetitionV2.json'
 import easterNftAbi from 'config/abi/easterNft.json'
-import cakeVaultAbi from 'config/abi/cakeVault.json'
-import ifoPoolAbi from 'config/abi/ifoPool.json'
+import cakeVaultAbi from 'config/abi/cakeVault.json' // TODO delete
+import ifoPoolAbi from 'config/abi/ifoPool.json' // TODO delete
+import cakeVaultV2Abi from 'config/abi/cakeVaultV2.json'
 import predictionsAbi from 'config/abi/predictions.json'
 import chainlinkOracleAbi from 'config/abi/chainlinkOracle.json'
 import MultiCallAbi from 'config/abi/Multicall.json'
@@ -81,7 +84,7 @@ import {
   AnniversaryAchievement,
   IfoV1,
   IfoV2,
-  IfoPool,
+  IfoPool, // TODO delete
   Erc20,
   Erc721,
   Cake,
@@ -90,6 +93,7 @@ import {
   PancakeProfile,
   LotteryV2,
   Masterchef,
+  MasterchefV1,
   SousChef,
   SousChefV2,
   BunnySpecial,
@@ -98,7 +102,7 @@ import {
   TradingCompetition,
   TradingCompetitionV2,
   EasterNft,
-  CakeVault,
+  CakeVault, // TODO delete
   Multicall,
   BunnySpecialCakeVault,
   BunnySpecialPrediction,
@@ -108,9 +112,10 @@ import {
   PancakeSquad,
   Erc721collection,
   PointCenterIfo,
+  CakeVaultV2,
 } from 'config/abi/types'
 
-const getContract = (abi: any, address: string, signer?: Signer | Provider) => {
+export const getContract = (abi: any, address: string, signer?: Signer | Provider) => {
   const signerOrProvider = signer ?? simpleRpcProvider
   return new Contract(address, abi, signerOrProvider)
 }
@@ -163,6 +168,9 @@ export const getLotteryV2Contract = (signer?: Signer | Provider) => {
 export const getMasterchefContract = (signer?: Signer | Provider) => {
   return getContract(masterChef, getMasterChefAddress(), signer) as Masterchef
 }
+export const getMasterchefV1Contract = (signer?: Signer | Provider) => {
+  return getContract(masterChefV1, getMasterChefV1Address(), signer) as MasterchefV1
+}
 export const getClaimRefundContract = (signer?: Signer | Provider) => {
   return getContract(claimRefundAbi, getClaimRefundAddress(), signer) as ClaimRefund
 }
@@ -176,13 +184,17 @@ export const getTradingCompetitionContractV2 = (signer?: Signer | Provider) => {
 export const getEasterNftContract = (signer?: Signer | Provider) => {
   return getContract(easterNftAbi, getEasterNftAddress(), signer) as EasterNft
 }
+// TODO: need delete
 export const getCakeVaultContract = (signer?: Signer | Provider) => {
   return getContract(cakeVaultAbi, getCakeVaultAddress(), signer) as CakeVault
 }
+// TODO: need delete
 export const getIfoPoolContract = (signer?: Signer | Provider) => {
   return getContract(ifoPoolAbi, getIfoPoolAddress(), signer) as IfoPool
 }
-
+export const getCakeVaultV2Contract = (signer?: Signer | Provider) => {
+  return getContract(cakeVaultV2Abi, getCakeVaultAddress(), signer) as CakeVaultV2
+}
 export const getPredictionsContract = (signer?: Signer | Provider) => {
   return getContract(predictionsAbi, getPredictionsAddress(), signer) as unknown as Predictions
 }

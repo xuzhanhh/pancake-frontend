@@ -34,7 +34,7 @@ import {
   ChartViewMode,
   setSubgraphHealthIndicatorDisplayed,
 } from './actions'
-import { GAS_PRICE_GWEI } from './hooks/helpers'
+import { GAS_PRICE_GWEI } from 'state/types'
 
 const currentTimestamp = () => new Date().getTime()
 
