@@ -98,14 +98,25 @@ export const selectProvider = async (selectedCb, isNeedTrigger) => {
   if (!currentProvider) {
     const web3Wallets = (await web3Provider?.request({ method: 'eth_accounts' })) || []
     const mpcWallets = (await mpcProvider?.request({ method: 'eth_accounts' })) || []
-    if (web3Provider && web3Wallets.length === 0 && mpcWallets.length === 0) {
+    if (!mpcProvider) {
+      // app < 2.60.0
       currentProvider = web3Provider
+    } else if (web3Wallets.length === 0 && mpcWallets.length === 0) {
+      // if no mpc wallet, connect web3 wallet directly before 0316
+      // FIXME need to switch to mpcwallet after 0316
+      currentProvider = web3Provider
+    } else if (web3Wallets.length === 1 && mpcWallets.length === 0) {
+      // if user only have web3 connect directly
+      currentProvider = web3Provider
+    } else if (web3Wallets.length === 0 && mpcWallets.length === 1) {
+      // if user only have web3 connect directly
+      currentProvider = mpcProvider
     } else {
       const { tapIndex } = await bn.showActionSheet({
         alertText: 'Select Wallet',
         itemList: [
-          web3Wallets.length > 0 ? `${shortenAddress(web3Wallets[0])}(DeFi Wallet original)` : `+ Create DeFi Wallet`,
-          mpcWallets.length > 0 ? `${shortenAddress(mpcWallets[0])}` : null,
+          web3Wallets.length > 0 ? `DeFi Wallet Original(${shortenAddress(web3Wallets[0])})` : null,
+          mpcWallets.length > 0 ? `DeFi Wallet(${shortenAddress(mpcWallets[0])})` : null,
         ].filter((item) => item),
       })
       if (tapIndex === 0) {
