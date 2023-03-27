@@ -99,12 +99,12 @@ export const selectProvider = async (selectedCb, isNeedTrigger) => {
     const web3Wallets = (await web3Provider?.request({ method: 'eth_accounts' })) || []
     const mpcWallets = (await mpcProvider?.request({ method: 'eth_accounts' })) || []
     if (!mpcProvider) {
-      // app < 2.60.0
+      // pcs will force user app version >= 2.62.0
+      // so this if case only for Code integrity and won't enter
       currentProvider = web3Provider
     } else if (web3Wallets.length === 0 && mpcWallets.length === 0) {
-      // if no mpc wallet, connect web3 wallet directly before 0316
-      // FIXME need to switch to mpcwallet after 0316
-      currentProvider = web3Provider
+      // if no mpc wallet, connect buw wallet directly 0330
+      currentProvider = mpcProvider
     } else if (web3Wallets.length === 1 && mpcWallets.length === 0) {
       // if user only have web3 connect directly
       currentProvider = web3Provider
