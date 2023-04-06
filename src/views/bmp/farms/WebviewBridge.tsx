@@ -6,6 +6,7 @@ import { EVENT_IDS, track } from 'utils/bmp/report'
 import { jumpToFarms, jumpToLiquidity, jumpToPools, jumpToSwap } from 'utils/bmp/jump'
 import { LiquidityPage } from '../liquidity/liquidityContext'
 
+import semver from 'semver'
 import { WebviewContext } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useActiveHandleWithoutToast } from 'hooks/useEagerConnect.bmp'
@@ -104,7 +105,13 @@ export const selectProvider = async (selectedCb, isNeedTrigger) => {
       currentProvider = web3Provider
     } else if (web3Wallets.length === 0 && mpcWallets.length === 0) {
       // if no mpc wallet, connect buw wallet directly 0330
-      currentProvider = mpcProvider
+      const systemInfo = getSystemInfoSync()
+      const isNewVersion = semver.gte(systemInfo.version, '2.62.0')
+      if (isNewVersion) {
+        currentProvider = mpcProvider
+      } else {
+        currentProvider = web3Provider
+      }
     } else if (web3Wallets.length === 1 && mpcWallets.length === 0) {
       // if user only have web3 connect directly
       currentProvider = web3Provider
