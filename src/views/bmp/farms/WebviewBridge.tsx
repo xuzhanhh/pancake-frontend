@@ -6,6 +6,7 @@ import { EVENT_IDS, track } from 'utils/bmp/report'
 import { jumpToFarms, jumpToLiquidity, jumpToPools, jumpToSwap } from 'utils/bmp/jump'
 import { LiquidityPage } from '../liquidity/liquidityContext'
 
+import semver from 'semver'
 import { WebviewContext } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useActiveHandleWithoutToast } from 'hooks/useEagerConnect.bmp'
@@ -98,14 +99,31 @@ export const selectProvider = async (selectedCb, isNeedTrigger) => {
   if (!currentProvider) {
     const web3Wallets = (await web3Provider?.request({ method: 'eth_accounts' })) || []
     const mpcWallets = (await mpcProvider?.request({ method: 'eth_accounts' })) || []
-    if (web3Provider && web3Wallets.length === 0 && mpcWallets.length === 0) {
+    if (!mpcProvider) {
+      // pcs will force user app version >= 2.62.0
+      // so this if case only for Code integrity and won't enter
       currentProvider = web3Provider
+    } else if (web3Wallets.length === 0 && mpcWallets.length === 0) {
+      // if no mpc wallet, connect buw wallet directly 0330
+      const systemInfo = getSystemInfoSync()
+      const isNewVersion = semver.gte(systemInfo.version, '2.62.0')
+      if (isNewVersion) {
+        currentProvider = mpcProvider
+      } else {
+        currentProvider = web3Provider
+      }
+    } else if (web3Wallets.length === 1 && mpcWallets.length === 0) {
+      // if user only have web3 connect directly
+      currentProvider = web3Provider
+    } else if (web3Wallets.length === 0 && mpcWallets.length === 1) {
+      // if user only have web3 connect directly
+      currentProvider = mpcProvider
     } else {
       const { tapIndex } = await bn.showActionSheet({
         alertText: 'Select Wallet',
         itemList: [
-          web3Wallets.length > 0 ? `${shortenAddress(web3Wallets[0])}(DeFi Wallet original)` : `+ Create DeFi Wallet`,
-          mpcWallets.length > 0 ? `${shortenAddress(mpcWallets[0])}` : null,
+          web3Wallets.length > 0 ? `DeFi Wallet Original(${shortenAddress(web3Wallets[0])})` : null,
+          mpcWallets.length > 0 ? `DeFi Wallet(${shortenAddress(mpcWallets[0])})` : null,
         ].filter((item) => item),
       })
       if (tapIndex === 0) {
