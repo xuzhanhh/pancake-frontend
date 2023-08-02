@@ -10,5 +10,6 @@
     "minified": false
   },
   "compileType": "miniprogram",
-  "libVersion": "4.7.0"
+  "libVersion": "4.7.0",
+  "enableBytecode": true
 }
